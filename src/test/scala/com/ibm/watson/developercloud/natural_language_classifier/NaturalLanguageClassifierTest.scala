@@ -19,6 +19,5 @@ class NaturalLanguageClassifierTest extends FunSuite with ScalaFutures with Matc
   implicit val system = ActorSystem()
   import system.dispatcher
 
-  test("An empty Set should have size 0") {
-  }
+
 }

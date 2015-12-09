@@ -46,5 +46,6 @@
     <orderEntry type="library" scope="TEST" name="Gradle: org.parboiled:parboiled-java:1.0.2" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: asm:asm:3.3.1" level="project" />
     <orderEntry type="library" name="Gradle: com.typesafe.akka:akka-actor_2.11:2.3.14" level="project" />
+    <orderEntry type="library" name="scala-sdk-2.10.4 (2)" level="application" />
   </component>
 </module>
