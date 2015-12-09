@@ -1,0 +1,652 @@
+{
+    "swaggerVersion": "1.2",
+    "apiVersion": "1.0.0",
+	"basePath": "https://gateway.watsonplatform.net",
+    "resourcePath": "/question-and-answer-beta/api",
+    "description": "Operations for the Question Answer Gateway",
+    "produces": [
+        "application/json"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "apis": [
+        {
+            "path": "/v1/ping",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Pings the service to verify that it is available",
+                    "nickname": "ping",
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "Service is available"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/v1/services",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Returns the list of supported Watson domains",
+                    "type": "Services",
+                    "nickname": "services"
+                }
+            ]
+        },
+        {
+            "path": "/v1/question/{dataset}",
+            "operations": [
+                {
+                    "method": "POST",
+                    "summary": "Sends a question to an instance of Watson",
+                    "notes": "Accepts a Question and Answer REST API request and routes it to the Watson instance identified by the \"dataset\" path parameter. The response includes answers and supporting evidence.",
+                    "type": "WatsonAnswer",
+                    "nickname": "question",
+                    "parameters": [
+                        {
+                            "name": "dataset",
+                            "description": "Identifies the data set or domain that Watson is trained for",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path",
+                            "enum": [
+                                "travel",
+                                "healthcare"
+                            ]
+                        },
+                        {
+                            "name": "X-SyncTimeout",
+                            "description": "Specifies how long the Watson pipeline waits for a response",
+                            "required": false,
+                            "value": 30,
+                            "format": "int64",
+                            "type": "integer",
+                            "paramType": "header"
+                        },
+                        {
+                            "name": "question",
+                            "description": "The container for the submitted question and its associated information.<br><pre><code>Example with required elements:<br>{<br>   \"question\": {<br>      \"questionText\":\"Question text here\"<br>   }<br>}</code></pre>",
+                            "required": true,
+                            "type": "WatsonQuestion",
+                            "paramType": "body",
+                            "consumes": "application/json"
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "Message processed successfully"
+                        },
+                        {
+                            "code": 400,
+                            "message": "Question validation failed. See the message text for more information."
+                        },
+                        {
+                            "code": 500,
+                            "message": "Server error. See the message text for more information"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/v1/feedback",
+            "description": "Feedback API for the Question Answer Gateway service",
+            "operations": [
+                {
+                    "method": "PUT",
+                    "summary": "Submit feedback on the Question Answer Gateway service",
+                    "notes": "The feedback API allows you to provide information on how well the service performed. The feedback is used to further improve the service and future results.",
+                    "nickname": "feedback",
+                    "consumes": [
+                        "application/json"
+                    ],
+                    "produces": [
+                        "application/json"
+                    ],
+                    "parameters": [
+                        {
+                            "name": "Feedback information",
+                            "required": true,
+                            "paramType": "body",
+                            "description": "JSON Data",
+                            "type": "FeedbackInput"
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 201,
+                            "message": "Accepted"
+                        },
+                        {
+                            "code": 400,
+                            "message": "Bad request. Most likely the result of a missing required parameter."
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "models": {
+        "Ping": {
+            "description": "Ping model",
+            "required": [],
+            "id": "ping",
+            "properties": {}
+        },
+        "Services": {
+            "description": "Services model",
+            "required": [
+                "services"
+            ],
+            "id": "services",
+            "properties": {
+                "services": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "Service"
+                    }
+                }
+            }
+        },
+        "Service": {
+            "description": "Service model",
+            "required": [
+                "id",
+                "name",
+                "description"
+            ],
+            "id": "service",
+            "properties": {
+                "overall": {
+                    "type": "integer"
+                },
+                "dataset": {
+                    "type": "string",
+                    "description": "Unique identifier of the domain"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "Friendly name of the Watson domain"
+                },
+                "description": {
+                    "type": "string",
+                    "description": "Brief description of the domain"
+                }
+            }
+        },
+        "WatsonQuestion": {
+            "description": "The container for the submitted question and its associated information.",
+            "required": [
+                "question"
+            ],
+            "id": "watsonQuestion",
+            "properties": {
+                "question": {
+                    "$ref": "QuestionInformation",
+                    "description": "Question information"
+                }
+            }
+        },
+        "QuestionInformation": {
+            "description": "The question parameters",
+            "required": [
+                "questionText"
+            ],
+            "id": "QuestionInformation",
+            "properties": {
+                "questionText": {
+                    "type": "string",
+                    "description": "The text of the question to be answered"
+                },
+                "items": {
+                    "type": "integer",
+                    "format": "int32",
+                    "description": "An integer in the range 1 – 10 that represents the number of possible answers to be returned. If you do not specify the number of items, the request assumes five answers.",
+                    "min": 1,
+                    "max": 10
+                },
+                "evidenceRequest": {
+                    "$ref": "EvidenceRequest",
+                    "description": "Specifies that you want Watson to return supporting evidence for each answer in the answers/answer/evidence section of the answer response."
+                },
+                "answerAssertion": {
+                    "type": "string",
+                    "description": "Specify an answer to receive the supporting evidence passages for that answer. Without this element, Watson searches for answers from the questionText. When you assert an answer, Watson uses that answer instead to search for supporting evidence passages."
+                },
+                "category": {
+                    "type": "string",
+                    "description": "The category of the question in terms of a constraint on the possible answers."
+                },
+                "context": {
+                    "type": "string",
+                    "description": "A natural language string that is composed of words that provide extra information for Watson to consider when it determines answers.",
+                    "maxLength": 1024
+                },
+                "formattedAnswer": {
+                    "type": "boolean",
+                    "description": "Requests Watson to return the formatted answer."
+                },
+                "passthru": {
+                    "type": "string",
+                    "description": "Specifies a string that you include with the question. The passthru data is not submitted with the pipeline but does pass through to the answer."
+                },
+                "synonyms": {
+                    "type": "string",
+                    "description": "The container for the set of synonyms. You can provide feedback to Watson by resubmitting a question and including an updated list of synonyms."
+                },
+                "lat": {
+                    "type": "string",
+                    "description": "The lexical answer type (LAT) of the question. The LAT is a word or noun phrase that appears in the question, or is implied by it."
+                },
+                "filters": {
+                    "$ref": "Filters",
+                    "description": "Supports the use of metadata to restrict answers to specific documents"
+                }
+            }
+        },
+        "EvidenceRequest": {
+            "description": "Specifies that you want Watson to return supporting evidence for each answer in the answers/answer/evidence section of the answer response.",
+            "required": [],
+            "id": "EvidenceRequest",
+            "properties": {
+                "items": {
+                    "type": "integer",
+                    "format": "int32",
+                    "description": "An integer in the range 1 – 10 that defines the number of supporting passages to return for each answer. Fewer passages might be returned for answers that do not have good passage support. The default value is 3 passages.",
+                    "min": 1,
+                    "max": 10
+                },
+                "profile": {
+                    "type": "string",
+                    "description": "Whether to return evidence profiles for each possible answer. ",
+                    "enum": [
+                        "yes",
+                        "no"
+                    ]
+                }
+            }
+        },
+        "Filters": {
+            "description": "The container for a set of filters. Filters allow the use of metadata to restrict answers to come from specific documents. ",
+            "required": [
+                "filters"
+            ],
+            "id": "Filters",
+            "properties": {
+                "filters": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "Filter"
+                    }
+                }
+            }
+        },
+        "Filter": {
+            "description": "The container for a set of filters. Filters allow the use of metadata to restrict answers to come from specific documents. ",
+            "required": [],
+            "id": "Filter",
+            "properties": {
+                "filterType": {
+                    "type": "string",
+                    "description": "The type of the filter",
+                    "enum": [
+                        "dataRangeFilter",
+                        "metadataFilter",
+                        "prefixFilter",
+                        "queryFilter"
+                    ]
+                },
+                "filterName": {
+                    "type": "string",
+                    "description": "The name of the indexed metadata field. Use \"indexedKey.\" for dateRangeFilter use \"indexed\" for other filterTypes."
+                },
+                "values": {
+                    "type": "string",
+                    "description": "The metadata value of the indexed field name."
+                }
+            }
+        },
+        "WatsonAnswer": {
+            "description": "The container for the answer response and its associated information.",
+            "required": [
+                "id"
+            ],
+            "id": "WatsonAnswer",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "format": "int64",
+                    "description": "An integer that is assigned by the service to identify this question and its answers."
+                },
+                "answers": {
+                    "$ref": "Answers",
+                    "decription": "The container for the set of ranked answers. Answers are included only if the value of /question/status is Complete."
+                },
+                "category": {
+                    "type": "string",
+                    "description": "The category of the question that was submitted with the question. When no category was submitted with the question, an empty category element is returned in the response."
+                },
+                "errorNotifications": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "ErrorNotification"
+                    }
+                },
+                "evidenceList": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "Evidence"
+                    }
+                },
+                "focusList": {
+                    "type": "string",
+                    "description": "The container for a list of focus elements that are determined by the pipeline for the final answer."
+                },
+                "latList": {
+                    "type": "string",
+                    "description": "The container for lexical answer types (LATs) that the pipeline determined for the final answer. The /question/lat is submitted in the POST when the question what submitted. The/question/latlist contains the LATs that were determined by the pipeline when it processed the answer."
+                },
+                "pipelineid": {
+                    "type": "string",
+                    "description": "The internal ID that is assigned for the final answer CAS. This element contains the internal CAS ID that is assigned after the question is answered. You can use this ID to identify the question with the internal data structures that Watson uses. "
+                },
+                "qclasslist": {
+                    "type": "string",
+                    "description": "The container for a list of question classes that are determined by the pipeline for the final answer."
+                },
+                "status": {
+                    "type": "string",
+                    "description": "The response status of the request.",
+                    "enum": [
+                        "Complete",
+                        "Timeout",
+                        "Failed"
+                    ]
+                },
+                "supplemental": {
+                    "type": "string",
+                    "description": "Contains more information about the answers for a customization of the IBM Watson processing pipeline. In a Watson system that is not customized, this element is not returned. "
+                },
+                "synonymList": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "SynonymList"
+                    }
+                }
+            }
+        },
+        "Answers": {
+            "description": "The container for the set of ranked answers. Answers are included only if the value of /question/status is Complete.",
+            "required": [
+                "answers"
+            ],
+            "id": "Answers",
+            "properties": {
+                "answers": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "Answer"
+                    }
+                }
+            }
+        },
+        "Answer": {
+            "description": "The container for information about an individual answer. The number of answers that are returned is dependent on the number of /question/items requested when the question was submitted.",
+            "required": [
+                "id",
+                "text",
+                "confidence"
+            ],
+            "id": "Answer",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "format": "int62",
+                    "description": "An integer that uniquely identifies an answer in the context of the question."
+                },
+                "text": {
+                    "type": "string",
+                    "description": "A string that contains an answer to the question in the form of text."
+                },
+                "confidence": {
+                    "type": "string",
+                    "description": "A decimal percentage that represents the confidence that Watson has in this answer. Higher values represent higher confidences."
+                },
+                "evidence": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "Passage"
+                    }
+                },
+                "evidenceProfile": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "EvidenceProfile"
+                    }
+                },
+                "formattedText": {
+                    "type": "string",
+                    "description": "The HTML-formatted version of the answer text that is returned when you set formattedAnswer to true when you submit a question. The formatted answer includes content from the <body> tag of the answer."
+                }
+            }
+        },
+        "Passage": {
+            "description": "The container for a supporting passage for an answer and its metadata.",
+            "required": [
+                "copyright",
+                "document",
+                "termsOfUse",
+                "text",
+                "title"
+            ],
+            "id": "Passage",
+            "properties": {
+                "copyright": {
+                    "type": "string",
+                    "description": "The copyright holder for the document that contains the evidence passage. If there is no copyright information, the element is empty."
+                },
+                "document": {
+                    "type": "string",
+                    "description": "The URL to a document passage for an answer."
+                },
+                "termsOfUse": {
+                    "type": "string",
+                    "description": "A URL that points to the license that describes the terms of use of the document."
+                },
+                "text": {
+                    "type": "string",
+                    "description": "The passage text, essentially one or more sentences."
+                },
+                "title": {
+                    "type": "string",
+                    "description": "The passage title, a string of text."
+                }
+            }
+        },
+        "EvidenceProfile": {
+            "description": "The container for the evidence profile for this answer. The evidence profile indicates where the evidence came from.",
+            "required": [
+                "featureGroup"
+            ],
+            "id": "EvidenceProfile",
+            "properties": {
+                "featureGroup": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "FeatureGroup"
+                    }
+                }
+            }
+        },
+        "FeatureGroup": {
+            "id": "FeatureGroup",
+            "description": "The container for feature groups (name value pairs). A feature group is a name-value pair that represents a combined summary of a set of evidence features.",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "string"
+                }
+            }
+        },
+        "ErrorNotification": {
+            "id": "ErrorNotification",
+            "description": "The container for the set of recoverable errors that occurred during question processing. It is only included when the value of /question/status is Complete.",
+            "required": [
+                "error",
+                "text"
+            ],
+            "properties": {
+                "error": {
+                    "type": "string",
+                    "description": "The container for message information about a recoverable error."
+                },
+                "text": {
+                    "type": "string",
+                    "description": "A string that describes the error."
+                }
+            }
+        },
+        "SynonymList": {
+            "id": "SynonymList",
+            "description": "The container for the set of synonyms. The list contains synonyms for words in the question. When no synonyms are found, an empty synonymList element is returned in the response. You can provide feedback to Watson through an updated list of synonyms.",
+            "required": [
+                "term",
+                "synSet",
+                "synonym"
+            ],
+            "properties": {
+                "term": {
+                    "type": "string",
+                    "description": "The original term value with its part of speech, such as noun, adj, adv, and verb. "
+                },
+                "synSet": {
+                    "type": "string",
+                    "description": "The set that represents the source (such as wordnet or wikiredirect) of the synonyms. "
+                },
+                "synonym": {
+                    "type": "string",
+                    "description": "A synonym that belongs to a synSet. The synonym is represented by its value and whether it is used. All synonyms are returned in lowercase text."
+                }
+            }
+        },
+        "Evidence": {
+            "id": "Evidence",
+            "description": "The container for information about the evidence passage.",
+            "required": [
+                "copyright",
+                "metadataMap",
+                "termsOfUse",
+                "text",
+                "title",
+                "document",
+                "value"
+            ],
+            "properties": {
+                "copyright": {
+                    "type": "string",
+                    "description": "The copyright holder for the document that contains the evidence passage. If there is no copyright information, the element is empty."
+                },
+                "metadataMap": {
+                    "type": "string",
+                    "description": "The container for the metadata from the document that contains the evidence passage. This element is returned only when the IBM Watson processing pipeline is configured to support metadata."
+                },
+                "termsOfUse": {
+                    "type": "string",
+                    "description": "A URL that points to the license that describes the terms of use of the document that contains the evidence passage. If there is no information about terms of use, the element is empty."
+                },
+                "text": {
+                    "type": "string",
+                    "description": "The evidence passage text."
+                },
+                "title": {
+                    "type": "string",
+                    "description": "The title of the document for the evidence passage."
+                },
+                "document": {
+                    "type": "string",
+                    "description": "The URL to a document passage for an answer. "
+                },
+                "value": {
+                    "type": "string",
+                    "description": "A decimal percentage that represents the confidence that Watson has in this evidence. Higher values represent higher confidences."
+                }
+            }
+        },
+        "FeedbackInput": {
+            "id": "FeedbackInput",
+            "description": "Feedback Information",
+            "required": [
+                "questionId",
+                "questionText",
+                "answerId",
+                "answerText"
+            ],
+            "properties": {
+                "questionId": {
+                    "type": "string",
+                    "description": "The question ID, obtained from the QA API result."
+                },
+                "questionText": {
+                    "type": "string",
+                    "description": "The question text obtained from the QA API result."
+                },
+                "answerId": {
+                    "type": "string",
+                    "description": "The answer ID to provide feedback on. The Answer ID is obtained from the QA API result. "
+                },
+                "answerText": {
+                    "type": "string",
+                    "description": "The answer text to provide feedback on. The answer text is obtained from the QA API result. "
+                },
+                "userName": {
+                    "type": "string",
+                    "description": "The name of the user submitting the feedback."
+                },
+                "mode": {
+                    "type": "string",
+                    "description": "The Watson mode used to obtain the QA API result.",
+                    "enum": [
+                        "prod",
+                        "m_prod",
+                        "test",
+                        "m_test"
+                    ]
+                },
+                "confidence": {
+                    "type": "string",
+                    "description": "The confidence of the answer obtained from the QA API result."
+                },
+                "shown": {
+                    "type": "boolean",
+                    "description": "If the answer was shown to the user."
+                },
+                "evidenceViewed": {
+                    "type": "boolean",
+                    "description": "If the evidence was viewed by the user."
+                },
+                "feedback": {
+                    "type": "string",
+                    "description": "String representation of the feedback [-1 = answers was irrelevant, 0=neutral feedback, 1=answer was relevant, 9=answer was partially relevant]",
+                    "enum": [
+                        "-1",
+                        "0",
+                        "1",
+                        "9"
+                    ]
+                },
+                "comment": {
+                    "type": "string",
+                    "description": "User comment."
+                }
+            }
+        }
+    }
+}

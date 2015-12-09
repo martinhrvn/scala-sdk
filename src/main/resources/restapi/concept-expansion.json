@@ -1,0 +1,219 @@
+{
+    "swaggerVersion": "1.2",
+    "apiVersion": "1.0.0",
+    "basePath": "https://gateway.watsonplatform.net",
+    "resourcePath": "/concept-expansion-beta/api",
+    "description": "Operations for the Watson Concept Expansion service",
+    "authorizations": {},
+    "produces": [
+        "application/json"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "apis": [
+        {
+            "authorizations": {
+                "basicAuth": {
+                    "type": "basicAuth"
+                }
+            },
+            "path": "/v1/ping",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Ping the service to verify that that it is available",
+                    "type": "Ping",
+                    "nickname": "ping"
+                }
+            ]
+        },
+        {
+            "path": "/v1/upload",
+            "operations": [
+                {
+                    "method": "POST",
+                    "summary": "Uploads the seeds list",
+                    "notes": "Step 1. Upload the seed list.",
+                    "type": "Jobid",
+                    "nickname": "upload",
+                    "parameters": [
+                        {
+                            "name": "seeds",
+                            "description": "The JSON request with the list of terms to seed the concept expansion. The JSON must follow the format in the model schema, and must include 'dataset' and 'seeds'.",
+                            "required": true,
+                            "type": "Seeds",
+                            "paramType": "body",
+                            "consumes": "application/json"
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 400,
+                            "message": "Missing label or seeds. Or error uploading seed list. Or error creating the job."
+                        },
+                        {
+                            "code": 500,
+                            "message": "Job is not ready"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/v1/status",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Get the status of a job",
+                    "notes": "Step 2. Query the status of the job created with the POST /upload operation.",
+                    "type": "Status",
+                    "nickname": "getStatus",
+                    "parameters": [
+                        {
+                            "name": "jobid",
+                            "description": "The jobid returned from the POST /upload operation.",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 400,
+                            "message": "Missing or incorrect jobid"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/v1/result",
+            "operations": [
+                {
+                    "method": "PUT",
+                    "summary": "Retrieves the seed list and deletes the results",
+                    "notes": "Step 3. Retrieve the concept-expanded seed list and delete the results.",
+                    "type": "Rtn_seeds",
+                    "nickname": "result",
+                    "parameters": [
+                        {
+                            "name": "jobid",
+                            "description": "ID returned from the upload path.",
+                            "required": true,
+                            "type": "Jobid",
+                            "paramType": "body"
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 400,
+                            "message": "Missing jobid or seed list. Or error deleting or retrieving seed list. Or error setting state."
+                        },
+                        {
+                            "code": 500,
+                            "message": "Job is not ready"
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "models": {
+        "Ping": {
+            "description": "Ping model",
+            "required": [
+                "message"
+            ],
+            "id": "ping",
+            "properties": {
+                "message": {
+                    "description": "Ping response message.",
+                    "type": "string"
+                }
+            }
+        },
+        "Jobid": {
+            "description": "Jobid model",
+            "required": [
+                "Jobid"
+            ],
+            "id": "Jobid",
+            "properties": {
+                "jobid": {
+                    "type": "string",
+                    "description": "Unique identifier for the submitted job in the form \"&lt;id_number&gt;#&lt;serialnumber&gt;\""
+                }
+            }
+        },
+        "Status": {
+            "description": "Status model",
+            "required": [
+                "state"
+            ],
+            "id": "Status",
+            "properties": {
+                "state": {
+                    "type": "string",
+                    "description": "Current status of the job: Done. Awaiting start. Going, Retrieved, and Failed",
+                    "enum": [
+                        "D",
+                        "A",
+                        "G",
+                        "R",
+                        "F"
+                    ]
+                }
+            }
+        },
+		"Seeds": {
+      "id": "Seeds",
+      "description" : "seed model",
+      "required" : ["text"],
+      "properties" : {
+        "label" : {
+          "type" : "string",
+          "description" : "A conceptual classification of the seed terms."
+        },
+        "seeds" : {
+          "type" : "array",
+		  "required" : "true",
+          "description" : "A list of terms with which to start your expansion.",
+          "items" : { "type" : "string"}
+        }
+      }
+    },
+	
+        "Rtn_seeds": {
+            "description": "List of all return seeds",
+            "required": [
+                "rtn_seeds"
+            ],
+            "id": "rtn_seeds",
+            "properties": {
+                "return_seeds": {
+                    "$ref": "rtn_seed"
+                }
+            }
+        },
+        "rtn_seed": {
+            "description": "List of all return seeds",
+            "required": [
+                "prevalance",
+                "result"
+            ],
+            "id": "rtn_seed",
+            "properties": {
+                "prevalance": {
+                    "type": "double",
+                    "format": "double",
+                    "description": "Ranked score for result"
+                },
+                "result": {
+                    "type": "string",
+                    "description": "A new term"
+                }
+            }
+        }
+    }
+}

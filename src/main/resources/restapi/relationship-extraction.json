@@ -1,0 +1,62 @@
+{
+  "apiVersion": "1.0.0",
+  "swaggerVersion": "1.2",
+  "basePath": "https://gateway.watsonplatform.net",
+  "resourcePath": "/relationship-extraction-beta/api",
+  "description": "Operations for the Watson Relationship Extractor service",
+  "authorizations" : { },
+   "produces": [
+        "application/xml"
+      ],
+  "consumes": [
+        "x-www-form-urlencoded"
+      ],
+       "apis": [
+        {
+            "authorizations" : {
+               "basicAuth" : {"type" : "basicAuth"}
+            },              
+          "path": "/v1/sire/0",
+          "operations": [
+            {
+              "method": "POST",
+              "summary": "Sends text to the server",
+              "notes": "You can extract useful information from text by using the IBM Watson Relationship Extractor service.",
+              "nickname": "extract",
+              "parameters": [
+               {
+                  "name": "sid",
+                  "paramType": "query",
+                  "description": "Language identifier. \"es\" refers to Spanish, and \"en\" refers to English.",
+                  "required": true,
+                  "type": "string",
+                  "enum": [
+                      "ie-es-news",
+                      "ie-en-news"
+                    ]
+                },
+                {
+                  "name": "txt",
+                  "description": "The text that you want to process. Must be encoded as UTF-8.",
+                  "required": true,
+                  "type": "string",
+                  "paramType": "query"
+                },
+                {
+                  "name": "rt",
+                  "description": "Return type. The content type to accept.",
+                  "required": false,
+                  "type": "string",
+                  "enum": [
+                     "json",                     
+                  	 "xml"
+                    ],
+                  "defaultValue": "xml",
+                  "paramType": "query"
+                }
+              ]
+            }
+          ]
+        }
+    ]
+ }

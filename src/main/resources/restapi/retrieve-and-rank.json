@@ -1,0 +1,981 @@
+{
+    "apiVersion": "1.0",
+    "swaggerVersion": "1.2",
+    "basePath": "/retrieve-and-rank/api",
+    "resourcePath": "/retrieve-and-rank/api",
+    "apis": [
+        {
+            "path": "/v1/solr_clusters",
+            "operations": [
+                {
+                    "method": "POST",
+                    "summary": "Create Solr cluster",
+                    "notes": " Provisions a Solr cluster asynchronously. When the operation is successful, the status of the cluster is set to \"NOT_AVAILABLE\". The status must be \"READY\" before you can use the cluster.",
+                    "type": "SolrClusterResponse",
+                    "nickname": "createSolrCluster",
+                    "consumes": [],
+                    "produces": [
+                        "application/json"
+                    ],
+                    "parameters": [
+                        {
+                            "name": "body",
+                            "required": false,
+                            "type": "SolrClusterCreationRequest",
+                            "paramType": "body",
+                            "allowMultiple": false
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 400,
+                            "message": "Bad request. Invalid cluster size.",
+                            "responseModel": "ErrorResponsePayload"
+                        },
+                        {
+                            "code": 409,
+                            "message": "This user or service instance has the maximum number of Solr clusters.",
+                            "responseModel": "ErrorResponsePayload"
+                        },
+                        {
+                            "code": 415,
+                            "message": "Invalid Content-Type.",
+                            "responseModel": "ErrorResponsePayload"
+                        },
+                        {
+                            "code": 500,
+                            "message": "Cannot create a Solr cluster.",
+                            "responseModel": "ErrorResponsePayload"
+                        }
+                    ]
+                },
+                {
+                    "method": "GET",
+                    "summary": "List Solr clusters",
+                    "notes": "",
+                    "type": "SolrClusterListResponse",
+                    "nickname": "listSolrClusters",
+                    "produces": [
+                        "application/json"
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/v1/solr_clusters/{solr_cluster_id}",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Get information about a Solr cluster",
+                    "notes": "Returns status and other information about a cluster.",
+                    "type": "SolrClusterResponse",
+                    "nickname": "pollSolrCluster",
+                    "parameters": [
+                        {
+                            "name": "solr_cluster_id",
+                            "description": "Unique identifier for this cluster",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path",
+                            "allowMultiple": false
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 400,
+                            "message": "Bad request. The Solr cluster ID is malformed and cannot be parsed.",
+                            "responseModel": "ErrorResponsePayload"
+                        },
+                        {
+                            "code": 403,
+                            "message": "Forbidden. The user is not authorized to delete the given Solr cluster.",
+                            "responseModel": "ErrorResponsePayload"
+                        },
+                        {
+                            "code": 500,
+                            "message": "Cannot delete the Solr cluster.",
+                            "responseModel": "ErrorResponsePayload"
+                        }
+                    ]
+                },
+                {
+                    "method": "DELETE",
+                    "summary": "Delete Solr cluster",
+                    "notes": "Stops and deletes a Solr Cluster asynchronously.",
+                    "type": "void",
+                    "nickname": "deleteSolrCluster",
+                    "parameters": [
+                        {
+                            "name": "solr_cluster_id",
+                            "description": "Cluster to delete",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path",
+                            "allowMultiple": false
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 400,
+                            "message": "Bad request. The Solr cluster ID is malformed and cannot be parsed.",
+                            "responseModel": "ErrorResponsePayload"
+                        },
+                        {
+                            "code": 403,
+                            "message": "Forbidden. The user is not authorized to delete the given Solr cluster.",
+                            "responseModel": "ErrorResponsePayload"
+                        },
+                        {
+                            "code": 500,
+                            "message": "Cannot delete the Solr cluster.",
+                            "responseModel": "ErrorResponsePayload"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/v1/solr_clusters/{solr_cluster_id}/config",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "List Solr configurations",
+                    "notes": "Retrieves all configurations for a cluster.",
+                    "type": "SolrConfigList",
+                    "nickname": "listConfigs",
+                    "produces": [
+                        "application/json"
+                    ],
+                    "parameters": [
+                        {
+                            "name": "solr_cluster_id",
+                            "description": "Cluster to query",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path",
+                            "allowMultiple": false
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 400,
+                            "message": "Bad request. The Solr cluster ID is malformed and cannot be parsed.",
+                            "responseModel": "ErrorResponsePayload"
+                        },
+                        {
+                            "code": 403,
+                            "message": "Forbidden. The user is not authorized for the Solr cluster.",
+                            "responseModel": "MessageResponsePayload"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/v1/solr_clusters/{solr_cluster_id}/config/{config_name}",
+            "operations": [
+                {
+                    "method": "POST",
+                    "summary": "Upload Solr configuration",
+                    "notes": "For a valid response, upload the <a download=\"cranfield_solr_config.zip\" target=\"_blank\" href=\"http://www.ibm.com/smarterplanet/us/en/ibmwatson/developercloud/doc/retrieve-rank/resources/cranfield_solr_config.zip\">sample cranfield_solr_config.zip</a> configuration set.<p/>Uploads the configuration files to use with your Solr collection. Include schema.xml, solrconfig.xml, and other files you need for your configuration. <p/>Configuration files on the xslt path are not uploaded. The request fails if a configuration with the same name exists.",
+                    "type": "void",
+                    "nickname": "uploadConfig",
+                    "produces": [
+                        "application/json"
+                    ],
+                    "consumes": [
+                        "multipart/form-data"
+                    ],
+                    "parameters": [
+                        {
+                            "name": "Content-Type",
+                            "description": "Media type of the configuration.",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "header",
+                            "allowMultiple": false,
+                            "enum": [
+                                "application/zip"
+                            ]
+                        },
+                        {
+                            "name": "solr_cluster_id",
+                            "description": "Cluster ID for the configuration.",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path",
+                            "allowMultiple": false
+                        },
+                        {
+                            "name": "config_name",
+                            "description": "The name of the configuration to create.",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path",
+                            "allowMultiple": false
+                        },
+                        {
+                            "name": "body",
+                            "description": "The compressed configuration files.",
+                            "required": true,
+                            "type": "File",
+                            "paramType": "form",
+                            "allowMultiple": false
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 404,
+                            "message": "The specified Solr cluster is not found.",
+                            "responseModel": "ErrorResponsePayload"
+                        },
+                        {
+                            "code": 409,
+                            "message": "The configuration exists.",
+                            "responseModel": "ErrorResponsePayload"
+                        },
+                        {
+                            "code": 500,
+                            "message": "The configuration upload failed.",
+                            "responseModel": "ErrorResponsePayload"
+                        }
+                    ]
+                },
+                {
+                    "method": "GET",
+                    "summary": "Get Solr configuration",
+                    "notes": "Returns a configuration .zip file for a cluster.",
+                    "type": "void",
+                    "nickname": "getConfig",
+                    "produces": [
+                        "application/zip"
+                    ],
+                    "parameters": [
+                        {
+                            "name": "solr_cluster_id",
+                            "description": "Cluster ID for the configuration",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path",
+                            "allowMultiple": false
+                        },
+                        {
+                            "name": "config_name",
+                            "description": "The name of the configuration to create",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path",
+                            "allowMultiple": false
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 404,
+                            "message": "The configuration does not exist or is not available to the user.",
+                            "responseModel": "MessageResponsePayload"
+                        }
+                    ]
+                },
+                {
+                    "method": "DELETE",
+                    "summary": "Delete Solr configuration",
+                    "notes": "Deletes the configuration for a cluster. An HTTP 200 status code indicates that the configuration was deleted or does not exist.<p/>Before you delete the configuration, delete any collections that point to it.",
+                    "type": "void",
+                    "nickname": "deleteConfig",
+                    "produces": [
+                        "application/json"
+                    ],
+                    "parameters": [
+                        {
+                            "name": "solr_cluster_id",
+                            "description": "Cluster ID for the configuration",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path",
+                            "allowMultiple": false
+                        },
+                        {
+                            "name": "config_name",
+                            "description": " The name of the configuration to delete",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path",
+                            "allowMultiple": false
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 400,
+                            "message": "Bad request. Likely caused by a malformed Solr cluster ID or a configuration that is used by a collection. Delete the collection.",
+                            "responseModel": "MessageResponsePayload"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/v1/solr_clusters/{solr_cluster_id}/solr/admin/collections",
+            "operations": [
+                {
+                    "method": "POST",
+                    "summary": "Forward collection requests to Solr (CREATE, DELETE, LIST)",
+                    "notes": "Creates, deletes, or lists Solr configurations. The Retrieve and Rank API forwards the requests to Solr. For details about the Solr API, see the <a target=\"_blank\" href=\"https://cwiki.apache.org/confluence/display/solr/Collections+API\">Solr Collections API</a>.",
+                    "type": "void",
+                    "nickname": "adminAction",
+                    "produces": [
+                        "application/xml",
+                        "application/json",
+                        "text/x-script.python"
+                    ],
+                    "parameters": [
+                        {
+                            "name": "solr_cluster_id",
+                            "description": "Cluster ID for the collection.",
+                            "required": true,
+                            "type": "SolrClusterParameter",
+                            "paramType": "path",
+                            "allowMultiple": false
+                        },
+                        {
+                            "name": "action",
+                            "description": "Operation to carry out. `CREATE` creates a Solr collection, `DELETE` removes a collection, and `LIST` returns the names of the collections in the cluster.",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query",
+                            "allowMultiple": false,
+                            "enum": [
+                                "CREATE",
+                                "DELETE",
+                                "LIST"
+                            ],
+                            "defaultValue": "LIST"
+                        },
+                        {
+                            "name": "name",
+                            "description": "Collection name. Required for the `CREATE` and `DELETE` actions.",
+                            "required": false,
+                            "type": "string",
+                            "paramType": "query",
+                            "allowMultiple": false
+                        },
+                        {
+                            "name": "collection.configName",
+                            "description": "Used with the `CREATE` action. The name of the configuration to use. Default is the collection `name`.",
+                            "required": false,
+                            "type": "string",
+                            "paramType": "query",
+                            "allowMultiple": false
+                        },
+                        {
+                            "name": "wt",
+                            "description": "Writer type. Specifies which QueryResponseWriter to use to process the request. Valid values are declared in the solrconfig.xml file.",
+                            "required": false,
+                            "type": "string",
+                            "paramType": "query",
+                            "allowMultiple": false,
+                            "enum": [
+                                "json",
+                                "xml"
+                            ],
+                            "defaultValue": "xml"
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 400,
+                            "message": "Bad request. Likely caused by a malformed Solr cluster ID.",
+                            "responseModel": "ErrorResponsePayload"
+                        },
+                        {
+                            "code": 403,
+                            "message": "Forbidden. The method is not allowed.",
+                            "responseModel": "MessageResponsePayload"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/v1/solr_clusters/{solr_cluster_id}/solr/{collection_name}/update",
+            "operations": [
+                {
+                    "method": "POST",
+                    "summary": "Index documents",
+                    "notes": "For a valid response with the `sample cranfield_solr_config.zip` configuration file, upload the <a download=\"cranfield_data.json\" target=\"_blank\" href=\"http://www.ibm.com/smarterplanet/us/en/ibmwatson/developercloud/doc/retrieve-rank/resources/cranfield_data.json\">cranfield_data.json</a> configuration set.<p/>Adds content to a Solr index so you can search it. This method is an example that forwards to Solr. For more information about indexing, see <a target=\"_blank\" href=\"https://cwiki.apache.org/confluence/display/solr/Indexing+and+Basic+Data+Operations\">Indexing and Basic Data Operations</a> in the Solr wiki.<p/>For details about the response, see Uploading Data with Index Handlers in the Apach Solr Reference Guide. ",
+                    "type": "void",
+                    "nickname": "update",
+                    "parameters": [
+                        {
+                            "name": "Content-Type",
+                            "description": "Media type of the content.",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "header",
+                            "allowMultiple": false,
+                            "defaultValue": "application/json"
+                        },
+                        {
+                            "name": "solr_cluster_id",
+                            "description": "Cluster ID for the collection.",
+                            "required": true,
+                            "type": "SolrClusterParameter",
+                            "paramType": "path",
+                            "allowMultiple": false
+                        },
+                        {
+                            "name": "collection_name",
+                            "description": "The name of the collection in the cluster.",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path",
+                            "allowMultiple": false
+                        },
+                        {
+                            "name": "body",
+                            "description": "File that defines the content.",
+                            "required": true,
+                            "type": "File",
+                            "paramType": "form",
+                            "allowMultiple": false
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 400,
+                            "message": "Bad request. There was an unknown error.",
+                            "responseModel": "MessageResponsePayload"
+                        },
+                        {
+                            "code": 403,
+                            "message": "Forbidden. The method is not allowed.",
+                            "responseModel": "MessageResponsePayload"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/v1/solr_clusters/{solr_cluster_id}/solr/{collection_name}/select",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Search Solr standard query parser",
+                    "notes": "Forwards to the <a target=\"_blank\" href=\"https://cwiki.apache.org/confluence/display/solr/The+Standard+Query+Parser\">Solr standard query parser</a>.<p/>The options in the request determine the structure of the response.",
+                    "type": "void",
+                    "nickname": "select",
+                    "parameters": [
+                        {
+                            "name": "solr_cluster_id",
+                            "description": "ID for the Solr cluster",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path",
+                            "allowMultiple": false
+                        },
+                        {
+                            "name": "collection_name",
+                            "description": "The name of the collection in the cluster.",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path",
+                            "allowMultiple": false
+                        },
+                        {
+                            "name": "q",
+                            "description": "The query. Uses Solr standard query syntax.",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query",
+                            "allowMultiple": false
+                        },
+                        {
+                            "name": "wt",
+                            "description": "Writer type. Specifies which QueryResponseWriter to use to process the request. Valid values are declared in the solrconfig.xml file.",
+                            "required": false,
+                            "type": "string",
+                            "paramType": "query",
+                            "allowMultiple": false,
+                            "enum": [
+                                "json",
+                                "xml"
+                            ],
+                            "defaultValue": "xml"
+                        },
+                        {
+                            "name": "fl",
+                            "description": "The list of fields to return. For a valid response with the cranfield_data.json content, specify \"`id,title`\".",
+                            "required": false,
+                            "type": "string",
+                            "paramType": "query",
+                            "allowMultiple": true
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 400,
+                            "message": "Bad request. There was an unknown error.",
+                            "responseModel": "solrErrorMessages"
+                        },
+                        {
+                            "code": 403,
+                            "message": "Forbidden. The method is not allowed.",
+                            "responseModel": "solrErrorMessages"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/v1/rankers",
+            "operations": [
+                {
+                    "method": "POST",
+                    "summary": "Create ranker",
+                    "notes": " Sends data to create and train a ranker and returns information about the new ranker. <p/>When the operation is successful, the status of the ranker is set to \"Training\". The status must be \"Available\" before you can use the ranker.",
+                    "type": "RankerStatusPayload",
+                    "nickname": "create",
+                    "produces": [
+                        "application/json"
+                    ],
+                    "consumes": [
+                        "multipart/form-data"
+                    ],
+                    "parameters": [
+                        {
+                            "name": "training_data",
+                            "description": "Training data. The first header must be `question_id` and the last header must be `ground_truth`. All headers in between must be alpha numeric feature names. For details, see <a target=\"_blank\", href=\"http://www.ibm.com/smarterplanet/us/en/ibmwatson/developercloud/doc/retrieve-rank/data_format.shtml\">\"Using your own data.\"</a>",
+                            "type": "File",
+                            "paramType": "form",
+                            "allowMultiple": false,
+                            "required": true
+                        },
+                        {
+                            "name": "body",
+                            "description": "\"training_metadata\". Additional training information in JSON format. The metadata identifies an optional name to identify the ranker.",
+                            "required": true,
+                            "type": "RankerTrainingMetadataPayload",
+                            "paramType": "body",
+                            "allowMultiple": false
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 400,
+                            "message": "Bad request. Likely caused by a missing `training_data` form field, `training_metadata` form field or malformed CSV, or the set of data is too small to train with.",
+                            "responseModel": "RankerErrorResponsePayload"
+                        }
+                    ]
+                },
+                {
+                    "method": "GET",
+                    "summary": "List rankers",
+                    "notes": "Retrieves the list of rankers for the service instance.",
+                    "type": "ListRankersPayload",
+                    "nickname": "getRankers",
+                    "produces": [
+                        "application/json"
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/v1/rankers/{ranker_id}/rank",
+            "operations": [
+                {
+                    "method": "POST",
+                    "summary": "Rank",
+                    "notes": " Returns the top answer and a list of ranked answers with their ranked scores and confidence values. Use the \"Get information about a ranker\" method to retrieve the status.",
+                    "type": "RankerOutputPayload",
+                    "nickname": "rank",
+                    "produces": [
+                        "application/json"
+                    ],
+                    "consumes": [
+                        "multipart/form-data"
+                    ],
+                    "parameters": [
+                        {
+                            "name": "ranker_id",
+                            "description": "Ranker to use",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path",
+                            "allowMultiple": false
+                        },
+                        {
+                            "name": "body",
+                            "description": "The CSV file that contains the search results that you want to rank. The first column header of the CSV must be labeled \"answer_id\". The remaining column headers must match the names of the features in the training_data when this ranker was created.",
+                            "required": true,
+                            "type": "File",
+                            "paramType": "form",
+                            "allowMultiple": false
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 400,
+                            "message": "Bad request. Likely caused by a ranker status other than `Available`, Likely caused by a missing `answer_data` form field or by malformed CSV.",
+                            "responseModel": "RankerErrorResponsePayload"
+                        },
+                        {
+                            "code": 404,
+                            "message": "The ranker does not exist or is not available to the user",
+                            "responseModel": "RankerErrorResponsePayload"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/v1/rankers/{ranker_id}",
+            "operations": [
+                {
+                    "method": "DELETE",
+                    "summary": "Delete ranker",
+                    "notes": "",
+                    "type": "void",
+                    "nickname": "delete",
+                    "produces": [
+                        "application/json"
+                    ],
+                    "parameters": [
+                        {
+                            "name": "ranker_id",
+                            "description": "Ranker to delete",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path",
+                            "allowMultiple": false
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 404,
+                            "message": "The ranker does not exist or is not available to the user",
+                            "responseModel": "RankerErrorResponsePayload"
+                        }
+                    ]
+                },
+                {
+                    "method": "GET",
+                    "summary": "Get information about a ranker",
+                    "notes": "Returns status and other information about a ranker.",
+                    "type": "RankerStatusPayload",
+                    "nickname": "getStatus",
+                    "produces": [
+                        "application/json"
+                    ],
+                    "parameters": [
+                        {
+                            "name": "ranker_id",
+                            "description": "Ranker to query",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path",
+                            "allowMultiple": false
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 404,
+                            "message": "The ranker does not exist or is not available to the user",
+                            "responseModel": "RankerErrorResponsePayload"
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "models": {
+        "SolrClusterCreationRequest": {
+            "id": "SolrClusterCreationRequest",
+            "description": "Solr cluster creation request body.",
+            "properties": {
+                "cluster_name": {
+                    "type": "string",
+                    "description": "An optional, user provided, name used to identify this Solr cluster."
+                },
+                "cluster_size": {
+                    "type": "string",
+                    "description": "An optional, user provided, size for the Solr cluster.  The smallest size will be used if not otherwise specified."
+                }
+            }
+        },
+        "SolrConfigList": {
+            "id": "SolrConfigList",
+            "description": "List of names of the Solr configurations.",
+            "properties": {
+                "solr_configs": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "SolrConfig"
+                    }
+                }
+            }
+        },
+        "SolrConfig": {
+            "id": "SolrConfig",
+            "properties": {
+                "config_name": {
+                    "type": "string",
+                    "description": "The name of the configuration."
+                }
+            }
+        },
+        "SolrClusterResponse": {
+            "id": "SolrClusterResponse",
+            "description": "",
+            "properties": {
+                "solr_cluster_id": {
+                    "type": "string",
+                    "description": "Unique identifier for this cluster"
+                },
+                "cluster_name": {
+                    "type": "string",
+                    "description": "Name that identifies the cluster"
+                },
+                "cluster_size": {
+                    "type": "string",
+                    "description": "Size of the cluster to create"
+                },
+                "solr_cluster_status": {
+                    "type": "string",
+                    "enum": [
+                        "NOT_AVAILABLE",
+                        "READY"
+                    ],
+                    "description": "The state of the cluster"
+                }
+            }
+        },
+        "SolrClusterListResponse": {
+            "id": "SolrClusterListResponse",
+            "description": "An array of clusters that are available for the service instance.",
+            "properties": {
+                "clusters": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "SolrClusterResponse"
+                    }
+                }
+            }
+        },
+        "MessageResponsePayload": {
+            "id": "MessageResponsePayload",
+            "description": "Response payload for HTTP errors",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "description": "Error description"
+                }
+            }
+        },
+        "solrErrorMessages": {
+            "id": "solrErrorMessages",
+            "description": "Response payload for HTTP errors",
+            "properties": {
+                "SolrErrorMessage": {
+                    "$ref": "solrMessage"
+                }
+            }
+        },
+        "solrMessage": {
+            "id": "solrMessage",
+            "description": "Message",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "description": "Error description"
+                }
+            }
+        },
+        "ErrorResponsePayload": {
+            "id": "ErrorResponsePayload",
+            "description": "Response payload for HTTP errors",
+            "properties": {
+                "msg": {
+                    "type": "string",
+                    "description": "Error description"
+                },
+                "code": {
+                    "type": "integer",
+                    "format": "int32",
+                    "description": "HTTP status code"
+                }
+            }
+        },
+        "RankerErrorResponsePayload": {
+            "id": "RankerErrorResponsePayload",
+            "description": "Response payload for HTTP errors",
+            "properties": {
+                "code": {
+                    "type": "integer",
+                    "format": "int32",
+                    "description": "HTTP status code"
+                },
+                "error": {
+                    "type": "string",
+                    "description": "Error name"
+                },
+                "description": {
+                    "type": "string",
+                    "description": "Error description"
+                }
+            }
+        },
+        "RankerTrainingMetadataPayload": {
+            "id": "RankerTrainingMetadataPayload",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "Optional name to identify the ranker"
+                }
+            }
+        },
+        "Ranker": {
+            "id": "Ranker",
+            "properties": {
+                "rankerId": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "timestamp": {
+                    "type": "string"
+                },
+                "userId": {
+                    "type": "string"
+                },
+                "selfLink": {
+                    "type": "string"
+                }
+            }
+        },
+        "RankedAnswer": {
+            "id": "RankedAnswer",
+            "description": "Payload for class and confidence",
+            "properties": {
+                "answer_id": {
+                    "type": "string",
+                    "description": "Answer label"
+                },
+                "score": {
+                    "type": "number",
+                    "format": "double",
+                    "description": "A decimal percentage that represents the confidence that Watson has in this class. Higher values represent higher confidences."
+                },
+                "confidence": {
+                    "type": "number",
+                    "format": "double",
+                    "description": "A decimal percentage that represents the confidence that Watson has in this class. Higher values represent higher confidences."
+                }
+            }
+        },
+        "RankerStatusPayload": {
+            "id": "RankerStatusPayload",
+            "description": "Response payload for a ranker",
+            "properties": {
+                "ranker_id": {
+                    "type": "string",
+                    "description": "Unique identifier for this ranker"
+                },
+                "url": {
+                    "type": "string",
+                    "description": "Link to the ranker"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "User-supplied name for the ranker"
+                },
+                "created": {
+                    "type": "string",
+                    "description": "Date and time (UTC) the ranker was created"
+                },
+                "status": {
+                    "type": "string",
+                    "description": "The state of the ranker",
+                    "enum": [
+                        "Non Existent",
+                        "Training",
+                        "Failed",
+                        "Available",
+                        "Unavailable"
+                    ]
+                },
+                "status_description": {
+                    "type": "string",
+                    "description": "Additional detail about the status"
+                }
+            }
+        },
+        "RankerInfoPayload": {
+            "id": "RankerInfoPayload",
+            "description": "Response payload for information about available rankers",
+            "required": [
+                "ranker_id",
+                "url"
+            ],
+            "properties": {
+                "ranker_id": {
+                    "type": "string",
+                    "description": "Unique identifier for this ranker"
+                },
+                "url": {
+                    "type": "string",
+                    "description": "Link to the ranker"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "User-supplied name for the ranker"
+                },
+                "created": {
+                    "type": "string",
+                    "description": "Date and time (UTC) the ranker was created"
+                }
+            }
+        },
+        "ListRankersPayload": {
+            "id": "ListRankersPayload",
+            "description": "Response payload of available rankers",
+            "properties": {
+                "rankers": {
+                    "type": "array",
+                    "description": "The rankers available to the user. Returns an empty array if no rankers are available.",
+                    "items": {
+                        "$ref": "RankerInfoPayload"
+                    }
+                }
+            }
+        },
+        "RankerOutputPayload": {
+            "id": "RankerOutputPayload",
+            "description": "Response payload for a ranker on a phrase",
+            "properties": {
+                "ranker_id": {
+                    "type": "string",
+                    "description": "Unique identifier for this ranker"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "Name of this ranker"
+                },
+                "url": {
+                    "type": "string",
+                    "description": "Link to the ranker"
+                },
+                "top_answer": {
+                    "type": "string",
+                    "description": "The class with the highest confidence"
+                },
+                "answers": {
+                    "type": "array",
+                    "description": "An array of up to ten class-confidence pairs sorted in descending order of confidence",
+                    "items": {
+                        "$ref": "RankedAnswer"
+                    }
+                }
+            }
+        }
+    }
+}

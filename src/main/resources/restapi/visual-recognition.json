@@ -1,0 +1,188 @@
+{
+    "apiVersion": "1.0.0",
+    "swaggerVersion": "1.2",
+    "basePath": "https://gateway.watsonplatform.net",
+    "resourcePath": "/visual-recognition/beta/api",
+    "description": "Operations for the Watson Visual Recognition service",
+    "produces": [
+        "application/json"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "apis": [
+        {
+            "path": "/v1/tag/labels",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Retrieves a list of labels and label groups",
+                    "notes": "You can query a label group to return other label groups and relevant labels.",
+                    "nickname": "getLabelService",
+                    "consumes": [
+                        "multipart/form-data",
+                        "application/json"
+                    ],
+                    "parameters": [
+                        {
+                            "paramType": "query",
+                            "name": "labels_to_check",
+                            "description": "Label groups and labels object. Send the JSON data as a string. Omit the parameter to return all items. Specify a label group to return a subset of label groups and corresponding labels. Existing labels that you specify are returned.",
+                            "type": "labels_payload",
+                            "defaultValue": "",
+                            "required": false
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "Success",
+                            "responseModel": ""
+                        },
+                        {
+                            "code": 400,
+                            "message": "Invalid JSON",
+                            "responseModel": ""
+                        },
+                        {
+                            "code": 500,
+                            "message": "Server error",
+                            "responseModel": ""
+                        }
+
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/v1/tag/recognize",
+            "operations": [
+                {
+                    "method": "POST",
+                    "summary": "Uploads an image to analyze against the specified labels",
+                    "notes": "Classifies the images you upload against the label groups and labels. For each image, the response includes a score for a label if the score meets the minimum threshold of 0.5.  If no score meets the threshold for an image, no labels are returned.<br>The operation consumes both parameters as multipart/form-data",
+                    "nickname": "recognizeLabelsService",
+                    "type": "images",
+                    "consumes": [
+                        "multipart/form-data"
+                    ],
+                    "parameters": [
+                        {
+                            "paramType": "form",
+                            "name": "img_File",
+                            "description": "The image file to analyze. Ensure that the image includes a file name extension (for example, .jpg or .png). You can also upload a compressed (.zip) file of images.",
+                            "type": "file",
+                            "required": true
+                        },
+                        {
+                            "paramType": "form",
+                            "name": "labels_to_check",
+                            "description": "The labels to check. Send the JSON data as a string. Use the response from the GET /labels method to narrow the list of labels to check. Omit this parameter to use all labels.",
+                            "type": "labels_payload",
+                            "required": false,
+                            "allowMultiple": false
+                        }                  
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "Success",
+                            "responseModel": ""
+                        },
+                        {
+                            "code": 400,
+                            "message": "Invalid labels",
+                            "responseModel": ""
+                        },
+                        {
+                            "code": 500,
+                            "message": "Server error, such as a lack of storage."
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "models": {
+        "images": {
+            "id": "images",
+            "description": "",
+            "required": [
+                "image"
+            ],
+            "properties": {
+                "images": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "image"
+                    }
+                }
+            }
+        },
+        "image": {
+            "id": "image",
+            "description": "",
+            "required": [
+                "image_id",
+                "image_name",
+                "labels"
+            ],
+            "properties": {
+                "image_id": {
+                    "type": "integer",
+                    "format": "int32",
+                    "description": "Integer assigned to each uploaded image"
+                },
+                "image_name": {
+                    "type": "string",
+                    "description": "File name of the image"
+                },
+                "labels": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "labels"
+                    }
+                }
+            }
+        },
+        "labels": {
+            "id": "labels",
+            "description": "List of labels and scores that are recognized",
+            "required": [
+            ],
+            "properties": {
+                "label_name": {
+                    "type": "string",
+                    "description": "Name of the label"
+                },
+                "label_score": {
+                    "type": "number",
+                    "format": "float", 
+                    "minimum": "0.5",
+                    "maximum": "1.0",
+                    "description": "Number that represents how strongly the label is recognized in the image"
+                }
+            }        
+        },
+        "labels_payload": {
+            "id": "labels_payload",
+            "description": "",
+            "required": [
+            ],
+            "properties": {
+                "label_groups": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "labels": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }       
+            }
+        }
+    }
+}

@@ -1,0 +1,465 @@
+{
+    "apiVersion": "1.0",
+    "swaggerVersion": "1.2",
+    "basePath": "https://gateway.watsonplatform.net/natural-language-classifier/api",
+    "resourcePath": "/natural-language-classifier/api",
+    "apis": [
+        {
+            "path": "/v1/classifiers",
+            "operations": [
+                {
+                    "method": "POST",
+                    "summary": "Creates a classifier with CSV data",
+                    "notes": "Sends data to create and train a classifier and returns information about the new classifier. In the CSV file, each text phrase in the request must have at least one class. <p/>When the operation is successful, the status of the classifier is set to `Training`. The status must be `Available` before you can use the classifier.<h4>Example Request</h4>Creates a classifier with the information in the file `train.csv`:<pre>curl -u \"&lt;username&gt;\":\"&lt;password&gt;\"<br>    -F training_data=@train.csv <br>    -F training_metadata=\"{\\\"language\\\":\\\"en\\\",\\\"name\\\":\\\"My Classifier\\\"}\"<br>    \"https://gateway.watsonplatform.net/natural-language-classifier/api/v1/classifiers\"</pre>",
+                    "type": "StatusPayload",
+                    "nickname": "create",
+                    "produces": [
+                        "application/json"
+                    ],
+                    "consumes": [
+                        "multipart/form-data"
+                    ],
+                    "parameters": [
+                        {
+                            "name": "training_metadata",
+                            "description": "Metadata in JSON format. The metadata identifies the language of the data, and an optional name to identify the classifier. For details, see the earlier example request.",
+                            "required": true,
+                            "type": "file",
+                            "paramType": "form",
+                            "allowMultiple": false
+                        },
+                        {
+                            "name": "training_data",
+                            "description": "Training data. Each text value must have at least one class. The data can include up to 15,000 records. For details, see <a target=\"_blank\", href=\"../doc/nl-classifier/data_format.shtml\">\"Using your own data.\"</a>",
+                            "required": true,
+                            "type": "file",
+                            "paramType": "form",
+                            "allowMultiple": false
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "OK",
+                            "responseModel": "StatusPayload"
+                        },
+                        {
+                            "code": 400,
+                            "message": "Bad request. Likely caused by a missing `training_data` form field, `training_metadata` form field or malformed CSV, or the set of data is too small to train with.",
+                            "responseModel": "ErrorResponsePayload"
+                        },
+                        {
+                            "code": 409,
+                            "message": "Conflict with this classifier. Likely caused by a temporary server issue or invalid training data. Make sure that your training data adheres to the format and data requirements and resubmit the request to try again.",
+                            "responseModel": "ErrorResponsePayload"
+                        }
+
+                    ]
+                },
+                {
+                    "method": "GET",
+                    "summary": "Retrieves the list of classifiers for the user",
+                    "notes": "Returns an empty array if no classifiers are available.<h4>Example Request</h4><pre>curl -u \"&lt;username&gt;\":\"&lt;password&gt;\" \"https://gateway.watsonplatform.net/natural-language-classifier/api/v1/classifiers\"</pre>",
+                    "type": "ListClassifiersPayload",
+                    "nickname": "getClassifiers",
+                    "produces": [
+                        "application/json"
+                    ],
+                    "parameters": [],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "OK",
+                            "responseModel": "ListClassifiersPayload"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/v1/classifiers/{classifier_id}/classify",
+            "operations": [
+                {
+                    "method": "POST",
+                    "summary": "Returns label information for the input",
+                    "notes": "The response includes the names of the top classes and confidence values. <p/>The status must be `Available` before you can use the classifier to classify calls.  Use `GET /classifiers/{classifier_id}` to retrieve the status.<h4>Example Request</h4>Classify a phrase with the classifier `6C76AF-nlc-43`:<pre>curl -X POST -u \"&lt;username&gt;\":\"&lt;password&gt;\" -H \"Content-Type:application/json\" -d \"{\\\"text\\\":\\\"what is your phone number?\\\"}\" <br>    \"https://gateway.watsonplatform.net/natural-language-classifier/api/v1/classifiers/6C76AF-nlc-43/classify\"</pre>",
+                    "type": "NLClassifierOutputPayload",
+                    "nickname": "classify",
+                    "produces": [
+                        "application/json"
+                    ],
+                    "consumes": [
+                        "application/json"
+                    ],
+                    "parameters": [
+                        {
+                            "name": "classifier_id",
+                            "description": "Classifier ID to use",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path",
+                            "allowMultiple": false
+                        },
+                        {
+                            "name": "body",
+                            "description": "Phrase to classify",
+                            "required": false,
+                            "type": "NLClassifierInputPayload",
+                            "paramType": "body",
+                            "allowMultiple": false
+                        },
+                        {
+                            "name": "Content-Type",
+                            "required": false,
+                            "type": "string",
+                            "paramType": "header",
+                            "enum": ["application/json"],
+                            "allowMultiple": false
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "OK",
+                            "responseModel": "NLClassifierOutputPayload"
+                        },
+                        {
+                            "code": 400,
+                            "message": "Bad request. Likely caused by a classifier status other than `Available` or by malformed JSON.",
+                            "responseModel": "ErrorResponsePayload"
+                        },
+                        {
+                            "code": 404,
+                            "message": "The classifier does not exist or is not available to the user",
+                            "responseModel": "ErrorResponsePayload"
+                        }
+                    ]
+                },
+                {
+                    "method": "GET",
+                    "summary": "Returns label information for the input",
+                    "notes": "The response includes the names of the top classes and confidence values. </p>The status must be `Available` before you can use the classifier to classify calls. Use `GET /classifiers/{classifier_id}` to retrieve the status.<h4>Example Request</h4>Classify a phrase with the classifier `6C76AF-nlc-43`:<pre>curl -G -u \"&lt;username&gt;\":\"&lt;password&gt;\"  <br>    \"https://gateway.watsonplatform.net/natural-language-classifier/api/v1/classifiers/6C76AF-nlc-43/classify\" <br>    --data-urlencode \"text=what is your phone number?\"</pre>",
+                    "type": "NLClassifierOutputPayload",
+                    "nickname": "classify",
+                    "produces": [
+                        "application/json"
+                    ],
+                    "parameters": [
+                        {
+                            "name": "classifier_id",
+                            "description": "Classifier ID to use",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path",
+                            "allowMultiple": false
+                        },
+                        {
+                            "name": "text",
+                            "description": "Phrase to classify",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query",
+                            "allowMultiple": false
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "OK",
+                            "responseModel": "NLClassifierOutputPayload"
+                        },
+                        {
+                            "code": 400,
+                            "message": "Bad request. Missing the 'text' parameter.",
+                            "responseModel": "ErrorResponsePayload"
+                        },
+                        {
+                            "code": 404,
+                            "message": "The classifier does not exist or is not available to the user",
+                            "responseModel": "ErrorResponsePayload"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/v1/classifiers/{classifier_id}",
+            "operations": [
+                {
+                    "method": "DELETE",
+                    "summary": "Deletes a classifier",
+                    "notes": "<h4>Example Request</h4>Delete the classifier `6C76AF-nlc-43`:<pre>curl -X DELETE -u \"&lt;username&gt;\":\"&lt;password&gt;\" \"https://gateway.watsonplatform.net/natural-language-classifier<br>    /api/v1/classifiers/6C76AF-nlc-43\"</pre>",
+                    "type": "void",
+                    "nickname": "delete",
+                    "produces": [
+                        "application/json"
+                    ],
+                    "parameters": [
+                        {
+                            "name": "classifier_id",
+                            "description": "Classifier ID to delete",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path",
+                            "allowMultiple": false
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "OK. Deleted."
+                        },
+                        {
+                            "code": 404,
+                            "message": "The classifier does not exist or is not available to the user",
+                            "responseModel": "ErrorResponsePayload"
+                        }
+                    ]
+                },
+                {
+                    "method": "GET",
+                    "summary": "Returns the training status of a classifier",
+                    "notes": "<h4>Example Request</h4>Retrieves the information for classifier with the id `6C76AF-nlc-43`:<pre>curl -u \"&lt;username&gt;\":\"&lt;password&gt;\" \"https://gateway.watsonplatform.net/natural-language-classifier<br>    /api/v1/classifiers/6C76AF-nlc-43\"</pre>",
+                    "type": "StatusPayload",
+                    "nickname": "getStatus",
+                    "produces": [
+                        "application/json"
+                    ],
+                    "parameters": [
+                        {
+                            "name": "classifier_id",
+                            "description": "Classifier ID to query",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path",
+                            "allowMultiple": false
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "OK",
+                            "responseModel": "StatusPayload"
+                        },
+                        {
+                            "code": 404,
+                            "message": "The classifier does not exist or is not available to the user",
+                            "responseModel": "ErrorResponsePayload"
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "models": {
+        "ErrorResponsePayload": {
+            "id": "ErrorResponsePayload",
+            "description": "Response payload for HTTP errors",
+            "properties": {
+                "description": {
+                    "type": "string",
+                    "description": "Error description"
+                },
+                "error": {
+                    "type": "string",
+                    "description": "Error name"
+                },
+                "code": {
+                    "type": "integer",
+                    "format": "int32",
+                    "description": "HTTP status code"
+                }
+            }
+        },
+        "TrainingData": {
+            "id": "TrainingData",
+            "description": "Request payload for the data that is used to train the classifier",
+            "required": [
+                "classes",
+                "text"
+            ],
+            "properties": {
+                "classes": {
+                    "type": "array",
+                    "description": "One or more labels that apply to the `text` property",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "text": {
+                    "type": "string",
+                    "description": "Representative phrase. For example, questions that users might ask."
+                }
+            }
+        },
+        "ListClassifiersPayload": {
+            "id": "ListClassifiersPayload",
+            "description": "Response payload of available classifiers",
+            "properties": {
+                "classifiers": {
+                    "type": "array",
+                    "description": "The classifiers available to the user. Returns an empty array if no classifiers are available.",
+                    "items": {
+                        "$ref": "ClassifierInfoPayload"
+                    }
+                }
+            }
+        },
+        "StatusPayload": {
+            "id": "StatusPayload",
+            "description": "Response payload for a classifier",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "User-supplied name for the classifier"
+                },
+                "url": {
+                    "type": "string",
+                    "description": "Link to the classifer"
+                },
+                "status": {
+                    "type": "string",
+                    "description": "The state of the classifier",
+                    "enum": [
+                        "Non Existent",
+                        "Training",
+                        "Failed",
+                        "Available",
+                        "Unavailable"
+                    ]
+                },
+                "classifier_id": {
+                    "type": "string",
+                    "description": "Unique identifier for this classifier"
+                },
+                "created": {
+                    "type": "string",
+                    "description": "Date and time (UTC) the classifier was created"
+                },
+                "status_description": {
+                    "type": "string",
+                    "description": "Additional detail about the status"
+                },
+                "language": {
+                    "type": "string",
+                    "description": "The language used for the classifier"
+                }
+            }
+        },
+        "NLClassifierOutputPayload": {
+            "id": "NLClassifierOutputPayload",
+            "description": "Response payload for a classifier on a phrase",
+            "properties": {
+                "classifier_id": {
+                    "type": "string",
+                    "description": "Unique identifier for this classifier"
+                },
+                "url": {
+                    "type": "string",
+                    "description": "Link to the classifer"
+                },
+                "text": {
+                    "type": "string",
+                    "description": "The submitted phrase"
+                },
+                "top_class": {
+                    "type": "string",
+                    "description": "The class with the highest confidence"
+                },
+                "classes": {
+                    "type": "array",
+                    "description": "An array of up to ten class-confidence pairs sorted in descending order of confidence",
+                    "items": {
+                        "$ref": "NLClassifiedClass"
+                    }
+                }
+            }
+        },
+        "NLClassifierInputPayload": {
+            "id": "NLClassifierInputPayload",
+            "description": "Request payload to classify",
+            "required": [
+                "text"
+            ],
+            "properties": {
+                "text": {
+                    "type": "string",
+                    "description": "The submitted phrase"
+                }
+            }
+        },
+        "NLClassifiedClass": {
+            "id": "NLClassifiedClass",
+            "description": "Payload for class and confidence",
+            "properties": {
+                "confidence": {
+                    "type": "number",
+                    "format": "double",
+                    "description": "A decimal percentage that represents the confidence that Watson has in this class. Higher values represent higher confidences."
+                },
+                "class_name": {
+                    "type": "string",
+                    "description": "Class label"
+                }
+            }
+        },
+        "TrainingInputPayload": {
+            "id": "TrainingInputPayload",
+            "description": "Request payload that contains the training data",
+            "required": [
+                "language",
+                "training_data"
+            ],
+            "properties": {
+                "language": {
+                    "type": "string",
+                    "description": "IETF primary language subtag for the `training_data`",
+                    "enum": [
+                        "en"
+                    ]
+                },
+                "name": {
+                    "type": "string",
+                    "description": "A user-supplied name for the classifier"
+                },
+                "training_data": {
+                    "type": "array",
+                    "description": "The set of phrases and their classes that are used to train a classifier to a domain",
+                    "items": {
+                        "$ref": "TrainingData"
+                    }
+                }
+            }
+        },
+        "ClassifierInfoPayload": {
+            "id": "ClassifierInfoPayload",
+            "description": "Response payload for information about available classifiers",
+            "required": [
+                "url",
+                "classifier_id"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "User-supplied name for the classifier"
+                },
+                "language": {
+                    "type": "string",
+                    "description": "The language used for the classifier"
+                },
+                "url": {
+                    "type": "string",
+                    "description": "Link to the classifer"
+                },
+                "classifier_id": {
+                    "type": "string",
+                    "description": "Unique identifier for this classifier"
+                },
+                "created": {
+                    "type": "string",
+                    "description": "Date and time (UTC) the classifier was created"
+                }
+            }
+        }
+    }
+}

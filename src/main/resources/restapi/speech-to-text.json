@@ -1,0 +1,1181 @@
+{
+    "apiVersion": "1.0.0",
+    "swaggerVersion": "1.2",
+    "basePath": "https://stream.watsonplatform.net/speech-to-text/api",
+    "resourcePath": "/speech-to-text/api/",
+    "produces": [
+        "application/json",
+        "text/html"
+    ],
+    "info": {
+        "title": "REST Methods for the IBM Speech to Text",
+        "description": "Transcribes speech in various languages to text with low latency"
+    },
+    "apis": [
+        {
+            "path": "/v1/models",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Retrieves the models available for the service",
+                    "nickname": "GetModels",
+                    "type": "ModelSet",
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "OK"
+                        },
+                        {
+                            "code": 406,
+                            "message": "Not acceptable",
+                            "responseModel": "ErrorSessionless"
+                        },
+                        {
+                            "code": 415,
+                            "message": "Unsupported Media Type",
+                            "responseModel": "ErrorSessionless"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/v1/models/{model_id}",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Retrieves information about the model",
+                    "type": "Model",
+                    "nickname": "getModelId",
+                    "parameters": [
+                        {
+                            "name": "model_id",
+                            "description": "The desired model",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "OK"
+                        },
+                        {
+                            "code": 404,
+                            "message": "Model not found",
+                            "responseModel": "ErrorSessionless"
+                        },
+                        {
+                            "code": 406,
+                            "message": "Not acceptable",
+                            "responseModel": "ErrorSessionless"
+                        },
+                        {
+                            "code": 415,
+                            "message": "Unsupported Media Type",
+                            "responseModel": "ErrorSessionless"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/v1/sessions",
+            "operations": [
+                {
+                    "method": "POST",
+                    "summary": "Creates a session",
+                    "notes": "Create a session to lock an engine to the session. You can use the session for multiple recognition requests, so that each request is processed with the same speech-to-text engine. Use the cookie that is returned from this operation in the Set-Cookie header for each request that uses this session. <p/>The session expires after 30 seconds of inactivity. Use a GET request on the \"session_id\" to prevent the session from expiring.",
+                    "type": "Session",
+                    "nickname": "sessions",
+                    "parameters": [
+                        {
+                            "name": "model",
+                            "description": "Model name for which session is created (see GET on /v1/models for list of available models)",
+                            "required": false,
+                            "type": "string",
+                            "defaultValue": "en-US_BroadbandModel",
+                            "enum": [
+                                "en-US_BroadbandModel",
+                                "en-US_NarrowbandModel",
+                                "es-ES_BroadbandModel",
+                                "es-ES_NarrowbandModel",
+                                "ja-JP_BroadbandModel",
+                                "ja-JP_NarrowbandModel",
+                                "pt-BR_BroadbandModel",
+                                "pt-BR_NarrowbandModel",
+                                "zh-CN_BroadbandModel",
+                                "zh-CN_NarrowbandModel"
+                            ],
+                            "paramType": "query"
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 201,
+                            "message": "Created"
+                        },
+                        {
+                            "code": 406,
+                            "message": "Not acceptable",
+                            "responseModel": "ErrorSessionless"
+                        },
+                        {
+                            "code": 415,
+                            "message": "Unsupported Media Type",
+                            "responseModel": "ErrorSessionless"
+                        },
+                        {
+                            "code": 503,
+                            "message": "Service Unavailable",
+                            "responseModel": "ErrorSessionless"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/v1/sessions/{session_id}",
+            "operations": [
+                {
+                    "method": "DELETE",
+                    "summary": "Deletes the specified session",
+                    "type": "void",
+                    "nickname": "deleteSession",
+                    "parameters": [
+                        {
+                            "name": "session_id",
+                            "required": true,
+                            "description": "ID of the session to be deleted",
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 204,
+                            "message": "OK, no content."
+                        },
+                        {
+                            "code": 400,
+                            "message": "Bad request. Cookie must be set.",
+                            "responseModel": "ErrorSessionless"
+                        },
+                        {
+                            "code": 404,
+                            "message": "\"session_id\" not found.",
+                            "responseModel": "ErrorSessionless"
+                        },
+                        {
+                            "code": 406,
+                            "message": "Not acceptable.",
+                            "responseModel": "ErrorSessionless"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/v1/sessions/{session_id}/observe_result",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Observes results for a recognition task within a session",
+                    "type": "SpeechRecognitionEvent",
+                    "nickname": "observeResult",
+                    "notes": "Specify a sequence ID (with the \"sequence_id\" query parameter) that matches the ID for a recognition task to see results for that recognition. You can submit multiple requests for the same recognition. A request with a sequence ID can arrive before, during, or after the matching recognition, but it must arrive no later than 30 seconds after the recognition completes to avoid a session timeout (status code 408). Send multiple requests for the sequence ID with a maximum gap of 30 seconds to avoid the timeout. Omit the sequence ID to observe results for an ongoing recognition; if no recognition is ongoing, the method returns results for the next recognition regardless of whether it specifies a sequence ID. To see interim results, set the query parameter \"interim_results=true\".",
+                    "parameters": [
+                        {
+                            "name": "session_id",
+                            "description": "Session used in the recognition",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        },
+                        {
+                            "name": "sequence_id",
+                            "description": "Specify the sequence ID of the recognition task whose results you want to observe. Omit the parameter to obtain results either for an ongoing recognition, if any, or for the next recognition regardless of whether it specifies a sequence ID.",
+                            "required": false,
+                            "type": "integer",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "interim_results",
+                            "description": "If true, interim results are returned as a stream of JSON objects. Each object represents a single SpeechRecognitionEvent. If false, the response is a single `SpeechRecognitionEvent` with all final results.",
+                            "required": false,
+                            "defaultValue": "false",
+                            "type": "boolean",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "X-WDC-PL-OPT-OUT",
+                            "description": "Specify 1 to opt out, which means that the payload data, including audio and hypotheses, will not be used to improve our services. Any other value will opt in. The setting applies only to the request with which it's used.",
+                            "defaultValue": [
+                                0
+                            ],
+                            "required": false,
+                            "type": "string",
+                            "paramType": "header",
+                            "enum": [
+                                "1",
+                                "0"
+                            ]
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "OK."
+                        },
+                        {
+                            "code": 400,
+                            "message": "Bad request or session closed because of user input error (for example, audio not matching the specified format) or because of an inactivity timeout. If an existing session is closed, \"session_closed\" is set to true.",
+                            "responseModel": "ErrorSession"
+                        },
+                        {
+                            "code": 404,
+                            "message": "The \"session_id\" was not found or a specified \"sequence_id\" does not match the sequence ID of the recognition task.",
+                            "responseModel": "ErrorSessionless"
+                        },
+                        {
+                            "code": 406,
+                            "message": "Not acceptable.",
+                            "responseModel": "ErrorSessionless"
+                        },
+                        {
+                            "code": 408,
+                            "message": "Session closed due to inactivity (session timeout) for 30 seconds. \"session_closed\" is set to true.",
+                            "responseModel": "ErrorSession"
+                        },
+                        {
+                            "code": 413,
+                            "message": "Session closed because the input stream is larger than currently supported data limit. \"session_closed\" is set to true.",
+                            "responseModel": "ErrorSession"
+                        },
+                        {
+                            "code": 415,
+                            "message": "Unsupported Media Type.",
+                            "responseModel": "ErrorSessionless"
+                        },
+                        {
+                            "code": 500,
+                            "message": "Internal server error. The session is destroyed with \"session_closed\" set to true. Future requests that use this session return HTTP 404.",
+                            "responseModel": "ErrorSession"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/v1/sessions/{session_id}/recognize",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Checks whether a session is ready to accept a new recognition task",
+                    "notes": "Concurrent recognition tasks during the same session are not allowed. This method offers a way to check whether the session can accept another recognition task. The returned state must be `initialized` to send the POST recognize operation.",
+                    "type": "RecognizeStatus",
+                    "nickname": "recognizeGet",
+                    "parameters": [
+                        {
+                            "name": "session_id",
+                            "description": "Session used in the recognition",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "OK"
+                        },
+                        {
+                            "code": 404,
+                            "message": "\"session_id\" not found",
+                            "responseModel": "ErrorSessionless"
+                        },
+                        {
+                            "code": 406,
+                            "message": "Not acceptable",
+                            "responseModel": "ErrorSessionless"
+                        },
+                        {
+                            "code": 415,
+                            "message": "Unsupported Media Type",
+                            "responseModel": "ErrorSessionless"
+                        }
+                    ]
+                },
+                {
+                    "method": "POST",
+                    "summary": "Sends audio for speech recognition within a session",
+                    "type": "SpeechRecognitionEvent",
+                    "nickname": "recognizeSession",
+                    "consumes": [
+                        "audio/flac",
+                        "audio/l16",
+                        "audio/wav",
+                        "audio/ogg;codecs=opus"
+                    ],
+                    "notes": "Returns only the final results; to see interim results, set the query parameter \"interim_results=true\" in a GET request to /sessions/{session_id}/observe_result before this POST finishes. To enable polling by the observe_result method for large audio requests, specify an integer with the \"sequence_id\" query parameter. <br/><br/>Endianness of the incoming audio is autodetected. Audio files larger than 4 MB are required to be sent in streaming mode, with \"transfer-encoding\" set to \"chunked\". The streaming audio size limit is 100 MB. <br><br/>In streaming mode, the server closes the session (status code 408) if the engine receives no data chunk for 30 seconds and the engine has no audio to transcribe for 30 seconds. The server also closes the session (status code 400) if no speech is detected for \"inactivity_timeout\" seconds of audio (not processing time). This time can be set by the \"inactivity_timeout\" parameter; the default is 30 seconds.",
+                    "parameters": [
+                        {
+                            "name": "Content-Type",
+                            "description": "Media type of the audio. If you use the audio/l16 MIME type, specify the rate and channels. For example, \"audio/l16; rate=48000; channels=2\". Ensure that the rate matches the rate at which the audio is captured.",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "header",
+                            "enum": [
+                                "audio/flac",
+                                "audio/l16",
+                                "audio/wav",
+                                "audio/ogg;codecs=opus"
+                            ]
+                        },
+                        {
+                            "name": "session_id",
+                            "description": "Session used in the recognition.",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        },
+                        {
+                            "name": "sequence_id",
+                            "description": "Sequence ID of this recognition task in the form of a user-specified integer. If omitted, no session ID is associated with the recognition.",
+                            "required": false,
+                            "type": "integer",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "body",
+                            "description": "Audio to recognize in format specified by Content-Type header.",
+                            "required": true,
+                            "type": "array",
+                            "items": {
+                                "type": "string",
+                                "format": "byte"
+                            },
+                            "paramType": "body"
+                        },
+                        {
+                            "name": "continuous",
+                            "description": "If true, multiple final results representing multiple consecutive phrases separated by long pauses are returned. Otherwise, the recognition ends after first \"end of speech\" is detected.",
+                            "required": false,
+                            "defaultValue": "false",
+                            "type": "boolean",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "max_alternatives",
+                            "description": "Maximum number of alternative transcripts to return.",
+                            "required": false,
+                            "defaultValue": 1,
+                            "type": "number",
+                            "format": "int32",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "timestamps",
+                            "description": "If true, time alignment for each word is returned.",
+                            "required": false,
+                            "defaultValue": "false",
+                            "type": "boolean",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "word_confidence",
+                            "description": "If true, confidence measure per word is returned if available.",
+                            "required": false,
+                            "defaultValue": "false",
+                            "type": "boolean",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "inactivity_timeout",
+                            "description": "The time in seconds after which, if only silence (no speech) is detected in submitted audio, the connection is closed with a 400 error and with \"session_closed\" set to true. Use -1 for infinity. Useful for stopping audio submission from a live microphone when a user simply walks away.  See also the \"continuous\" parameter.",
+                            "required": false,
+                            "defaultValue": 30,
+                            "type": "number",
+                            "format": "int32",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "Transfer-encoding",
+                            "description": "Set this header to \"chunked\" to send the audio in streaming mode. Streaming is required for audio longer than 4 MB. Streaming limit is 100 MB.",
+                            "required": false,
+                            "type": "string",
+                            "paramType": "header",
+                            "enum": [
+                                "chunked"
+                            ]
+                        },
+                        {
+                            "name": "X-WDC-PL-OPT-OUT",
+                            "description": "Specify 1 to opt out, which means that the payload data, including audio and hypotheses, will not be used to improve our services. Any other value will opt in. The setting applies only to the request with which it is used.",
+                            "defaultValue": [
+                                0
+                            ],
+                            "required": false,
+                            "type": "string",
+                            "paramType": "header",
+                            "enum": [
+                                "1",
+                                "0"
+                            ]
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "OK."
+                        },
+                        {
+                            "code": 400,
+                            "message": "Bad request or session closed because of user input error (for example, audio not matching the specified format), because session is in the wrong state, or because of an inactivity timeout. If an existing session is closed, \"session_closed\" is set to true.",
+                            "responseModel": "ErrorSession"
+                        },
+                        {
+                            "code": 404,
+                            "message": "\"session_id\" not found.",
+                            "responseModel": "ErrorSessionless"
+                        },
+                        {
+                            "code": 406,
+                            "message": "Not acceptable.",
+                            "responseModel": "ErrorSessionless"
+                        },
+                        {
+                            "code": 408,
+                            "message": "Session closed due to inactivity (session timeout) for 30 seconds. \"session_closed\" is set to true.",
+                            "responseModel": "ErrorSession"
+                        },
+                        {
+                            "code": 413,
+                            "message": "Session closed because the input stream is larger than 100 MB. \"session_closed\" is set to true.",
+                            "responseModel": "ErrorSession"
+                        },
+                        {
+                            "code": 415,
+                            "message": "Unsupported Media Type.",
+                            "responseModel": "ErrorSessionless"
+                        },
+                        {
+                            "code": 500,
+                            "message": "Internal server error. The session is destroyed with \"session_closed\" set to true. Future requests that use this session return HTTP 404.",
+                            "responseModel": "ErrorSession"
+                        },
+                        {
+                            "code": 503,
+                            "message": "Session is already processing a request. Concurrent requests are not allowed on the same session. Session remains alive after this error.",
+                            "responseModel": "ErrorSessionless"
+                        }
+                    ]
+                },
+                {
+                    "method": "POST",
+                    "summary": "Sends audio as multipart for speech recognition within a session",
+                    "type": "SpeechRecognitionEvent",
+                    "notes": "Returns only the final results. To see interim results, set the query parameter \"interim_results=true\" in a GET request to /sessions/{session_id}/observe_result before this POST finishes. To enable polling by the observe_result method for large audio requests, specify an integer with the \"sequence_id\" query parameter. <br/><br/>Endianness of the incoming audio is autodetected. Audio files larger than 4 MB or more than one audio part are required to be sent in streaming mode, with \"transfer-encoding\" set to \"chunked\". The streaming audio size limit is 100 MB. <br/><br/>In streaming mode, the server closes the session (status code 408) if the engine receives no data chunk for 30 seconds and the engine has no audio to transcribe for 30 seconds. The server also closes the session (status code 400) if no speech is detected for \"inactivity_timeout\" seconds of audio (not processing time). This time can be set by the \"inactivity_timeout\" parameter; the default is 30 seconds. <h4>Example request</h4>Multipart data for the first part of a series of flac files. This first part of the request is sent as JSON. The following parts are audio files:<pre>{\"part_content_type\":\"audio/flac\",\"data_parts_count\":1,\"continuous\":true,\"inactivity_timeout\":-1}</pre>",
+                    "nickname": "recognizeSessionMultipart",
+                    "consumes": [
+                        "multipart/form-data"
+                    ],
+                    "parameters": [
+                        {
+                            "name": "Content-Type",
+                            "description": "Content-Type of the payload",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "header",
+                            "enum": [
+                                "multipart/form-data"
+                            ]
+                        },
+                        {
+                            "name": "session_id",
+                            "description": "Session used in the recognition",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        },
+                        {
+                            "name": "Transfer-encoding",
+                            "description": "Set this header to \"chunked\" to send the audio in streaming mode. Streaming is required for audio longer than 4 MB. Streaming limit is 100 MB.",
+                            "required": false,
+                            "type": "string",
+                            "paramType": "header",
+                            "enum": [
+                                "chunked"
+                            ]
+                        },
+                        {
+                            "name": "multipart",
+                            "description": "Metadata and audio files",
+                            "required": true,
+                            "type": "Multipart",
+                            "paramType": "form"
+                        },
+                        {
+                            "name": "X-WDC-PL-OPT-OUT",
+                            "description": "Specify 1 to opt out, which means that the payload data, including audio and hypotheses, will not be used to improve our services. Any other value will opt in. The setting applies only to the request with which it's used.",
+                            "defaultValue": [
+                                0
+                            ],
+                            "required": false,
+                            "type": "string",
+                            "paramType": "header",
+                            "enum": [
+                                "1",
+                                "0"
+                            ]
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "OK."
+                        },
+                        {
+                            "code": 400,
+                            "message": "Bad request or session closed because of user input error (for example, audio not matching the specified format), because session is in the wrong state, or because of an inactivity timeout. If an existing session is closed, \"session_closed\" is set to true.",
+                            "responseModel": "ErrorSession"
+                        },
+                        {
+                            "code": 404,
+                            "message": "\"session_id\" not found.",
+                            "responseModel": "ErrorSessionless"
+                        },
+                        {
+                            "code": 406,
+                            "message": "Not acceptable.",
+                            "responseModel": "ErrorSessionless"
+                        },
+                        {
+                            "code": 408,
+                            "message": "Session closed due to inactivity (session timeout) for 30 seconds. \"session_closed\" is set to true.",
+                            "responseModel": "ErrorSession"
+                        },
+                        {
+                            "code": 413,
+                            "message": "Session closed because the input stream is larger than 100 MB. \"session_closed\" is set to true.",
+                            "responseModel": "ErrorSession"
+                        },
+                        {
+                            "code": 415,
+                            "message": "Unsupported Media Type.",
+                            "responseModel": "ErrorSessionless"
+                        },
+                        {
+                            "code": 500,
+                            "message": "Internal server error. The session is destroyed with \"session_closed\" set to true. Future requests that use this session return HTTP 404.",
+                            "responseModel": "ErrorSession"
+                        },
+                        {
+                            "code": 503,
+                            "message": "Session is already processing a request. Concurrent requests are not allowed on the same session. Session remains alive after this error.",
+                            "responseModel": "ErrorSessionless"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/v1/recognize",
+            "operations": [
+                {
+                    "method": "POST",
+                    "summary": "Sends audio for speech recognition in sessionless mode",
+                    "type": "SpeechRecognitionEvent",
+                    "nickname": "recognizeSessionless",
+                    "consumes": [
+                        "audio/flac",
+                        "audio/l16",
+                        "audio/wav",
+                        "audio/ogg;codecs=opus"
+                    ],
+                    "notes": "Returns only the final results. To enable interim results, use session-based requests or Websockets API. <br/><br/>Endianness of the incoming audio is autodetected. Audio files larger than 4 MB are required to be sent in streaming mode, with \"transfer-encoding\" set to \"chunked\". The streaming audio size limit is 100 MB. <br/><br/>In streaming mode, the request fails (status code 408) if the engine receives no data chunk for 30 seconds and the engine has no audio to transcribe for 30 seconds. The request also fails (status code 400) if no speech is detected for \"inactivity_timeout\" seconds of audio (not processing time). This time can be set by the \"inactivity_timeout\" parameter; the default is 30 seconds.",
+                    "parameters": [
+                        {
+                            "name": "Content-Type",
+                            "description": "Media type of the audio. If you use the audio/l16 MIME type, specify the rate and channels. For example, \"audio/l16; rate=48000; channels=2\". Ensure that the rate matches the rate at which the audio is captured.",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "header",
+                            "enum": [
+                                "audio/flac",
+                                "audio/l16",
+                                "audio/wav",
+                                "audio/ogg;codecs=opus"
+                            ]
+                        },
+                        {
+                            "name": "model",
+                            "description": "The model name used for the recognition (see GET on /v1/models for list of available models)",
+                            "required": false,
+                            "type": "string",
+                            "defaultValue": "en-US_BroadbandModel",
+                            "enum": [
+                                "en-US_BroadbandModel",
+                                "en-US_NarrowbandModel",
+                                "es-ES_BroadbandModel",
+                                "es-ES_NarrowbandModel",
+                                "ja-JP_BroadbandModel",
+                                "ja-JP_NarrowbandModel",
+                                "pt-BR_BroadbandModel",
+                                "pt-BR_NarrowbandModel",
+                                "zh-CN_BroadbandModel",
+                                "zh-CN_NarrowbandModel"
+                            ],
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "Transfer-encoding",
+                            "description": "Set this header to \"chunked\" to send the audio in streaming mode. Streaming is required for audio longer than 4 MB. Streaming limit is 100 MB.",
+                            "required": false,
+                            "type": "string",
+                            "paramType": "header",
+                            "enum": [
+                                "chunked"
+                            ]
+                        },
+                        {
+                            "name": "body",
+                            "description": "Audio to recognize in format specified by Content-Type header",
+                            "required": true,
+                            "type": "array",
+                            "items": {
+                                "type": "string",
+                                "format": "byte"
+                            },
+                            "paramType": "body"
+                        },
+                        {
+                            "name": "continuous",
+                            "description": "If true, multiple final results that represent multiple consecutive phrases separated by pauses are returned. Otherwise, the recognition ends after first \"end of speech\" is detected.",
+                            "required": false,
+                            "defaultValue": "false",
+                            "type": "boolean",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "max_alternatives",
+                            "description": "Maximum number of alternative transcripts returned",
+                            "required": false,
+                            "defaultValue": 1,
+                            "type": "number",
+                            "format": "int32",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "timestamps",
+                            "description": "If true, time alignment for each word is returned",
+                            "required": false,
+                            "defaultValue": "false",
+                            "type": "boolean",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "word_confidence",
+                            "description": "If true, confidence measure per word is returned if available",
+                            "required": false,
+                            "defaultValue": "false",
+                            "type": "boolean",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "inactivity_timeout",
+                            "description": "The time in seconds after which, if only silence (no speech) is detected in submitted audio, the connection is closed with a 400 error. Use -1 for infinity. Useful for stopping audio submission from a live microphone when a user simply walks away.  See also the \"continuous\" parameter.",
+                            "required": false,
+                            "defaultValue": 30,
+                            "type": "number",
+                            "format": "int32",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "X-WDC-PL-OPT-OUT",
+                            "description": "Specify 1 to opt out, which means that the payload data, including audio and hypotheses, will not be used to improve our services. Any other value will opt in. The setting applies only to the request with which it's used.",
+                            "defaultValue": [
+                                0
+                            ],
+                            "required": false,
+                            "type": "string",
+                            "paramType": "header",
+                            "enum": [
+                                "1",
+                                "0"
+                            ]
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "OK"
+                        },
+                        {
+                            "code": 400,
+                            "message": "Bad request, user input error (for example, audio not matching the specified format), or inactivity timeout (no speech detected).",
+                            "responseModel": "ErrorSessionless"
+                        },
+                        {
+                            "code": 406,
+                            "message": "Not acceptable.",
+                            "responseModel": "ErrorSessionless"
+                        },
+                        {
+                            "code": 408,
+                            "message": "Request fails due to inactivity (no audio data sent) for 30 seconds.",
+                            "responseModel": "ErrorSessionless"
+                        },
+                        {
+                            "code": 413,
+                            "message": "Request fails because the input stream is larger than 100 MB.",
+                            "responseModel": "ErrorSessionless"
+                        },
+                        {
+                            "code": 415,
+                            "message": "Unsupported Media Type.",
+                            "responseModel": "ErrorSessionless"
+                        },
+                        {
+                            "code": 500,
+                            "message": "Internal server error.",
+                            "responseModel": "ErrorSessionless"
+                        },
+                        {
+                            "code": 503,
+                            "message": "Service Unavailable.",
+                            "responseModel": "ErrorSessionless"
+                        }
+                    ]
+                },
+                {
+                    "method": "POST",
+                    "summary": "Sends audio as multipart for speech recognition in sessionless mode",
+                    "notes": "Returns only the final results. To enable interim results use session-based requests or Websockets API. <br/><br/>Endianness of the incoming audio is autodetected. Audio files larger than 4 MB or more than one audio part are required to be sent in streaming mode, with \"transfer-encoding\" set to \"chunked\". The streaming audio size limit is 100 MB. <br/><br/> In streaming mode, the request fails (status code 408) if the engine receives no data chunk for 30 seconds and the engine has no audio to transcribe for 30 seconds. The request also fails (status code 400) if no speech is detected for \"inactivity_timeout\" seconds of audio (not processing time). This time can be set by the \"inactivity_timeout\" parameter; the default is 30 seconds. <h4>Example request</h4>Multipart data for the first part of a series of flac files. This first part of the request is sent as JSON. The following parts are audio files:<pre>{\"part_content_type\":\"audio/flac\",\"data_parts_count\":1,\"continuous\":true, \"inactivity_timeout\"=-1}</pre>",
+                    "type": "SpeechRecognitionEvent",
+                    "nickname": "recognizeSessionlessMultipart",
+                    "consumes": [
+                        "multipart/form-data"
+                    ],
+                    "parameters": [
+                        {
+                            "name": "Content-Type",
+                            "description": "Content-Type of the payload",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "header",
+                            "enum": [
+                                "multipart/form-data"
+                            ]
+                        },
+                        {
+                            "name": "model",
+                            "description": "The model name used for the recognition (see GET on /v1/models for list of available models)",
+                            "required": false,
+                            "type": "string",
+                            "defaultValue": "en-US_BroadbandModel",
+                            "enum": [
+                                "en-US_BroadbandModel",
+                                "en-US_NarrowbandModel",
+                                "es-ES_BroadbandModel",
+                                "es-ES_NarrowbandModel",
+                                "ja-JP_BroadbandModel",
+                                "ja-JP_NarrowbandModel",
+                                "pt-BR_BroadbandModel",
+                                "pt-BR_NarrowbandModel",
+                                "zh-CN_BroadbandModel",
+                                "zh-CN_NarrowbandModel"
+                            ],
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "Transfer-encoding",
+                            "description": "Set this header to \"chunked\" to send the audio in streaming mode. Streaming is required for audio longer than 4 MB. Streaming limit is 100 MB.",
+                            "required": false,
+                            "type": "string",
+                            "paramType": "header",
+                            "enum": [
+                                "chunked"
+                            ]
+                        },
+                        {
+                            "name": "multipart",
+                            "description": "Metadata and audio files",
+                            "required": true,
+                            "type": "Multipart",
+                            "paramType": "form"
+                        },
+                        {
+                            "name": "X-WDC-PL-OPT-OUT",
+                            "description": "Specify 1 to opt out, which means that the payload data, including audio and hypotheses, will not be used to improve our services. Any other value will opt in. The setting applies only to the request with which it's used.",
+                            "defaultValue": [
+                                0
+                            ],
+                            "required": false,
+                            "type": "string",
+                            "paramType": "header",
+                            "enum": [
+                                "1",
+                                "0"
+                            ]
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "OK."
+                        },
+                        {
+                            "code": 400,
+                            "message": "Bad request, user input error (for example, audio not matching the specified format), or inactivity timeout (no speech detected).",
+                            "responseModel": "ErrorSessionless"
+                        },
+                        {
+                            "code": 406,
+                            "message": "Not acceptable.",
+                            "responseModel": "ErrorSessionless"
+                        },
+                        {
+                            "code": 408,
+                            "message": "Request fails due to inactivity (no audio data sent) for 30 seconds.",
+                            "responseModel": "ErrorSessionless"
+                        },
+                        {
+                            "code": 413,
+                            "message": "Request fails because the input stream is larger than 100 MB.",
+                            "responseModel": "ErrorSessionless"
+                        },
+                        {
+                            "code": 415,
+                            "message": "Unsupported Media Type.",
+                            "responseModel": "ErrorSessionless"
+                        },
+                        {
+                            "code": 500,
+                            "message": "Internal server error.",
+                            "responseModel": "ErrorSessionless"
+                        },
+                        {
+                            "code": 503,
+                            "message": "Service Unavailable.",
+                            "responseModel": "ErrorSessionless"
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "models": {
+        "SpeechRecognitionEvent": {
+            "id": "SpeechRecognitionEvent",
+            "required": [
+                "result_index",
+                "results"
+            ],
+            "properties": {
+                "result_index": {
+                    "description": "Index indicating change point in the results array.  See description of \"results\" array for further information.",
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "results": {
+                    "description": "The results array consists of 0 or more final results, followed by 0 or 1 interim result.  The final results are guaranteed not to change, while the interim result may be replaced by 0 or more final results, followed by 0 or 1 interim result.  The service periodically sends \"updates\" to the result list, with the resultIndex set to the lowest index in the array that has changed.  resultIndex always points to the slot just after the most recent final result.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "SpeechRecognitionResult"
+                    }
+                }
+            }
+        },
+        "SpeechRecognitionResult": {
+            "id": "SpeechRecognitionResult",
+            "required": [
+                "final",
+                "alternatives"
+            ],
+            "properties": {
+                "final": {
+                    "description": "If true, result for this utterance is not updated further",
+                    "type": "boolean"
+                },
+                "alternatives": {
+                    "description": "List of alternative transcripts received from the service",
+                    "type": "array",
+                    "items": {
+                        "$ref": "SpeechRecognitionAlternative"
+                    }
+                }
+            }
+        },
+        "SpeechRecognitionAlternative": {
+            "id": "SpeechRecognitionAlternative",
+            "required": [
+                "transcript"
+            ],
+            "properties": {
+                "transcript": {
+                    "description": "Transcript of the utterance",
+                    "type": "string"
+                },
+                "confidence": {
+                    "description": "Confidence score of the transcript, between 0 and 1. Available only for the best alternative and only in results marked as final.",
+                    "type": "number",
+                    "format": "double",
+                    "minimum": 0,
+                    "maximum": 1
+                },
+                "timestamps": {
+                    "description": "Time alignments for each word from transcript as list of lists. Each inner list consists of 3 elements: the word, start and end of the word in seconds. Example: [[\"hello\",0.0,1.2],[\"world\",1.2,2.5]]. Available only for the best alternative.",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "word_confidence": {
+                    "description": "Confidence score for each word of the transcript, between 0 and 1. Each inner list consists of 2 elements: the word and the confidence of the word. Example: [[\"hello\",0.95],[\"world\",0.866]]. Available only for the best alternative and only in results marked as final.",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "ModelSet": {
+            "description": "Information about the available models",
+            "id": "ModelSet",
+            "required": [
+                "models"
+            ],
+            "properties": {
+                "models": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "Model"
+                    }
+                }
+            }
+        },
+        "Model": {
+            "id": "Model",
+            "required": [
+                "name",
+                "rate",
+                "sessions"
+            ],
+            "properties": {
+                "name": {
+                    "description": "Name of the model to use as identifier in all requests",
+                    "type": "string"
+                },
+                "rate": {
+                    "description": "Sampling rate used by model (minimal rate to use)",
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "language": {
+                    "description": "Language identifier for the model",
+                    "type": "string"
+                },
+                "description": {
+                    "description": "Brief description of the model",
+                    "type": "string"
+                },
+                "url": {
+                    "description": "URI for the model",
+                    "type": "string"
+                }
+            }
+        },
+        "Session": {
+            "id": "Session",
+            "required": [
+                "session_id",
+                "new_session_uri",
+                "recognize",
+                "observe_result"
+            ],
+            "properties": {
+                "session_id": {
+                    "description": "ID of the session created",
+                    "type": "string"
+                },
+                "new_session_uri": {
+                    "description": "URI for the session created",
+                    "type": "string"
+                },
+                "recognize": {
+                    "description": "URI for REST recognize requests",
+                    "type": "string"
+                },
+                "recognizeWS": {
+                    "description": "URI for Websocket recognize requests",
+                    "type": "string"
+                },
+                "observe_result": {
+                    "description": "URI for results observers",
+                    "type": "string"
+                }
+            }
+        },
+        "ErrorSession": {
+            "id": "ErrorSession",
+            "required": [
+                "error",
+                "code",
+                "code_description",
+                "session_closed"
+            ],
+            "properties": {
+                "error": {
+                    "description": "More detailed description of the problem.",
+                    "type": "string"
+                },
+                "code": {
+                    "description": "HTTP response code.",
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "code_description": {
+                    "description": "Brief description of the problem.",
+                    "type": "string"
+                },
+                "session_closed": {
+                    "description": "True if the active session is closed as a result of the problem; otherwise, false.",
+                    "type": "boolean"
+                }
+            }
+        },
+        "ErrorSessionless": {
+            "id": "ErrorSessionless",
+            "required": [
+                "error",
+                "code",
+                "code_description"
+            ],
+            "properties": {
+                "error": {
+                    "description": "More detailed description of the problem.",
+                    "type": "string"
+                },
+                "code": {
+                    "description": "HTTP response code.",
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "code_description": {
+                    "description": "Brief description of the problem.",
+                    "type": "string"
+                }
+            }
+        },
+        "Multipart": {
+            "id": "Multipart",
+            "required": [
+                "metadata",
+                "files"
+            ],
+            "properties": {
+                "metadata": {
+                    "description": "This must be the first part and must contain JSON-formatted text. The metadata describes the following parts, which contain the data. The Content-Type of the parts is ignored.",
+                    "$ref": "Metadata"
+                },
+                "files": {
+                    "description": "Audio parts as described by metadata. Endianness of the audio is autodetected.",
+                    "type": "array",
+                    "items": {
+                        "type": "file"
+                    }
+                }
+            }
+        },
+        "Metadata": {
+            "id": "Metadata",
+            "required": [
+                "part_content_type"
+            ],
+            "properties": {
+                "part_content_type": {
+                    "description": "The MIME type of the data in the following parts. All data parts must have the same MIME type. Supported types are audio/flac, audio/l16, audio/wav, and audio/ogg;codecs=opus.",
+                    "type": "string"
+                },
+                "data_parts_count ": {
+                    "description": "The number of the data parts (one less than total number of parts in the request). When specified, server-side end-of-stream detection is applied to the last (and possibly the only) data part. If omitted, the number of parts is determined from the request itself.",
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "sequence_id": {
+                    "description": "The sequence ID for all data parts of this recognition task in the form of a user-specified integer. If omitted, no sequence ID is associated with the recognition. Applies only to session-based recognition tasks.",
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "continuous": {
+                    "description": "If true, multiple final results that represent multiple consecutive phrases separated by pauses are returned. If set to false (default), the recognition ends after the first \"end of speech\" is detected.",
+                    "type": "boolean",
+                    "defaultValue": "false"
+                },
+                "max_alternatives": {
+                    "description": "Maximum number of alternative transcripts returned",
+                    "defaultValue": 1,
+                    "type": "number",
+                    "format": "int32"
+                },
+                "timestamps": {
+                    "description": "If true, time alignment for each word is returned",
+                    "type": "boolean",
+                    "defaultValue": "false"
+                },
+                "word_confidence": {
+                    "description": "If true, confidence measure per word is returned if available",
+                    "defaultValue": "false",
+                    "type": "boolean"
+                },
+                "inactivity_timeout": {
+                     "description": "The time in seconds after which, if only silence (no speech) is detected in submitted audio, the connection is closed with a 400 error and, for session-based methods, with \"session_closed\" set to true. Use -1 for infinity. Useful for stopping audio submission from a live microphone when a user simply walks away.  See also the \"continuous\" parameter.",
+                    "defaultValue": 30,
+                    "type": "number",
+                    "format": "int32"
+                }
+            }
+        },
+        "RecognizeStatus": {
+            "id": "RecognizeStatus",
+            "required": [
+                "session"
+            ],
+            "properties": {
+                "session": {
+                    "description": "Description of state and possible actions on the current session",
+                    "$ref": "SessionStatus"
+                }
+            }
+        },
+        "SessionStatus": {
+            "id": "SessionStatus",
+            "required": [
+                "state",
+                "model",
+                "recognize",
+                "observe_result"
+            ],
+            "properties": {
+                "state": {
+                    "description": "State of the session. It must be \"initialized\" to perform new recognition tasks on the session.",
+                    "type": "string"
+                },
+                "model": {
+                    "description": "URI for information about the model that is used in the session",
+                    "type": "string"
+                },
+                "recognize": {
+                    "description": "URI for recognize",
+                    "type": "string"
+                },
+                "observe_result": {
+                    "description": "URI for results observers",
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

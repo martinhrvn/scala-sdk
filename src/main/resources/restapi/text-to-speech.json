@@ -1,0 +1,347 @@
+{
+    "apiVersion": "1.0.0",
+    "swaggerVersion": "1.2",
+    "basePath": "https://stream.watsonplatform.net/text-to-speech/api",
+    "resourcePath": "/text-to-speech/api",
+    "produces": [
+        "application/json"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "authorizations": {},
+    "apis": [
+        {
+            "path": "/v1/synthesize",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Streaming speech synthesis of the text in a query parameter",
+                    "notes": "Identical to the POST method but passes shorter text in a query parameter. The text size is limited by the maximum length of the HTTP request line and headers (about 6KB) or by system limits, whichever is less.",
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "format": "byte"
+                    },
+                    "nickname": "synthesizeDefault",
+                    "produces": [
+                        "audio/ogg; codecs=opus",
+                        "audio/wav",
+                        "audio/flac"
+                    ],
+                    "parameters": [
+                        {
+                            "name": "accept",
+                            "description": "Requested MIME type. You can use this query parameter instead of a header parameter.",
+                            "required": false,
+                            "type": "string",
+                            "paramType": "query",
+                            "enum": [
+                                "audio/ogg; codecs=opus",
+                                "audio/wav",
+                                "audio/flac"
+                            ]
+                        },
+                        {
+                            "name": "voice",
+                            "description": "Selects a voice to use for synthesis. Retrieve available voices with GET /v1/voices method.",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query",
+                            "defaultValue": "en-US_MichaelVoice",
+                            "enum": [
+                                "en-US_MichaelVoice",
+                                "en-US_LisaVoice",
+                                "en-US_AllisonVoice",
+                                "en-GB_KateVoice",
+                                "es-ES_EnriqueVoice",
+                                "es-ES_LauraVoice",
+                                "es-US_SofiaVoice",
+                                "de-DE_DieterVoice",
+                                "de-DE_BirgitVoice",
+                                "fr-FR_ReneeVoice",
+                                "it-IT_FrancescaVoice",
+                                "ja-JP_EmiVoice"
+                            ]
+                        },
+                        {
+                            "name": "text",
+                            "description": "Text to synthesize. Use either plain text or a subset of SSML. For details about the support for SSML, see <a target=\"_blank\" href = \"../doc/text-to-speech/SSML.shtml\">Using SSML with the service</a>. Text size limited to 5 KB.",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "X-WDC-PL-OPT-OUT",
+                            "description": "Specify 1 to opt-out, which means that the payload data, including audio and hypotheses, will not be used to improve our services. Any other value will opt-in. The setting applies only to the request with which it's used.",
+                            "defaultValue": [
+                                0
+                            ],
+                            "required": false,
+                            "type": "string",
+                            "paramType": "header",
+                            "enum": [
+                                "1",
+                                "0"
+                            ]
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "OK"
+                        },
+                        {
+                            "code": 304,
+                            "message": "Not modified"
+                        },
+                        {
+                            "code": 400,
+                            "message": "Bad request ",
+                            "responseModel": "ErrorModel"
+                        },
+                        {
+                            "code": 406,
+                            "message": "Not acceptable",
+                            "responseModel": "ErrorModel"
+                        },
+                        {
+                            "code": 415,
+                            "message": "Unsupported Media Type",
+                            "responseModel": "ErrorModel"
+                        },
+                        {
+                            "code": 500,
+                            "message": "Internal server error",
+                            "responseModel": "ErrorModel"
+                        },
+                        {
+                            "code": 503,
+                            "message": "Service Unavailable",
+                            "responseModel": "ErrorModel"
+                        }
+                    ]
+                },
+                {
+                    "method": "POST",
+                    "summary": "Streaming speech synthesis of the text in the body parameter",
+                    "notes": "Identical to the GET method but passes longer texts in the body. Text size is limited to 5 KB.",
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "format": "byte"
+                    },
+                    "nickname": "synthesizeDefault",
+                    "produces": [
+                        "audio/ogg; codecs=opus",
+                        "audio/wav",
+                        "audio/flac"
+                    ],
+                    "consumes": ["application/json"],
+                    "parameters": [
+                        {
+                            "name": "accept",
+                            "description": "Requested MIME type. You can use this query parameter instead of a header parameter.",
+                            "required": false,
+                            "type": "string",
+                            "paramType": "query",
+                            "enum": [
+                                "audio/ogg; codecs=opus",
+                                "audio/wav",
+                                "audio/flac"
+                            ]
+                        },
+                        {
+                            "name": "voice",
+                            "description": "Selects a voice to use for synthesis. Retrieve available voices with GET /v1/voices method.",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "query",
+                            "defaultValue": "en-US_MichaelVoice",
+                            "enum": [
+                                "en-US_MichaelVoice",
+                                "en-US_LisaVoice",
+                                "en-US_AllisonVoice",
+                                "en-GB_KateVoice",
+                                "es-ES_EnriqueVoice",
+                                "es-ES_LauraVoice",
+                                "es-US_SofiaVoice",
+                                "de-DE_DieterVoice",
+                                "de-DE_BirgitVoice",
+                                "fr-FR_ReneeVoice",
+                                "it-IT_FrancescaVoice",
+                                "ja-JP_EmiVoice"
+                            ]
+                        },
+                        {
+                            "name": "body",
+                            "description": "JSON with the text to synthesize. Use JSON to specify either plain text or a subset of SSML. For details about the support for SSML, see <a target=\"_blank\" href = \"../doc/text-to-speech/SSML.shtml\">Using SSML with the service</a>. Limited to 5 KB.",
+                            "required": true,
+                            "type": "Text",
+                            "paramType": "body"
+                        },
+                        {
+                            "name": "X-WDC-PL-OPT-OUT",
+                            "description": "Specify 1 to opt-out, which means that the payload data, including audio and hypotheses, will not be used to improve our services. Any other value will opt-in. The setting applies only to the request with which it's used.",
+                            "defaultValue": [
+                                0
+                            ],
+                            "required": false,
+                            "type": "string",
+                            "paramType": "header",
+                            "enum": [
+                                "1",
+                                "0"
+                            ]
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "OK"
+                        },
+                        {
+                            "code": 304,
+                            "message": "Not modified"
+                        },
+                        {
+                            "code": 400,
+                            "message": "Bad request ",
+                            "responseModel": "ErrorModel"
+                        },
+                        {
+                            "code": 406,
+                            "message": "Not acceptable",
+                            "responseModel": "ErrorModel"
+                        },
+                        {
+                            "code": 415,
+                            "message": "Unsupported Media Type",
+                            "responseModel": "ErrorModel"
+                        },
+                        {
+                            "code": 500,
+                            "message": "Internal server error",
+                            "responseModel": "ErrorModel"
+                        },
+                        {
+                            "code": 503,
+                            "message": "Service Unavailable",
+                            "responseModel": "ErrorModel"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/v1/voices",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Retrieves the voices available for speech synthesis",
+                    "notes": "",
+                    "type": "VoiceSet",
+                    "nickname": "voices",
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "OK"
+                        },
+                        {
+                            "code": 304,
+                            "message": "Not modified"
+                        },
+                        {
+                            "code": 406,
+                            "message": "Not acceptable",
+                            "responseModel": "ErrorModel"
+                        },
+                        {
+                            "code": 415,
+                            "message": "Unsupported Media Type",
+                            "responseModel": "ErrorModel"
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "models": {
+        "VoiceSet": {
+            "description": "Description of the available voices.",
+            "required": [
+                "voices"
+            ],
+            "id": "VoiceSet",
+            "properties": {
+                "voices": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "Voice"
+                    }
+                }
+            }
+        },
+        "Voice": {
+            "id": "Voice",
+            "required": [
+                "name",
+                "language",
+                "gender",
+                "url"
+            ],
+            "properties": {
+                "name": {
+                    "description": "The name of the voice. Use this as voice identifier in all requests.",
+                    "type": "string"
+                },
+                "language": {
+                    "description": "The language and region of the voice (for example, 'en-US').",
+                    "type": "string"
+                },
+                "gender": {
+                    "description": "The gender of the voice: 'male' or 'female'.",
+                    "type": "string"
+                },
+                "url": {
+                    "description": "URI of the voice.",
+                    "type": "string"
+                }
+            }
+        },
+        "Text": {
+            "id": "Text",
+            "required": [
+                "text"
+            ],
+            "properties": {
+                "text": {
+                    "description": "Text to synthesize",
+                    "type": "string"
+                }
+            }
+        },
+        "ErrorModel": {
+            "id": "ErrorModel",
+            "required": [
+                "error",
+                "code"
+            ],
+            "properties": {
+                "error": {
+                    "description": "Description of the problem",
+                    "type": "string"
+                },
+                "code": {
+                    "description": "HTTP response code",
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "code_description": {
+                    "description": "Response message",
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

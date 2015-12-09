@@ -1,0 +1,624 @@
+{
+    "apiVersion": "1.0.0",
+    "swaggerVersion": "1.2",
+    "basePath": "https://gateway.watsonplatform.net/tradeoff-analytics/api",
+    "resourcePath": "/tradeoff-analytics/api",
+    "apis": [
+        {
+            "operations": [
+                {
+                    "authorizations": {},
+                    "consumes": [
+                        "application/json"
+                    ],
+                    "method": "POST",
+                    "nickname": "dilemma",
+                    "notes": "Returns a dilemma that contains the problem and a resolution. The problem contains a set of options and objectives. The resolution contains a set of optimal options, their analytical characteristics, and by default their representation on a 2D space.",
+                    "parameters": [
+                        {
+                            "allowMultiple": false,
+                            "description": "The decision problem.",
+                            "name": "body",
+                            "paramType": "body",
+                            "required": true,
+                            "type": "Problem"
+                        },
+                        {
+                            "allowMultiple": false,
+                            "defaultValue": "true",
+                            "description": "Determines whether to calculate the visualization. If true, the visualization is returned; if false, no visualization is returned. By default, the value is true.",
+                            "name": "generate_visualization",
+                            "paramType": "query",
+                            "required": false,
+                            "type": "boolean"
+                        }
+                    ],
+                    "produces": [
+                        "application/json"
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "Dilemma created",
+                            "responseModel": "Dilemma"
+                        },
+                        {
+                            "code": 304,
+                            "message": "Same problem was received"
+                        },
+                        {
+                            "code": 400,
+                            "message": "Malformed problem was received"
+                        },
+                        {
+                            "code": 413,
+                            "message": "Problem received is too large"
+                        },
+                        {
+                            "code": 500,
+                            "message": "Server encountered internal error"
+                        }
+                    ],
+                    "summary": "Retrieves a dilemma based on the submitted decision problem.",
+                    "type": "Dilemma"
+                }
+            ],
+            "path": "/v1/dilemmas/"
+        }
+    ],
+    "models": {
+        "IRange": {
+            "id": "IRange",
+            "description": "",
+            "properties": {
+                "CategoricalRange": {
+                    "$ref": "CategoricalRange",
+                    "description": "A list of valid values that define the range of possible values for a categorical column; valid only for categorical columns."
+                },
+                "DateRange": {
+                    "$ref": "DateRange",
+                    "description": "High and low values in full ISO 8601 format that define the range of a datetype column; valid only for datetime columns."
+                },
+                "ValueRange": {
+                    "$ref": "ValueRange",
+                    "description": "High and low values that define the range of a numeric column; valid only for numeric columns."
+                }
+            }
+        },
+        "ValueRange": {
+            "id": "ValueRange",
+            "description": "A utility class to work with a range of doubles.",
+            "required": [
+                "low",
+                "high"
+            ],
+            "properties": {
+                "low": {
+                    "type": "number",
+                    "format": "double",
+                    "description": "Low end of range."
+                },
+                "high": {
+                    "type": "number",
+                    "format": "double",
+                    "description": "High end of range."
+                }
+            }
+        },
+        "DateRange": {
+            "id": "DateRange",
+            "description": "A utility class to work with a range of strings that represent dates.",
+            "required": [
+                "low",
+                "high"
+            ],
+            "properties": {
+                "low": {
+                    "type": "string",
+                    "description": "Low end of range."
+                },
+                "high": {
+                    "type": "string",
+                    "description": "High end of range."
+                }
+            }
+        },
+        "CategoricalRange": {
+            "id": "CategoricalRange",
+            "description": "A utility class to work with a range of strings that represent categorical values.",
+            "required": [
+                "keys"
+            ],
+            "properties": {
+                "keys": {
+                    "description": "List of values in range.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                }
+            }
+        },
+        "Anchor": {
+            "description": "",
+            "id": "Anchor",
+            "properties": {
+                "name": {
+                    "description": "Anchor point name.",
+                    "type": "string"
+                },
+                "position": {
+                    "$ref": "MapNodeCoordinates",
+                    "description": "Anchor point position."
+                }
+            },
+            "required": [
+                "name",
+                "position"
+            ]
+        },
+        "ColumnDefinition": {
+            "description": "A KPI, metric, target or goal that you are taking into account during an evaluation of an option if the column is considered an objective.",
+            "id": "ColumnDefinition",
+            "properties": {
+                "description": {
+                    "description": "A long description of the column.",
+                    "type": "string"
+                },
+                "format": {
+                    "description": "For columns whose type is numeric or datetime, specifies a number or date pattern that indicates how the value is to be presented by the visualization. For information about specifying a number pattern, see Section 3.1 of the Unicode Technical Standard #35. For information about specifying a date pattern, see the description of the dojo.date.locale.format() function.",
+                    "type": "string"
+                },
+                "full_name": {
+                    "description": "Descriptive name.",
+                    "type": "string"
+                },
+                "goal": {
+                    "description": "Direction of the column. The direction can be minimized (price of a car) or maximized (safety of a car). Meaningful only for columns for which is_objective is true. By default, the goal is max.",
+                    "enum": [
+                        "min",
+                        "max"
+                    ],
+                    "type": "string"
+                },
+                "insignificant_loss": {
+                    "description": "A value in the range 0 to 1 that is considered an insignificant loss for this column.",
+                    "format": "double",
+                    "type": "number"
+                },
+                "is_objective": {
+                    "description": "An indication of whether the column is an objective for the problem. If true, the column contributes to the resolution; if false, the column does not contribute to the resulotion. By default, the value is false. A column with type text cannot be set to true.",
+                    "type": "boolean"
+                },
+                "key": {
+                    "description": "An identifier for the column that is unique among all columns for the problem.",
+                    "type": "string"
+                },
+                "preference": {
+                    "description": "For columns whose type is categorical, a subset of the values in the range that indicates their preference; valid only for categorical columns. If goal is min, elements in the low position of the array are favored; if goal is max, elements in the high position are favored. By default, preference matches the order of the values in range and the direction indicated by goal.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "range": {
+                    "$ref": "IRange",
+                    "description": "The range of valid values for the column. Any option whose value is outside of the specified range is marked as incomplete and is excluded from the resolution. By default, the range is calculated from the minimum and maximum values provided in the data set for the column."
+                },
+                "significant_gain": {
+                    "description": "A value in the range 0 to 1 that is considered a significant gain for this column.",
+                    "format": "double",
+                    "type": "number"
+                },
+                "significant_loss": {
+                    "description": "A value in the range 0 to 1 that is considered a significant loss for this column.",
+                    "format": "double",
+                    "type": "number"
+                },
+                "type": {
+                    "description": "An indication of whether a column is specified as a numeric value, a categorical value, a date and time, or as text. Specify a list of valid values for a categorical column by using the range field. For date and time columns, options must specify values in full ISO 8601 format. By default, the type is text.",
+                    "enum": [
+                        "categorical",
+                        "datetime",
+                        "numeric",
+                        "text"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "key"
+            ]
+        },
+        "Dilemma": {
+            "description": "Container for the decision problem and its resolution.",
+            "id": "Dilemma",
+            "properties": {
+                "problem": {
+                    "$ref": "Problem",
+                    "description": "The decision problem."
+                },
+                "resolution": {
+                    "$ref": "Resolution",
+                    "description": "The decision problem resolution."
+                }
+            },
+            "required": [
+                "problem",
+                "resolution"
+            ]
+        },
+        "MapConfig": {
+            "description": "Used mainly to reproduce map generation.",
+            "id": "MapConfig",
+            "properties": {
+                "drivers": {
+                    "$ref": "MapDrivers",
+                    "description": "Derived algorithm parameters used for map generation."
+                },
+                "params": {
+                    "$ref": "MapParameters",
+                    "description": "Raw algorithm parameters used for map generation."
+                }
+            },
+            "required": [
+                "params",
+                "drivers"
+            ]
+        },
+        "MapDrivers": {
+            "description": "",
+            "id": "MapDrivers",
+            "properties": {
+                "alpha_init": {
+                    "description": "Alpha initialization value.",
+                    "format": "double",
+                    "type": "number"
+                },
+                "data_multiplier": {
+                    "description": "Number of times a configuration is to be run given the random nature of the algorithm.",
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "max_map_size": {
+                    "description": "Maximum size of map.",
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "r_anchor_init": {
+                    "description": "Radius anchor.",
+                    "format": "double",
+                    "type": "number"
+                },
+                "r_fin": {
+                    "description": "Radius finish.",
+                    "format": "double",
+                    "type": "number"
+                },
+                "r_init": {
+                    "description": "Radius initialization.",
+                    "format": "double",
+                    "type": "number"
+                },
+                "training_anchors": {
+                    "description": "Anchor training ratio.",
+                    "format": "double",
+                    "type": "number"
+                },
+                "training_length": {
+                    "description": "Number of iterations.",
+                    "format": "int32",
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "r_fin",
+                "r_init",
+                "r_anchor_init",
+                "training_length",
+                "max_map_size",
+                "alpha_init",
+                "training_anchors",
+                "data_multiplier"
+            ]
+        },
+        "MapNode": {
+            "description": "",
+            "id": "MapNode",
+            "properties": {
+                "coordinates": {
+                    "description": "Position of cell on map.",
+                    "$ref": "MapNodeCoordinates"
+                },
+                "solution_refs": {
+                    "description": "References to solutions positioned on this cell.",
+                    "$ref": "List[string]"
+                }
+            },
+            "required": [
+                "coordinates",
+                "solution_refs"
+            ]
+        },
+        "MapNodeCoordinates": {
+            "description": "",
+            "id": "MapNodeCoordinates",
+            "properties": {
+                "x": {
+                    "description": "X coordinate.",
+                    "format": "double",
+                    "type": "number"
+                },
+                "y": {
+                    "description": "Y coordinate.",
+                    "format": "double",
+                    "type": "number"
+                }
+            },
+            "required": [
+                "x",
+                "y"
+            ]
+        },
+        "MapParameters": {
+            "description": "",
+            "id": "MapParameters",
+            "properties": {
+                "alpha_init": {
+                    "description": "Alpha initialization value.",
+                    "format": "double",
+                    "type": "number"
+                },
+                "anchor_epoch": {
+                    "description": "Rate of anchor training.",
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "map_size": {
+                    "description": "Estimated number of neurons in map.",
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "rAnchor": {
+                    "description": "Radius anchor.",
+                    "format": "double",
+                    "type": "number"
+                },
+                "rFinish": {
+                    "description": "Radius finish.",
+                    "format": "double",
+                    "type": "number"
+                },
+                "rInit": {
+                    "description": "Radius initialization.",
+                    "format": "double",
+                    "type": "number"
+                },
+                "seed": {
+                    "description": "Random seed used in the algorithm.",
+                    "format": "int64",
+                    "type": "integer"
+                },
+                "training_period": {
+                    "description": "Algorithm training iterations.",
+                    "format": "int32",
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "rInit",
+                "rFinish",
+                "rAnchor",
+                "seed",
+                "alpha_init",
+                "map_size",
+                "training_period",
+                "anchor_epoch"
+            ]
+        },
+        "MapQualityMeasurements": {
+            "description": "",
+            "id": "MapQualityMeasurements",
+            "properties": {
+                "final_kappa": {
+                    "description": "Kappa error for final map.",
+                    "format": "double",
+                    "type": "number"
+                },
+                "kappa": {
+                    "description": "Kappa error.",
+                    "format": "double",
+                    "type": "number"
+                }
+            }
+        },
+        "Map": {
+            "description": "Typically, map format would be consumed by Tradeoff Analytics JavaScript widget.",
+            "id": "Map",
+            "properties": {
+                "anchors": {
+                    "description": "Representation of the vertices and their positions on map.",
+                    "items": {
+                        "$ref": "Anchor"
+                    },
+                    "type": "array"
+                },
+                "comments": {
+                    "description": "Comments related to map; currently not in use.",
+                    "type": "string"
+                },
+                "config": {
+                    "$ref": "MapConfig",
+                    "description": "Configuration of algorithm parameters used for this map output."
+                },
+                "metrics": {
+                    "$ref": "MapQualityMeasurements",
+                    "description": "Metrics associated with map quality."
+                },
+                "nodes": {
+                    "description": "Cell on map. Structure is {\"coordinates\": {\"x\": 0, \"y\": 0}, \"solution_refs\": [\"key1\", \"key3\"]}. `Coordinates` describe the position on the map of options identified by keys in `solution_refs`.",
+                    "items": {
+                        "$ref": "MapNode"
+                    },
+                    "type": "array"
+                }
+            },
+            "required": [
+                "anchors",
+                "nodes"
+            ]
+        },
+        "Option": {
+            "description": "Decision problem representation.",
+            "id": "Option",
+            "properties": {
+                "app_data": {
+                    "$ref": "Map[string,string]",
+                    "description": "Application-specific data available to the hosting application; not used by the service. Specified as a map of values with the structure \"app_data\": { \"key1\": \"value1\", \"key2\": \"value2\" }."
+                },
+                "description_html": {
+                    "description": "Description in HTML format.",
+                    "type": "string"
+                },
+                "key": {
+                    "description": "An identifier for the option that is unique among all options for the problem.",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "The name of the option.",
+                    "type": "string"
+                },
+                "values": {
+                    "$ref": "Map[string,number|string]",
+                    "description": "Map of objective key to objective value with the structure \"values\": { \"key1\": value1, \"key2\": value2 }. An option that fails to specify a value for a column for which is_objective is true is marked as incomplete and is excluded from the resolution. datetime columns require a string value in full ISO 8601 format; categorical columns require one of the categories specified by the column's range."
+                }
+            },
+            "required": [
+                "values",
+                "key"
+            ]
+        },
+        "Problem": {
+            "description": "Decision problem representation.",
+            "id": "Problem",
+            "properties": {
+                "columns": {
+                    "description": "List of possible objectives. The field typically specifies the columns for the tabular representation of the data.",
+                    "items": {
+                        "$ref": "ColumnDefinition"
+                    },
+                    "type": "array"
+                },
+                "options": {
+                    "description": "A list of options for the decision problem. The field typically specifies the rows for the tabular representation of the data.",
+                    "items": {
+                        "$ref": "Option"
+                    },
+                    "type": "array"
+                },
+                "subject": {
+                    "description": "The name of the decision problem. Typically, the name of the column representing the option names in the tabular representation of your data.",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "columns",
+                "subject",
+                "options"
+            ]
+        },
+        "Resolution": {
+            "description": "Contains the decision problem resolution.",
+            "id": "Resolution",
+            "properties": {
+                "map": {
+                    "$ref": "Map",
+                    "description": "2D position of option on map polygon displayed by the Tradeoff Analytics visualization."
+                },
+                "solutions": {
+                    "description": "Analytical data per option.",
+                    "items": {
+                        "$ref": "SolutionPerspective"
+                    },
+                    "type": "array"
+                }
+            },
+            "required": [
+                "solutions"
+            ]
+        },
+        "SolutionPerspective": {
+            "description": "",
+            "id": "SolutionPerspective",
+            "properties": {
+                "shadow_me": {
+                    "description": "A list of references to solutions that shadow this solution. Each option that shadows this option is strictly better than this option.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "shadows": {
+                    "description": "A list of references to solutions that are shadowed by this solution. This option is strictly better than each option that it shadows.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "solution_ref": {
+                    "description": "The key that uniquely identifies the option in the decision problem.",
+                    "type": "string"
+                },
+                "status": {
+                    "description": "The status of the option. front indicates that the option is included among the top options for the problem. excluded indicates that another option is strictly better than the option. incomplete indicates that either the option's specification does not include a value for one of the columns or its value for one of the columns lies outside the range specified for the column; only a column whose is_objective field is set to true can generate this status. does_not_meet_preference indicates that the the option specifies a value for a categorical column that is not included in the column's preference.",
+                    "enum": [
+                        "front",
+                        "excluded",
+                        "incomplete",
+                        "does_not_meet_preference"
+                    ],
+                    "type": "string"
+                },
+                "status_cause": {
+                    "$ref": "StatusCause",
+                    "description": "If the status is incomplete or does_not_meet_preference, a description that provides more information about the cause of the status."
+                }
+            },
+            "required": [
+                "status",
+                "solution_ref"
+            ]
+        },
+        "StatusCause": {
+            "description": "",
+            "id": "StatusCause",
+            "properties": {
+                "error_code": {
+                    "description": "An error code that specifies the cause of the option's status. missing_objective_value indicates that a column for which the is_objective field is true is absent from the option's specification. range_mismatch indicates that the option's specification defines a value that is outside of the range specified for an objective. does_not_meet_preference indicates that a categorical column value for the option is not in the preference for that column.",
+                    "enum": [
+                        "missing_objective_value",
+                        "range_mismatch",
+                        "does_not_meet_preference"
+                    ],
+                    "type": "string"
+                },
+                "message": {
+                    "description": "A textual description of the cause for the option's status.",
+                    "type": "string"
+                },
+                "tokens": {
+                    "description": "An array of values used to describe the cause for the option's status. The strings appear in the message field.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                }
+            },
+            "required": [
+                "message",
+                "tokens",
+                "error_code"
+            ]
+        }
+    }
+}

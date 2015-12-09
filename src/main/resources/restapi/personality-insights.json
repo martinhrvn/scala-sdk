@@ -1,0 +1,406 @@
+{
+    "apiVersion": "2.0.0",
+    "swaggerVersion": "1.2",
+    "basePath": "https://gateway.watsonplatform.net/personality-insights/api",
+    "resourcePath": "/personality-insights/api",
+    "apis": [
+        {
+            "path": "/v2/profile",
+            "description": "",
+            "operations": [
+                {
+                    "method": "POST",
+                    "summary": "Sends up to 20 MB of content for analysis",
+                    "notes": "Currently both English (en) and Spanish (es) are supported for input and only English is supported for output. A JSON response conforms to the Profile model. When an error status code is returned, a JSON response is returned with more details about the error.",
+                    "type": "Profile",
+                    "nickname": "profile",
+                    "consumes": [
+                        "application/json",
+                        "text/html",
+                        "text/plain"
+                    ],
+                    "produces": [
+                        "application/json",
+                        "text/csv"
+                    ],
+                    "parameters": [
+                        {
+                            "name": "Content-Type",
+                            "paramType": "header",
+                            "description": "The content type of the request: plain text (the default), HTML, or JSON. Per the JSON and HTTP specifications, the default character encoding for JSON content is effectively always UTF-8 and for plain text and HTML is by default ISO-8859-1 (effectively the ASCII character set). When specifying a content type of plain text or HTML, include the charset parameter to indicate the character encoding of the input text, for example, \"Content-Type: text/plain; charset=utf-8\".",
+                            "required": true,
+                            "type": "string",
+                            "allowMultiple": false,
+                            "enum": [
+                                "application/json",
+                                "text/html",
+                                "text/plain"
+                            ],
+                            "defaultValue": "text/plain"
+                        },
+                        {
+                            "name": "Accept",
+                            "paramType": "header",
+                            "description": "The desired content type of the response: JSON (the default) or CSV. CSV output includes a fixed number of columns.",
+                            "required": true,
+                            "type": "string",
+                            "allowMultiple": false,
+                            "enum": [
+                                "application/json",
+                                "text/csv"
+                            ],
+                            "defaultValue": "application/json"
+                        },
+                        {
+                            "name": "Accept-Language",
+                            "paramType": "header",
+                            "description": "The desired language of the response. Currently only \"en\" is supported.",
+                            "required": false,
+                            "type": "string",
+                            "allowMultiple": false,
+                            "defaultValue": "en",
+                            "enum": [
+                                "en"
+                            ]
+                        },
+                        {
+                            "name": "Content-Language",
+                            "paramType": "header",
+                            "description": "The content language of the request. Both English (\"en\") and Spanish (\"es\") input content are supported. The default is English. In all cases, regional variants are treated as their parent language; for example, \"en-US\" is interpreted as \"en\". Applies only when the Content-Type header is set to \"text/plain\" or \"text/html\".",
+                            "required": false,
+                            "type": "string",
+                            "allowMultiple": false,
+                            "defaultValue": "en",
+                            "enum": [
+                                "en",
+                                "es"
+                            ]
+                        },
+                        {
+                            "name": "include_raw",
+                            "paramType": "query",
+                            "description": "If true, a raw score for each characteristic is returned in addition to a normalized score; raw scores are not compared with a sample population. A raw sampling error for each characteristic is also returned. By default, only normalized percentiles and sampling errors are returned.",
+                            "required": false,
+                            "type": "boolean",
+                            "allowMultiple": false,
+                            "defaultValue": "false"
+                        },
+                        {
+                            "name": "headers",
+                            "paramType": "query",
+                            "description": "If true, column labels are returned with a CSV response. Applies only when the Accept header is set to \"text/csv\".",
+                            "required": false,
+                            "type": "boolean",
+                            "allowMultiple": false,
+                            "defaultValue": "false"
+                        },
+                        {
+                            "name": "body",
+                            "description": "A maximum of 20 MB of content to analyze. A JSON request must conform to the ContentListContainer model.",
+                            "required": true,
+                            "type": "ContentListContainer",
+                            "paramType": "body",
+                            "allowMultiple": false
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "OK"
+                        },
+                        {
+                            "code": 400,
+                            "message": "The request JSON is not properly formatted, fewer than 100 words are provided, or the requested language is not supprorted.",
+                            "responseModel": "Error"
+                        },
+                        {
+                            "code": 500,
+                            "message": "Server error",
+                            "responseModel": "Error"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/v2/visualize",
+            "description": "",
+            "operations": [
+                {
+                    "method": "POST",
+                    "summary": "DEPRECATED: Visualize a JSON profile",
+                    "notes": "The POST /v2/visualize operation is deprecated, it will be removed in a future release. The visualization capability now is included in the sample code to facilitate its use with caching and content distribution networks.<br><br>Accepts a User Modeling portrait that is generated from the response of the POST /profile operation. The response is a visualization of the portrait that is generated via JavaScript, HTML and SVG with the D3.js library.",
+                    "type": "string",
+                    "nickname": "visualize",
+                    "consumes": [
+                        "application/json"
+                    ],
+                    "produces": [
+                        "text/html"
+                    ],
+                    "deprecated": "true",
+                    "parameters": [
+                        {
+                            "name": "body",
+                            "description": "Portrait to be visualized.",
+                            "required": true,
+                            "type": "Profile",
+                            "paramType": "body",
+                            "allowMultiple": false
+                        },
+                        {
+                            "name": "w",
+                            "defaultValue": "800",
+                            "description": "Width of the visualization, in pixels.",
+                            "required": false,
+                            "type": "integer",
+                            "paramType": "query",
+                            "allowMultiple": false
+                        },
+                        {
+                            "name": "h",
+                            "defaultValue": "800",
+                            "description": "Height of the visualization, in pixels.",
+                            "required": false,
+                            "type": "integer",
+                            "paramType": "query",
+                            "allowMultiple": false
+                        },
+                        {
+                            "name": "id",
+                            "defaultValue": "chartDiv",
+                            "description": "The id of the result div element containing the visualization.",
+                            "required": false,
+                            "type": "string",
+                            "paramType": "query",
+                            "allowMultiple": false
+                        },
+                        {
+                            "name": "d3",
+                            "defaultValue": "true",
+                            "description": "If true, return the D3.js library inline.  If false, do not. Specify \"true\" for the first widget you place in your page and \"false\" for the rest to avoid having multiple copies of D3.",
+                            "required": false,
+                            "type": "string",
+                            "paramType": "query",
+                            "allowMultiple": false
+                        },
+                        {
+                            "name": "imgurl",
+                            "defaultValue": "",
+                            "description": "The URL to an image to place at the center of the visualization. Typically this would be a picture of the person who created the text that was analyzed. For example, a URL to the user's portrait from Twitter.",
+                            "required": false,
+                            "type": "string",
+                            "paramType": "query",
+                            "allowMultiple": false
+                        },
+                        {
+                            "name": "useorignames",
+                            "defaultValue": "false",
+                            "description": "The visualization uses some names that are more meaningful to a lay person. Set to true to see the original names for these characteristics.",
+                            "required": false,
+                            "type": "string",
+                            "paramType": "query",
+                            "allowMultiple": false
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "OK"
+                        },
+                        {
+                            "code": 400,
+                            "message": "Bad request",
+                            "responseModel": "Error"
+                        },
+                        {
+                            "code": 500,
+                            "message": "Server error",
+                            "responseModel": "Error"
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "models": {
+        "Profile": {
+            "id": "Profile",
+            "required": [
+                "id",
+                "processed_lang",
+                "source",
+                "tree",
+                "word_count"
+            ],
+            "properties": {
+                "tree": {
+                    "$ref": "TraitTreeNode"
+                },
+                "id": {
+                    "type": "string",
+                    "description": "The unique identifier for which these characteristics were computed, from the \"userid\" field of the input ContentItems."
+                },
+                "source": {
+                    "type": "string",
+                    "description": "The source for which these characteristics were computed, from the \"sourceid\" field of the input ContentItems."
+                },
+                "word_count": {
+                    "type": "integer",
+                    "description": "The number of words found in the input."
+                },
+                "word_count_message": {
+                    "type": "string",
+                    "description": "A message indicating the number of words found and where that value falls in the range of required or suggested number of words when guidance is available."
+                },
+                "processed_lang": {
+                    "type": "string",
+                    "description": "The language model that was used to process the input, one of \"en\" or \"es\"."
+                }
+            }
+        },
+        "TraitTreeNode": {
+            "id": "TraitTreeNode",
+            "required": [
+                "id",
+                "name"
+            ],
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "description": "The id of the characteristic, globally unique."
+                },
+                "name": {
+                    "type": "string",
+                    "description": "The user-displayable name of the characteristic."
+                },
+                "category": {
+                    "type": "string",
+                    "description": "The category of the characteristic: personality, needs, values, or behavior (for temporal data)."
+                },
+                "percentage": {
+                    "type": "double",
+                    "format": "double",
+                    "description": "For personality, needs, and values characterisitics, the normalized percentile score for the characteristic, from 0-1. For example, if the percentage for Openness is 0.25, the author scored in the 25th percentile; the author is more open than 24% of the population and less open than 74% of the population. For temporal behavior characteristics, the percentage of timestamped data that occurred during that day or hour."
+                },
+                "sampling_error": {
+                    "type": "double",
+                    "format": "double",
+                    "description": "Indicates the sampling error of the percentage based on the number of words in the input, from 0-1. The number defines a 95% confidence interval around the percentage. For example, if the sampling error is 4% and the percentage is 61%, it is 95% likely that the actual percentage value is between 57% and 65% if more words are given."
+                },
+                "raw_score": {
+                    "type": "double",
+                    "format": "double",
+                    "description": "For personality, needs, and values characterisitics, the raw score for the characteristic. A positive or negative score indicates more or less of the characteristic; zero indicates neutrality or no evidence for a score. The raw score is computed based on the input and the service model; it is not normalized or compared with a sample population. The raw score enables comparison of the results against a different sampling population and with a custom normalization approach."
+                },
+                "raw_sampling_error": {
+                    "type": "double",
+                    "format": "double",
+                    "description": "Indicates the sampling error of the raw score based on the number of words in the input; the practical range is 0-1. The number defines a 95% confidence interval around the raw score. For example, if the raw sampling error is 5% and the raw score is 65%, it is 95% likely that the actual raw score is between 60% and 70% if more words are given."
+                },
+                "children": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "TraitTreeNode"
+                    },
+                    "description": "Recursive array of characteristics inferred from the input text."
+                }
+            }
+        },
+        "ContentListContainer": {
+            "id": "ContentListContainer",
+            "required": [
+                "contentItems"
+            ],
+            "properties": {
+                "contentItems": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "ContentItem"
+                    }
+                }
+            }
+        },
+        "ContentItem": {
+            "id": "ContentItem",
+            "required": [
+                "content"
+            ],
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "description": "Unique identifier for this content item."
+                },
+                "userid": {
+                    "type": "string",
+                    "description": "Unique identifier for the author of this content."
+                },
+                "sourceid": {
+                    "type": "string",
+                    "description": "Identifier for the source of this content, for example, blog123 or twitter."
+                },
+                "created": {
+                    "type": "int",
+                    "format": "int64",
+                    "description": "Timestamp that identifies when this content was created, in milliseconds since midnight 1/1/1970 UTC. Required only for results about temporal behavior data."
+                },
+                "updated": {
+                    "type": "int",
+                    "format": "int64",
+                    "description": "Timestamp that identifies when this content was last updated, in milliseconds since midnight 1/1/1970 UTC. Required only for results about temporal behavior data."
+                },
+                "contenttype": {
+                    "type": "string",
+                    "description": "MIME type of the content, for example, \"text/plain\" (the default) or \"text/html\".  The tags are stripped from HTML content before it is analyzed; other MIME types are processed as is."
+                },
+                "charset": {
+                    "type": "string",
+                    "description": "DEPRECATED. The value of this field is ignored. Character encoding for JSON data is assumed to be in UTF-8 format per the JSON specification."
+                },
+                "language": {
+                    "type": "string",
+                    "description": "Language identifier (two-letter ISO 639-1 identifier). Both English (\"en\") and Spanish (\"es\") input content are supported. The default is English. In all cases, regional variants are treated as their parent language; for example, \"en-US\" is interpreted as \"en\"."
+                },
+                "content": {
+                    "type": "string",
+                    "description": "Content to be analyzed. Up to 20 MB of content is supported."
+                },
+                "parentid": {
+                    "type": "string",
+                    "description": "Unique id of the parent content item. Used to identify hierarchical relationships between posts/replies, messages/replies, etc.",
+                    "defaultValue": "null"
+                },
+                "reply": {
+                    "type": "boolean",
+                    "defaultValue": "false",
+                    "description": "Indicates whether this content item is a reply to another content item."
+                },
+                "forward": {
+                    "type": "boolean",
+                    "defaultValue": "false",
+                    "description": "Indicates whether this content item is a forwarded/copied version of another content item."
+                }
+            }
+        },
+        "Error": {
+            "id": "Error",
+            "properties": {
+                "code": {
+                    "required": true,
+                    "type": "integer",
+                    "description": "The http status code."
+                },
+                "error": {
+                    "required": true,
+                    "type": "string",
+                    "description": "A message intended for users that describes the error that occurred."
+                },
+                "help": {
+                    "required": false,
+                    "type": "string",
+                    "description": "A URL to documentation explaining the cause and possibly solutions for this error."
+                }
+            }
+        }
+    }
+}
