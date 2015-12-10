@@ -1,5 +1,7 @@
 package com.ibm.watson.developercloud.language_translation.v2
 
+import java.io.File
+
 import com.ibm.watson.developercloud.language_classification.v1.LanguageIdentificationProtocol._
 import spray.json.DefaultJsonProtocol
 
@@ -25,4 +27,5 @@ object LanguageTranslationProtocol extends DefaultJsonProtocol {
   implicit val translationResult = jsonFormat(TranslationResult, "translations", "word_count", "character_count")
 }
 
+case class CreateModelOptions(baseModelId: String, forcedGlossary: File, monlingualCorpus: File, name: String, parallelCorpus: File)
 

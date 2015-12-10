@@ -68,5 +68,7 @@ abstract class WatsonService(var config : WatsonServiceConfig) {
   }
 
 
+  def formHeaders(params: (String, String)*) =
+    Seq(HttpHeaders.`Content-Disposition`("form-data", Map(params: _*)))
 }
 
