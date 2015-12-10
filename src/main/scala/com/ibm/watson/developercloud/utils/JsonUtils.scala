@@ -1,7 +1,6 @@
 package com.ibm.watson.developercloud.utils
 
-import spray.json.{JsString, JsValue}
-
+import spray.json._
 /**
   * Created by martinhrvn on 10/12/15.
   */
