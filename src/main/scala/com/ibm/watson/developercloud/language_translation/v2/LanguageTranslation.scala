@@ -119,11 +119,8 @@ class LanguageTranslation(config: WatsonServiceConfig ) extends WatsonService(co
     * @return future of HttpRequest
     */
   def deleteModel(modelId : String) : Future[HttpResponse] = {
-    val id : String = Option(modelId) match {
-      case Some(mid) if mid.nonEmpty => mid
-      case _ => throw new IllegalArgumentException("modelId cannot be null")
-    }
-    val request = Delete(endpoint + PATH_MODEL.format(id))
+    Validation.notEmpty(modelId, "Model ID cannot be empty")
+    val request = Delete(endpoint + PATH_MODEL.format(modelId))
     send(request)
   }
 
