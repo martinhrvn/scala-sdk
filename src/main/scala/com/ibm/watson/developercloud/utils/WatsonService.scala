@@ -4,17 +4,22 @@ package com.ibm.watson.developercloud.utils
 import akka.actor.ActorSystem
 import akka.io.IO
 import akka.pattern.ask
+import akka.util.Timeout
 import spray.can.Http
 import spray.client.pipelining._
 import spray.http.{HttpRequest, HttpResponse, _}
 
 import scala.concurrent.Future
+import scala.concurrent.duration._
+import scala.language.postfixOps
 
 
 abstract class WatsonService(var config : WatsonServiceConfig) {
   config.setup(serviceType)
 
   implicit val system = ActorSystem("simple-spray-client")
+
+  implicit val requestTimeout = Timeout(60 seconds)
 
   import system.dispatcher
 
