@@ -9,7 +9,11 @@ import spray.httpx.SprayJsonSupport._
 import com.ibm.watson.developercloud.personality_insights.v2.PersonalityInsightsProtocol._
 
 /**
-  * Created by martinhrvn on 11/12/15.
+  * The Watson Personality Insights service uses linguistic analytics to extract a spectrum of
+  * cognitive and social characteristics from the text data that a person generates through blogs,
+  * tweets, forum posts, and more.
+  *
+  * @version v2
   */
 class PersonalityInsights(config: WatsonServiceConfig) extends WatsonService(config: WatsonServiceConfig){
   import system.dispatcher
@@ -46,12 +50,26 @@ class PersonalityInsights(config: WatsonServiceConfig) extends WatsonService(con
 
   }
 
+  /**
+    * Accepts text and responds with Profile with a tree of characteristics that include
+    * personality, needs and values.
+    *
+    * @param text Text to analyze
+    * @return The personality Profile
+    */
   def getProfile(text: String) : Future[Profile] = {
     val options = ProfileOptions(text)
     getProfile(options)
 
   }
 
+  /**
+    * Accepts text and responds with Profile with a tree of characteristics that include
+    * personality, needs and values.
+    *
+    * @param options profile options
+    * @return The personality Profile
+    */
   def getProfile(options: ProfileOptions) : Future[Profile] = {
     val request = getRequest(options)
     val response = send(request)
