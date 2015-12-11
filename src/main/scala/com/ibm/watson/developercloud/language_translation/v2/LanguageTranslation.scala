@@ -1,12 +1,9 @@
 package com.ibm.watson.developercloud.language_translation.v2
 
-import com.ibm.watson.developercloud.language_translation.v2.LanguageTranslationProtocol._
 import com.ibm.watson.developercloud.utils.{JsonUtils, Validation, WatsonService, WatsonServiceConfig}
 import com.typesafe.scalalogging.LazyLogging
 import spray.client.pipelining._
 import spray.http._
-import spray.httpx.SprayJsonSupport._
-import spray.httpx.unmarshalling._
 import spray.json.{JsObject, JsString, JsValue}
 
 import scala.concurrent.Future
@@ -47,17 +44,17 @@ class LanguageTranslation(config: WatsonServiceConfig ) extends WatsonService(co
     val map = collection.mutable.Map[String, String]()
 
     Option(source) match {
-      case Some(src) if src.nonEmpty => map.put("source", src)
+      case Some(src) if src.nonEmpty => map.put(LanguageTranslation.Source, src)
       case _ =>
     }
 
     Option(target) match {
-      case Some(trg) if trg.nonEmpty => map.put("target", trg)
+      case Some(trg) if trg.nonEmpty => map.put(LanguageTranslation.Target, trg)
       case _ =>
     }
 
     Option(showDefault) match {
-      case Some(showDef) => map.put("default", showDef.toString)
+      case Some(showDef) => map.put(LanguageTranslation.Default, showDef.toString)
       case _ =>
     }
 
@@ -85,24 +82,24 @@ class LanguageTranslation(config: WatsonServiceConfig ) extends WatsonService(co
     * @return the translation model
     */
   def createModel(options: CreateModelOptions) : Future[LanguageModel] = {
-    var data : List[BodyPart] = List(BodyPart(options.baseModelId, formHeaders("name" -> "body_part")))
+    var data: List[BodyPart] = List(BodyPart(options.baseModelId, formHeaders(LanguageTranslation.Name -> LanguageTranslation.BodyPart)))
     data = Option(options.forcedGlossary) match {
-      case Some(glossary) => BodyPart(glossary, "forced_glossary") :: data
+      case Some(glossary) => BodyPart(glossary, LanguageTranslation.ForcedGlossary) :: data
       case _ => data
     }
 
     data = Option(options.monlingualCorpus) match {
-      case Some(corpus) => BodyPart(corpus, "monolingual_corpus") :: data
+      case Some(corpus) => BodyPart(corpus, LanguageTranslation.MonolingualCorpus) :: data
       case _ => data
     }
 
     data = Option(options.parallelCorpus) match {
-      case Some(parallelCorpus) => BodyPart(parallelCorpus, "parallel_corpus") :: data
+      case Some(parallelCorpus) => BodyPart(parallelCorpus, LanguageTranslation.ParallelCorpus) :: data
       case _ => data
     }
 
     data = Option(options.name) match {
-      case Some(name) => BodyPart(name, "name") :: data
+      case Some(name) => BodyPart(name, LanguageTranslation.Name) :: data
       case _ => data
     }
 
@@ -129,7 +126,7 @@ class LanguageTranslation(config: WatsonServiceConfig ) extends WatsonService(co
     * Retrieves a list of identifiable languages
     * @return the list of identifiable languages
     */
-  def getIdentifiableLanguages() : Future[List[IdentifiableLanguage]] = {
+  def getIdentifiableLanguages: Future[List[IdentifiableLanguage]] = {
     val request = Get(config.endpoint + PATH_IDENTIFIABLE_LANGUAGES)
     val response = send(request)
     response.map(unmarshal[List[IdentifiableLanguage]])
@@ -182,15 +179,26 @@ class LanguageTranslation(config: WatsonServiceConfig ) extends WatsonService(co
     */
   def translateRequest(text: String, modelId: String, source: String, target: String) : Future[TranslationResult] = {
     Validation.notEmpty(text, "Text cannot be empty")
-    var map : Map[String, JsValue] = Map("text" -> JsString(text))
-    map = JsonUtils.addIfNotEmpty(modelId, "model_id", map)
-    map = JsonUtils.addIfNotEmpty(source, "source", map)
-    map = JsonUtils.addIfNotEmpty(target, "target", map)
+    var map: Map[String, JsValue] = Map(LanguageTranslation.Text -> JsString(text))
+    map = JsonUtils.addIfNotEmpty(modelId, LanguageTranslation.ModelId, map)
+    map = JsonUtils.addIfNotEmpty(source, LanguageTranslation.Source, map)
+    map = JsonUtils.addIfNotEmpty(target, LanguageTranslation.Target, map)
     val jsonRequest = new JsObject(map)
 
     val response = send(Post(config.endpoint + PATH_TRANSLATE, jsonRequest.toString()))
     response.map(unmarshal[TranslationResult])
   }
+}
 
-
+object LanguageTranslation {
+  val ModelId = "model_id"
+  val Source = "source"
+  val Target = "target"
+  val Text = "text"
+  val Name = "name"
+  val ParallelCorpus = "parallel_corpus"
+  val MonolingualCorpus = "monolingual_corpus"
+  val ForcedGlossary = "forced_glossary"
+  val BodyPart = "body_part"
+  val Default = "default"
 }
