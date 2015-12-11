@@ -5,7 +5,8 @@ import com.typesafe.scalalogging.LazyLogging
 import spray.client.pipelining._
 import spray.http._
 import spray.json.{JsObject, JsString, JsValue}
-
+import LanguageTranslationProtocol._
+import spray.httpx.SprayJsonSupport._
 import scala.concurrent.Future
 
 /**
