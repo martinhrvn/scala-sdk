@@ -19,5 +19,11 @@ object Validation {
     }, message)
   }
 
+  def notNull[T](value : T, message: String) = {
+    validate(value, {p : T => p != null}, message)
+  }
 
+  def assertTrue(value: Boolean, message: String) = {
+    validate(value, {_ :Boolean => value}, message)
+  }
 }
