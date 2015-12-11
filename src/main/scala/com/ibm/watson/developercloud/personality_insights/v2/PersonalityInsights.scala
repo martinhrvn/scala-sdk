@@ -1,12 +1,13 @@
 package com.ibm.watson.developercloud.personality_insights.v2
 
+import com.ibm.watson.developercloud.personality_insights.v2.PersonalityInsightsProtocol._
 import com.ibm.watson.developercloud.utils.{Validation, WatsonService, WatsonServiceConfig}
 import spray.client.pipelining._
 import spray.http.HttpHeaders._
 import spray.http._
-import scala.concurrent.Future
 import spray.httpx.SprayJsonSupport._
-import com.ibm.watson.developercloud.personality_insights.v2.PersonalityInsightsProtocol._
+
+import scala.concurrent.Future
 
 /**
   * The Watson Personality Insights service uses linguistic analytics to extract a spectrum of
@@ -17,7 +18,8 @@ import com.ibm.watson.developercloud.personality_insights.v2.PersonalityInsights
   */
 class PersonalityInsights(config: WatsonServiceConfig) extends WatsonService(config: WatsonServiceConfig){
   import system.dispatcher
-  override def serviceType: String = "personality_insights"
+
+  def serviceType: String = "personality_insights"
   val PATH_PROFILE = "/v2/profile"
 
   private def getRequest(options: ProfileOptions) : HttpRequest = {
@@ -30,19 +32,19 @@ class PersonalityInsights(config: WatsonServiceConfig) extends WatsonService(con
     }
 
     uri = Option(options.includeRaw) match {
-      case Some(incl) => uri.withQuery("include_raw"-> options.includeRaw.toString)
+      case Some(incl) => uri.withQuery(PersonalityInsights.IncludeRaw -> options.includeRaw.toString)
       case _ => uri
     }
 
-    var request: HttpRequest = Post(uri, text).withHeaders(RawHeader("Content-Type", options.contentType))
+    var request: HttpRequest = Post(uri, text).withHeaders(RawHeader(WatsonService.ContentType, options.contentType))
 
     request = Option(options.language) match {
-      case Some(lang) => request.withHeaders(RawHeader("Content-Language", lang.value))
+      case Some(lang) => request.withHeaders(RawHeader(WatsonService.ContentLanguage, lang.value))
       case _ => request
     }
 
     request = Option(options.acceptLanguage) match {
-      case Some(lang) => request.withHeaders(RawHeader("Accept-Language", lang.value))
+      case Some(lang) => request.withHeaders(RawHeader(WatsonService.AcceptLanguage, lang.value))
       case _ => request
     }
 
@@ -75,4 +77,8 @@ class PersonalityInsights(config: WatsonServiceConfig) extends WatsonService(con
     val response = send(request)
     response.map(unmarshal[Profile])
   }
+}
+
+object PersonalityInsights {
+  val IncludeRaw = "include_raw"
 }
