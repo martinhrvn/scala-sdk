@@ -72,7 +72,7 @@ class LanguageTranslation(config: WatsonServiceConfig ) extends WatsonService(co
   def getModels(params: Map[String,String]) : Future[LanguageModels] = {
     logger.info("Entering getModels")
 
-    val request = Get(Uri(endpoint + MODEL_URL).withQuery(params))
+    val request = Get(Uri(config.endpoint + MODEL_URL).withQuery(params))
     val response: Future[HttpResponse] = send(request)
     logger.info("Returning response")
     response.map(unmarshal[LanguageModels])
@@ -108,7 +108,7 @@ class LanguageTranslation(config: WatsonServiceConfig ) extends WatsonService(co
 
     val formData = MultipartFormData(data)
 
-    val request = Post(endpoint + PATH_MODELS, formData)
+    val request = Post(config.endpoint + PATH_MODELS, formData)
     send(request).map(unmarshal[LanguageModel])
 
   }
@@ -120,7 +120,7 @@ class LanguageTranslation(config: WatsonServiceConfig ) extends WatsonService(co
     */
   def deleteModel(modelId : String) : Future[HttpResponse] = {
     Validation.notEmpty(modelId, "Model ID cannot be empty")
-    val request = Delete(endpoint + PATH_MODEL.format(modelId))
+    val request = Delete(config.endpoint + PATH_MODEL.format(modelId))
     send(request)
   }
 
@@ -130,7 +130,7 @@ class LanguageTranslation(config: WatsonServiceConfig ) extends WatsonService(co
     * @return the list of identifiable languages
     */
   def getIdentifiableLanguages() : Future[List[IdentifiableLanguage]] = {
-    val request = Get(endpoint + PATH_IDENTIFIABLE_LANGUAGES)
+    val request = Get(config.endpoint + PATH_IDENTIFIABLE_LANGUAGES)
     val response = send(request)
     response.map(unmarshal[List[IdentifiableLanguage]])
   }
@@ -141,7 +141,7 @@ class LanguageTranslation(config: WatsonServiceConfig ) extends WatsonService(co
     * @return the identified language
     */
   def identify (text: String): Future[List[IdentifiedLanguage]] = {
-    val request = Post(endpoint + PATH_IDENTIFY, text)
+    val request = Post(config.endpoint + PATH_IDENTIFY, text)
     val response = send(request)
     response.map(unmarshal[List[IdentifiedLanguage]])
   }
@@ -188,7 +188,7 @@ class LanguageTranslation(config: WatsonServiceConfig ) extends WatsonService(co
     map = JsonUtils.addIfNotEmpty(target, "target", map)
     val jsonRequest = new JsObject(map)
 
-    val response = send(Post(endpoint + PATH_TRANSLATE, jsonRequest.toString()))
+    val response = send(Post(config.endpoint + PATH_TRANSLATE, jsonRequest.toString()))
     response.map(unmarshal[TranslationResult])
   }
 

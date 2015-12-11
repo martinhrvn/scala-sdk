@@ -23,7 +23,7 @@ class PersonalityInsights(config: WatsonServiceConfig) extends WatsonService(con
   private def getRequest(options: ProfileOptions) : HttpRequest = {
     Validation.notNull(options, "Options cannot be null")
     Validation.assertTrue(options.text != null || options.contentItems != null, "text, html or content items need to be specified")
-    var uri = Uri(endpoint + PATH_PROFILE)
+    var uri = Uri(config.endpoint + PATH_PROFILE)
     val text = options match {
       case o if o.text != null => o.text
       case _ => Content(options.contentItems).toString

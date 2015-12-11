@@ -46,28 +46,38 @@ abstract class WatsonService(var config : WatsonServiceConfig) {
 
   import system.dispatcher
 
-  def host : String = config.host
   val AUTHORIZATION = "Authorization"
   val headers = List(HttpHeaders.RawHeader(AUTHORIZATION, config.apiKey),
     HttpHeaders.RawHeader("Accept", "application/json"),
-    HttpHeaders.Host(host, 443))
+    HttpHeaders.Host(config.host, 443))
 
-  def endpoint : String = config.endpoint
-  def apiKey : String = config.apiKey
+
+  /**
+    * Gets the service type for service (used to get correct entry from VCAP_SERVICES properties)
+    * @return
+    */
   def serviceType : String
-
 
   val pipeline: Future[SendReceive] =
     for (
       Http.HostConnectorInfo(connector, _) <-
-      IO(Http) ? Http.HostConnectorSetup(host, port = 443, sslEncryption = true)
+      IO(Http) ? Http.HostConnectorSetup(config.host, port = 443, sslEncryption = true)
     ) yield sendReceive(connector)
 
+  /**
+    * Sends the request and applies correct headers (apiKey, host and port)
+    * @param request
+    * @return
+    */
   def send(request: HttpRequest) : Future[HttpResponse] = {
     pipeline.flatMap(_(request.withHeaders(headers)))
   }
 
-
+  /**
+    * Helper method to return headers for form data
+    * @param params params to apply
+    * @return sequence of headers
+    */
   def formHeaders(params: (String, String)*) =
     Seq(HttpHeaders.`Content-Disposition`("form-data", Map(params: _*)))
 }

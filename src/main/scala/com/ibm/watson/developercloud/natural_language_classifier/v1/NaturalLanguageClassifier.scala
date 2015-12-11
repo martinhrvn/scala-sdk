@@ -52,7 +52,7 @@ class NaturalLanguageClassifier(config: WatsonServiceConfig) extends WatsonServi
 
     val jsonRequest = new JsObject(map)
 
-    val post: HttpRequest = Post(endpoint + CLASSIFIERS_URL, jsonRequest.toString())
+    val post: HttpRequest = Post(config.endpoint + CLASSIFIERS_URL, jsonRequest.toString())
     send(post).map(unmarshal[Classifier])
   }
 
@@ -70,7 +70,7 @@ class NaturalLanguageClassifier(config: WatsonServiceConfig) extends WatsonServi
     val url = CLASSIFICATION_URL.format(classifierId)
     val jsonRequest = JsObject("text" -> JsString(text))
 
-    val request: HttpRequest = Post(endpoint + url, jsonRequest.toString())
+    val request: HttpRequest = Post(config.endpoint + url, jsonRequest.toString())
     send(request).map(unmarshal[Classification])
   }
 
@@ -81,7 +81,7 @@ class NaturalLanguageClassifier(config: WatsonServiceConfig) extends WatsonServi
     */
   def getClassifiers : Future[List[Classifier]] = {
     logger.info("Running getClassifiers method")
-    val response: Future[HttpResponse] = send(Get(endpoint + CLASSIFIERS_URL))
+    val response: Future[HttpResponse] = send(Get(config.endpoint + CLASSIFIERS_URL))
     logger.info("returning a response")
     response.map(unmarshal[List[Classifier]])
   }
@@ -96,7 +96,7 @@ class NaturalLanguageClassifier(config: WatsonServiceConfig) extends WatsonServi
     Validation.notEmpty(classifierId, "Classifier ID cannot be empty")
     val url = CLASSIFIER_URL.format(classifierId)
 
-    val response : Future[HttpResponse] = send(Delete(endpoint + url))
+    val response : Future[HttpResponse] = send(Delete(config.endpoint + url))
     response
   }
 
@@ -110,7 +110,7 @@ class NaturalLanguageClassifier(config: WatsonServiceConfig) extends WatsonServi
 
     val url = CLASSIFIER_URL.format(classifierId)
 
-    val response : Future[HttpResponse] = send(Get(endpoint + url))
+    val response : Future[HttpResponse] = send(Get(config.endpoint + url))
 
     response.map(unmarshal[Classifier])
   }
