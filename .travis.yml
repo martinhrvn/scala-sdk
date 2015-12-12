@@ -1,1 +1,8 @@
 language: java
+before_install:
+- openssl aes-256-cbc -K $encrypted_532f38a6b998_key -iv $encrypted_532f38a6b998_iv
+  -in test.json.enc -out test.json -d
+- export "TEST=$(cat text.json)"
+- echo $TEST
+  
+  
