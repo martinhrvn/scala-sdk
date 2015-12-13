@@ -1,12 +1,12 @@
 package com.ibm.watson.developercloud.natural_language_classifier.v1
 
-import com.ibm.watson.developercloud.natural_language_classifier.v1.NaturalLanguageClassifierProtocol._
 import com.ibm.watson.developercloud.utils.{JsonUtils, Validation, WatsonServiceConfig, WatsonService}
 import com.typesafe.scalalogging.LazyLogging
 import spray.client.pipelining._
 import spray.http._
 import spray.httpx.SprayJsonSupport._
 import spray.json._
+import NaturalLanguageClassifierProtocol._
 
 import scala.concurrent.Future
 
