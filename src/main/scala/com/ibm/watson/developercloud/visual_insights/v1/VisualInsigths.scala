@@ -12,7 +12,10 @@ import VisualInsigthsProtocol._
 import scala.concurrent.Future
 
 /**
-  * Created by martinhrvn on 13/12/15.
+  * The IBM Watson Visual Insights gives insight into the themes present in a collection of images
+  * based on their visual appearance / content.
+  *
+  * @version v1
   */
 class VisualInsigths(config: WatsonServiceConfig) extends WatsonService(config: WatsonServiceConfig) {
   /**
@@ -22,11 +25,20 @@ class VisualInsigths(config: WatsonServiceConfig) extends WatsonService(config: 
   override def serviceType: String = "visual_insights"
   import system.dispatcher
 
-
+  /**
+    * Returns a summary of the collection's visual classifiers.
+    * @return summary of classifiers
+    */
   def getClassifiers : Future[Classifiers] = {
     return getClassifiers(null)
+    getClassifiers(null)
   }
 
+  /**
+    * Returns a summary of the collection's visual classifiers, filtered by name.
+    * @param name the filter name
+    * @return summary of classifiers
+    */
   def getClassifiers(name: String) : Future[Classifiers] = {
     var uri = Uri(config.endpoint + VisualInsights.ClassifiersPath)
     uri = Option(name) match {
@@ -38,8 +50,14 @@ class VisualInsigths(config: WatsonServiceConfig) extends WatsonService(config: 
     response.map(unmarshal[Classifiers])
   }
 
+  /**
+    * Uplad a set of images as a ZIP file for visual insight extraction.
+    * @param imagesFile the images ZIP file
+    * @return the summary of the collection's visual attributes
+    */
   def getSummary(imagesFile: File) : Future[Summary] = {
     Validation.fileExists(imagesFile, "imagesFile cannot be null or empty");
+    Validation.fileExists(imagesFile, "imagesFile cannot be null or empty")
     val data: List[BodyPart] = List(BodyPart(imagesFile, VisualInsights.ImagesFile))
     val formData = MultipartFormData(data)
     val request = Post(VisualInsights.SummaryPath, formData)
