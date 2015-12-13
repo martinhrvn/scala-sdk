@@ -6,7 +6,6 @@ import com.ibm.watson.developercloud.utils.{Validation, WatsonService, WatsonSer
 import com.typesafe.scalalogging.LazyLogging
 import spray.client.pipelining._
 import spray.http._
-import spray.json.{JsObject, JsString, JsValue}
 import spray.httpx.SprayJsonSupport._
 import VisualInsigthsProtocol._
 import scala.concurrent.Future
@@ -17,7 +16,7 @@ import scala.concurrent.Future
   *
   * @version v1
   */
-class VisualInsigths(config: WatsonServiceConfig) extends WatsonService(config: WatsonServiceConfig) {
+class VisualInsigths(config: WatsonServiceConfig) extends WatsonService(config: WatsonServiceConfig) with LazyLogging {
   /**
     * Gets the service type for service (used to get correct entry from VCAP_SERVICES properties)
     * @return
@@ -30,7 +29,6 @@ class VisualInsigths(config: WatsonServiceConfig) extends WatsonService(config: 
     * @return summary of classifiers
     */
   def getClassifiers : Future[Classifiers] = {
-    return getClassifiers(null)
     getClassifiers(null)
   }
 
@@ -56,7 +54,6 @@ class VisualInsigths(config: WatsonServiceConfig) extends WatsonService(config: 
     * @return the summary of the collection's visual attributes
     */
   def getSummary(imagesFile: File) : Future[Summary] = {
-    Validation.fileExists(imagesFile, "imagesFile cannot be null or empty");
     Validation.fileExists(imagesFile, "imagesFile cannot be null or empty")
     val data: List[BodyPart] = List(BodyPart(imagesFile, VisualInsights.ImagesFile))
     val formData = MultipartFormData(data)
