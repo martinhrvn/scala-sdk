@@ -1,3 +1,18 @@
+// Copyright (C) 2011-2012 the original author or authors.
+// See the LICENCE.txt file distributed with this work for additional
+// information regarding copyright ownership.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 package com.ibm.watson.developercloud.visual_insights.v1
 
 import java.io.File
@@ -10,6 +25,7 @@ import spray.httpx.SprayJsonSupport._
 import VisualInsigthsProtocol._
 import scala.concurrent.Future
 
+
 /**
   * The IBM Watson Visual Insights gives insight into the themes present in a collection of images
   * based on their visual appearance / content.
@@ -17,12 +33,13 @@ import scala.concurrent.Future
   * @version v1
   */
 class VisualInsigths(config: WatsonServiceConfig) extends WatsonService(config: WatsonServiceConfig) with LazyLogging {
+  import system.dispatcher
   /**
     * Gets the service type for service (used to get correct entry from VCAP_SERVICES properties)
     * @return
     */
   override def serviceType: String = "visual_insights"
-  import system.dispatcher
+
 
   /**
     * Returns a summary of the collection's visual classifiers.

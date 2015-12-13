@@ -1,3 +1,18 @@
+// Copyright (C) 2011-2012 the original author or authors.
+// See the LICENCE.txt file distributed with this work for additional
+// information regarding copyright ownership.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 package com.ibm.watson.developercloud.utils
 
 
@@ -6,8 +21,8 @@ import akka.io.IO
 import akka.pattern.ask
 import akka.util.Timeout
 import spray.can.Http
-import spray.client.pipelining._
-import spray.http.{HttpRequest, HttpResponse, _}
+import spray.client.pipelining.{SendReceive, sendReceive}
+import spray.http.{HttpHeader, HttpRequest, HttpResponse, HttpHeaders}
 
 import scala.concurrent.Future
 import scala.concurrent.duration._
@@ -25,7 +40,7 @@ abstract class WatsonService(var config : WatsonServiceConfig) {
 
   val headers = List(HttpHeaders.RawHeader(WatsonService.Authorization, config.apiKey),
     HttpHeaders.RawHeader(WatsonService.Accept, "application/json"),
-    HttpHeaders.Host(config.host, 443))
+    HttpHeaders.Host(config.host, WatsonService.SslPort))
 
 
   /**
@@ -37,7 +52,7 @@ abstract class WatsonService(var config : WatsonServiceConfig) {
   val pipeline: Future[SendReceive] =
     for (
       Http.HostConnectorInfo(connector, _) <-
-      IO(Http) ? Http.HostConnectorSetup(config.host, port = 443, sslEncryption = true)
+      IO(Http) ? Http.HostConnectorSetup(config.host, port = WatsonService.SslPort, sslEncryption = true)
     ) yield sendReceive(connector)
 
   /**
@@ -54,7 +69,7 @@ abstract class WatsonService(var config : WatsonServiceConfig) {
     * @param params params to apply
     * @return sequence of headers
     */
-  def formHeaders(params: (String, String)*) =
+  def formHeaders(params: (String, String)*): Seq[HttpHeader] =
     Seq(HttpHeaders.`Content-Disposition`(WatsonService.FormData, Map(params: _*)))
 }
 
@@ -66,4 +81,5 @@ object WatsonService {
   val ContentType = "Content-Type"
   val ContentLanguage = "Content-Language"
   val AcceptLanguage = "Accept-Language"
+  val SslPort = 443
 }
