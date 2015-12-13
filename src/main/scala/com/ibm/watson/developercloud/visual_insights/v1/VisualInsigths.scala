@@ -1,6 +1,8 @@
 package com.ibm.watson.developercloud.visual_insights.v1
 
-import com.ibm.watson.developercloud.utils.{WatsonService, WatsonServiceConfig}
+import java.io.File
+
+import com.ibm.watson.developercloud.utils.{Validation, WatsonService, WatsonServiceConfig}
 import com.typesafe.scalalogging.LazyLogging
 import spray.client.pipelining._
 import spray.http._
@@ -35,9 +37,20 @@ class VisualInsigths(config: WatsonServiceConfig) extends WatsonService(config: 
     val response = send(request)
     response.map(unmarshal[Classifiers])
   }
+
+  def getSummary(imagesFile: File) : Future[Summary] = {
+    Validation.fileExists(imagesFile, "imagesFile cannot be null or empty");
+    val data: List[BodyPart] = List(BodyPart(imagesFile, VisualInsights.ImagesFile))
+    val formData = MultipartFormData(data)
+    val request = Post(VisualInsights.SummaryPath, formData)
+    val response = send(request)
+    response.map(unmarshal[Summary])
+  }
 }
 
 object VisualInsights {
   val ClassifiersPath = "/v1/classifiers"
   val FilterName = "filter_name"
+  val ImagesFile = "images_file"
+  val SummaryPath = "/v1/summary"
 }
