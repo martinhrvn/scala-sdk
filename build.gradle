@@ -60,5 +60,6 @@ scalaStyle {
 }
 
 coveralls {
+    sourceDirs = files(subprojects.sourceSets.main.allSource.srcDirs).files.absolutePath
     coberturaReportPath = "${buildDir}/reports/scoverage/cobertura.xml"
 }
