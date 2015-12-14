@@ -1,15 +1,22 @@
 apply plugin: 'scala'
 apply plugin: 'scalaStyle'
+apply plugin: 'cobertura'
+apply plugin: 'com.github.kt3k.coveralls'
+
 version '0.1-SNAPSHOT'
 group = 'com.ibm.watson.developercloud'
 
 buildscript {
     repositories {
         jcenter() // only work after gradle 1.7
+        mavenCentral()
     }
 
     dependencies {
         classpath 'org.github.ngbinh.scalastyle:gradle-scalastyle-plugin_2.11:0.8.2'
+        classpath 'net.saliman:gradle-cobertura-plugin:2.0.0' // cobertura plugin
+        classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.4.0'
+
     }
 }
 ext {
