@@ -2,9 +2,7 @@
 lazy val commonSettings = Seq(
   organization := "org.myproject",
   version := "0.1.0",
-  // set the Scala version used for the project
   scalaVersion := "2.11.5"
-
 )
 
 // define ModuleID for library dependencies
@@ -28,8 +26,4 @@ lazy val root = (project in file(".")).
       "org.pegdown" % "pegdown" % "1.1.0" % Test
 
     )
-
-
-    // add compile dependency on osmlib
-    //libraryDependencies += osmlib
   )
