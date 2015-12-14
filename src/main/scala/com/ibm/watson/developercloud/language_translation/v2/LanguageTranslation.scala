@@ -18,7 +18,8 @@ package com.ibm.watson.developercloud.language_translation.v2
 import com.ibm.watson.developercloud.utils.{JsonUtils, Validation, WatsonService, WatsonServiceConfig}
 import com.typesafe.scalalogging.LazyLogging
 import spray.client.pipelining._
-import spray.http._
+import spray.http.{MultipartFormData, BodyPart, HttpResponse, Uri}
+
 import spray.json.{JsObject, JsString, JsValue}
 import LanguageTranslationProtocol._
 import spray.httpx.SprayJsonSupport._
@@ -40,7 +41,8 @@ class LanguageTranslation(config: WatsonServiceConfig ) extends WatsonService(co
   val PATH_TRANSLATE: String = "/v2/translate"
   val PATH_IDENTIFIABLE_LANGUAGES: String = "/v2/identifiable_languages"
   val PATH_MODELS: String = "/v2/models"
-  def serviceType = "language_translation"
+
+  def serviceType : String = "language_translation"
 
   /**
     * Retrieves a list of models
