@@ -1,3 +1,18 @@
+// Copyright (C) 2015 IBM Corp. All Rights Reserved.
+// See the LICENCE.txt file distributed with this work for additional
+// information regarding copyright ownership.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 package com.ibm.watson.developercloud.language_translation.v2
 
 import com.ibm.watson.developercloud.utils.{JsonUtils, Validation, WatsonService, WatsonServiceConfig}
@@ -117,7 +132,7 @@ class LanguageTranslation(config: WatsonServiceConfig ) extends WatsonService(co
     * @return future of HttpRequest
     */
   def deleteModel(modelId : String) : Future[HttpResponse] = {
-    Validation.notEmpty(modelId, "Model ID cannot be empty")
+    Validation.notEmpty(modelId, Validation.MessageNotEmpty.format(LanguageTranslation.ModelId))
     val request = Delete(config.endpoint + PATH_MODEL.format(modelId))
     send(request)
   }
@@ -150,9 +165,9 @@ class LanguageTranslation(config: WatsonServiceConfig ) extends WatsonService(co
     * @param modelId the model ID
     * @return translation result
     */
-  def translate(text: String, modelId: String): Future[TranslationResult] = {
-    Validation.notEmpty(modelId, "ModelId cannot be empty")
-    translateRequest(text, modelId, null, null)
+  def translate(text: String, modelId: Option[String]): Future[TranslationResult] = {
+    Validation.notEmpty(modelId, Validation.MessageNotEmpty.format(LanguageTranslation.ModelId))
+    translateRequest(text, modelId, None, None)
   }
 
   /**
@@ -162,10 +177,10 @@ class LanguageTranslation(config: WatsonServiceConfig ) extends WatsonService(co
     * @param target target language
     * @return translated text
     */
-  def translate(text: String, source: String, target: String) : Future[TranslationResult]= {
-    Validation.notEmpty(source, "Source cannot be empty")
-    Validation.notEmpty(target, "Target cannot be empty")
-    translateRequest(text, null, source, target)
+  def translate(text: String, source: Option[String], target: Option[String]) : Future[TranslationResult]= {
+    Validation.notEmpty(source, Validation.MessageNotEmpty.format(LanguageTranslation.Source))
+    Validation.notEmpty(target, Validation.MessageNotEmpty.format(LanguageTranslation.Target))
+    translateRequest(text, None, source, target)
   }
 
   /**
@@ -178,8 +193,8 @@ class LanguageTranslation(config: WatsonServiceConfig ) extends WatsonService(co
     * @param target target language
     * @return translated text
     */
-  def translateRequest(text: String, modelId: String, source: String, target: String) : Future[TranslationResult] = {
-    Validation.notEmpty(text, "Text cannot be empty")
+  def translateRequest(text: String, modelId: Option[String], source: Option[String], target: Option[String]) : Future[TranslationResult] = {
+    Validation.notEmpty(text, Validation.MessageNotEmpty.format(LanguageTranslation.Text))
     var map: Map[String, JsValue] = Map(LanguageTranslation.Text -> JsString(text))
     map = JsonUtils.addIfNotEmpty(modelId, LanguageTranslation.ModelId, map)
     map = JsonUtils.addIfNotEmpty(source, LanguageTranslation.Source, map)

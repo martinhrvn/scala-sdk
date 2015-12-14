@@ -1,4 +1,4 @@
-// Copyright (C) 2011-2012 the original author or authors.
+// Copyright (C) 2015 IBM Corp. All Rights Reserved.
 // See the LICENCE.txt file distributed with this work for additional
 // information regarding copyright ownership.
 //
@@ -46,7 +46,7 @@ class VisualInsigths(config: WatsonServiceConfig) extends WatsonService(config: 
     * @return summary of classifiers
     */
   def getClassifiers : Future[Classifiers] = {
-    getClassifiers(null)
+    getClassifiers(None)
   }
 
   /**
@@ -54,9 +54,9 @@ class VisualInsigths(config: WatsonServiceConfig) extends WatsonService(config: 
     * @param name the filter name
     * @return summary of classifiers
     */
-  def getClassifiers(name: String) : Future[Classifiers] = {
+  def getClassifiers(name: Option[String]) : Future[Classifiers] = {
     var uri = Uri(config.endpoint + VisualInsights.ClassifiersPath)
-    uri = Option(name) match {
+    uri = name match {
       case Some(n) if n.nonEmpty => uri.withQuery(VisualInsights.FilterName -> n)
       case _ => uri
     }
