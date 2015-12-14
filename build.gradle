@@ -59,3 +59,8 @@ scalaStyle {
     source = "src/main/scala"
     testSource = "src/test/scala"
 }
+
+coveralls {
+    sourceDirs = sourceSets.main.allSource.srcDirs.flatten()
+    coberturaReportPath = "${buildDir}/reports/scoverage/cobertura.xml"
+}
