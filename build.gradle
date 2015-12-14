@@ -4,6 +4,7 @@ apply plugin: 'scoverage'
 // gradle defaults to 'build' but use the same working directory as maven and sbt
 buildDir = file('target')
 apply plugin: 'scalaStyle'
+apply plugin: 'com.github.kt3k.coveralls'
 
 
 version '0.1-SNAPSHOT'
