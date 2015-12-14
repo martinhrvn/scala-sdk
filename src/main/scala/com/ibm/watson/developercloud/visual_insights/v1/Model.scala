@@ -13,21 +13,16 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-package com.ibm.watson.developercloud.utils
+package com.ibm.watson.developercloud.visual_insights.v1
 
-import spray.json.{JsString,JsValue}
-/**
-  * Created by martinhrvn on 10/12/15.
-  */
-object JsonUtils {
-  def addIfNotEmpty(value: Option[String], name: String, map: Map[String, JsValue]) : Map[String, JsValue] = {
-    value match {
-      case Some(v) if v.nonEmpty => map + (name -> JsString(v))
-      case _ => map
-    }
-  }
+import spray.json.DefaultJsonProtocol
 
-  def addIfNotEmpty(value: String, name: String, map: Map[String, JsValue]) : Map[String, JsValue] = {
-    addIfNotEmpty(Option(value), name, map)
-  }
+case class Classifier(name: String)
+case class Classifiers(classifiers : List[Classifier])
+case class Summary(name: String, score: Double)
+
+object VisualInsigthsProtocol extends DefaultJsonProtocol {
+  implicit val classifierFormat = jsonFormat(Classifier, "name")
+  implicit val classifiersFormat = jsonFormat(Classifiers, "classifiers")
+  implicit val summaryFormat = jsonFormat(Summary, "name", "score")
 }
