@@ -1,19 +1,36 @@
 apply plugin: 'scala'
+apply plugin: 'scalatest'
+apply plugin: 'scoverage'
+// gradle defaults to 'build' but use the same working directory as maven and sbt
+buildDir = file('target')
 version '0.1-SNAPSHOT'
 ext {
     scala_version = "2.11"
     spray_version = "1.3.2"
-}
+    scoverageVersion = '1.0.2'
 
+}
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.github.maiflai:gradle-scalatest:0.5', 'org.scoverage:gradle-scoverage:1.0-5-g9c68988'
+    }
+}
 
 repositories {
     mavenCentral()
     maven {
         url "http://repo.spray.io"
     }
+
 }
 
 dependencies {
+    scoverage "org.scoverage:scalac-scoverage-plugin_${scala_version}:${scoverageVersion}",
+            "org.scoverage:scalac-scoverage-runtime_${scala_version}:${scoverageVersion}"
+
     compile "commons-codec:commons-codec:1.10"
     compile "com.typesafe.akka:akka-actor_${scala_version}:2.3.14"
     compile "org.scala-lang:scala-library:2.11.1"

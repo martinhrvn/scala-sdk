@@ -1,6 +1,6 @@
 // factor out common settings into a sequence
 lazy val commonSettings = Seq(
-  organization := "org.myproject",
+  organization := "com.ibm.watson.developer_cloud",
   version := "0.1.0",
   scalaVersion := "2.11.5"
 )
@@ -11,7 +11,7 @@ lazy val sprayVersion = "1.3.2"
 lazy val root = (project in file(".")).
   settings(commonSettings: _*).
   settings(
-    name := "My Project",
+    name := "scala-sdk",
     // add a test dependency on ScalaCheck
     libraryDependencies ++= Seq(
       "commons-codec" % "commons-codec" % "1.10",
