@@ -13,16 +13,16 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-package com.ibm.watson.developercloud.visual_insights.v1
+package com.ibm.watson.developercloud.utils
 
-import spray.json.DefaultJsonProtocol
+import spray.http.HttpHeaders.RawHeader
+import spray.http.HttpRequest
 
-case class Classifier(name: String)
-case class Classifiers(classifiers : List[Classifier])
-case class Summary(name: String, score: Double)
-
-object VisualInsigthsProtocol extends DefaultJsonProtocol {
-  implicit val classifierFormat = jsonFormat(Classifier, "name")
-  implicit val classifiersFormat = jsonFormat(Classifiers, "classifiers")
-  implicit val summaryFormat = jsonFormat(Summary, "name", "score")
+object RequestUtils {
+  def addIfNotNull(value: String, request: HttpRequest, headerKey: String) : HttpRequest = {
+    Option(value) match {
+      case Some(lang) => request.withHeaders(RawHeader(headerKey, lang))
+      case _ => request
+    }
+  }
 }

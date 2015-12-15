@@ -36,7 +36,7 @@ import scala.concurrent.Future
   */
 class NaturalLanguageClassifier(config: WatsonServiceConfig) extends WatsonService(config) with LazyLogging {
   import system.dispatcher
-  def serviceType = "natural_language_classifier"
+  def serviceType : String = "natural_language_classifier"
   val CLASSIFIERS_URL = "/v1/classifiers"
   val CLASSIFIER_URL = "/v1/classifiers/%s"
   val CLASSIFICATION_URL = "/v1/classifiers/%s/classify"

@@ -52,7 +52,7 @@ abstract class WatsonServiceConfig extends LazyLogging {
   def username : String
   def password : String
   def apiKey : String = {
-    "Basic " + Base64.encodeBase64String((username+":"+password).getBytes)
+    "Basic " + Base64.encodeBase64String((username + ":" + password).getBytes)
   }
   def endpoint: String
   def setup(serviceType: String)
@@ -61,13 +61,13 @@ abstract class WatsonServiceConfig extends LazyLogging {
   }
 }
 
-class VCAPServicesConfig(val serviceName: String = null) extends WatsonServiceConfig{
+class VCAPServicesConfig(val serviceName: Option[String] = None) extends WatsonServiceConfig{
   val vcapProperties = VCAPServicesProtocol.vcapPropertiesFormat.read(sys.env("VCAP_SERVICES").parseJson)
 
-  def setup(serviceType: String) = {
+  def setup(serviceType: String) : Unit = {
     logger.info("Entering setup")
-    logger.info("Got vcapProperties: "+vcapProperties )
-    logger.info("Got serviceType: "+serviceType)
+    logger.info("Got vcapProperties: " + vcapProperties )
+    logger.info("Got serviceType: " + serviceType)
     serviceProperties = Option(serviceName) match {
       case Some(s) if !s.isEmpty => vcapProperties.properties(serviceType).filter(_.name == s).head
       case _ => vcapProperties.properties(serviceType).head
@@ -75,13 +75,13 @@ class VCAPServicesConfig(val serviceName: String = null) extends WatsonServiceCo
   }
 
   var serviceProperties : VCAPService = null
-  def username = serviceProperties.credentials.username
-  def password = serviceProperties.credentials.password
-  def endpoint = serviceProperties.credentials.url
+  def username : String = serviceProperties.credentials.username
+  def password : String = serviceProperties.credentials.password
+  def endpoint : String = serviceProperties.credentials.url
 }
 
 class ManualServicesConfig(val username: String, val password: String, val endpoint: String) extends WatsonServiceConfig {
-  def setup(serviceType: String) = {}
+  def setup(serviceType: String) : Unit = {}
 }
 case class VCAPCredentials(url: String, username: String, password: String)
 case class VCAPService(name : String, label: String, plan: String, tags: List[String], credentials: VCAPCredentials)

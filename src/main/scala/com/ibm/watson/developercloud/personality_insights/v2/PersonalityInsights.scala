@@ -16,7 +16,7 @@
 package com.ibm.watson.developercloud.personality_insights.v2
 
 import com.ibm.watson.developercloud.personality_insights.v2.PersonalityInsightsProtocol._
-import com.ibm.watson.developercloud.utils.{Validation, WatsonService, WatsonServiceConfig}
+import com.ibm.watson.developercloud.utils.{RequestUtils, Validation, WatsonService, WatsonServiceConfig}
 import spray.client.pipelining._
 import spray.http.HttpHeaders._
 import spray.http._
@@ -39,10 +39,10 @@ class PersonalityInsights(config: WatsonServiceConfig) extends WatsonService(con
 
   private def getRequest(options: ProfileOptions) : HttpRequest = {
     Validation.notNull(options, "Options cannot be null")
-    Validation.assertTrue(options.text != null || options.contentItems != null, "text, html or content items need to be specified")
+    Validation.assertTrue(Validation.notNull(options.text) || Validation.notNull(options.contentItems), "text, html or content items need to be specified")
     var uri = Uri(config.endpoint + PATH_PROFILE)
-    val text = options match {
-      case o if o.text != null => o.text
+    val text = Option(options.text) match {
+      case Some(o) => o
       case _ => Content(options.contentItems).toString
     }
 
@@ -53,15 +53,10 @@ class PersonalityInsights(config: WatsonServiceConfig) extends WatsonService(con
 
     var request: HttpRequest = Post(uri, text).withHeaders(RawHeader(WatsonService.ContentType, options.contentType))
 
-    request = Option(options.language) match {
-      case Some(lang) => request.withHeaders(RawHeader(WatsonService.ContentLanguage, lang.value))
-      case _ => request
-    }
+    request = RequestUtils.addIfNotNull(options.language.value, request, WatsonService.ContentLanguage)
 
-    request = Option(options.acceptLanguage) match {
-      case Some(lang) => request.withHeaders(RawHeader(WatsonService.AcceptLanguage, lang.value))
-      case _ => request
-    }
+    request = RequestUtils.addIfNotNull(options.acceptLanguage.value, request, WatsonService.AcceptLanguage)
+
 
     request
 

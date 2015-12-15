@@ -34,7 +34,8 @@ object Validation {
   }
 
   /**
-    * General purpose validation function. Uses provided function to validate. If the value does not match validation rules an IllegaArgumentException is thrown.
+    * General purpose validation function. Uses provided function to validate. If the value does not match validation
+    * rules an IllegaArgumentException is thrown.
     * @param value value to validate
     * @param condition condition for validation
     * @param message message to use for exception
@@ -86,5 +87,12 @@ object Validation {
     */
   def assertTrue(value: Boolean, message: String) : Unit = {
     validate(value, {_ :Boolean => value}, message)
+  }
+
+  def notNull(value: Any) : Boolean = {
+    Option(value) match {
+      case Some(v) => true
+      case _ => false
+    }
   }
 }
