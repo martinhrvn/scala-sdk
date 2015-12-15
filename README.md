@@ -145,6 +145,22 @@ val service = new VisualInsights(new VCAPServicesConfig());
 val images = new File("src/test/resources/images.zip");
 val summary = service.getSummary(images);
 ```
+### Visual Recognition
+Use the [Visual Recognition][visual_recognition] service to recognize the
+following picture.
+
+![Car](http://visual-recognition-demo.mybluemix.net/images/73388.jpg)
+
+```scala
+val service = new VisualRecognition(new VCAPServicesConfig());
+
+val image = new File("src/test/resources/car.png");
+
+val labelSet = new LabelSet();
+labelSet.withLabelGroup("Auto Racing").withLabelGroup("Sports");
+
+val recognizedImage = service.recognize(image, labelSet);
+```
 
 ## Running in Bluemix
 When running in Bluemix, the library will automatically get the credentials from `VCAP_SERVICES`.
