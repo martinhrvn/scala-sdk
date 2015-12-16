@@ -26,13 +26,13 @@ case class ContentItem(charset: String, content: String, contentType: String, cr
                        update: Date, userId: String)
 
 case class Profile(id: String, processedLanguage: String, source: String, tree: Trait, wordCount: Int, wordCountMessage: String)
-case class ProfileOptions(text: String, contentType: String = null, contentItems: List[ContentItem] = null,
-                          includeRaw: Boolean = false, acceptLanguage: AcceptLanguage = null, language: Language = null)
+case class ProfileOptions(text: String, contentType: Option[String] = None, contentItems: List[ContentItem] = List(),
+                          includeRaw: Boolean = false, acceptLanguage: Option[AcceptLanguage] = None, language: Option[Language] = None)
 
 case class Trait(category: String, children: List[Trait], id: String, name: String, percentage: Double,
                  rawSamplingError: Double, rawScore: Double, samplingError: Double)
 
-case class Language(value: String);
+case class Language(value: String)
 case class AcceptLanguage(value: String)
 
 object PersonalityInsightsProtocol extends DefaultJsonProtocol {

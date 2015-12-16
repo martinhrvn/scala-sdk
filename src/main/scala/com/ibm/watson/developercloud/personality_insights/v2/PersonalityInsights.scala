@@ -48,15 +48,12 @@ class PersonalityInsights(config: WatsonServiceConfig) extends WatsonService(con
 
     val uri = Option(options.includeRaw).map(x => inUri.withQuery(PersonalityInsights.IncludeRaw -> x.toString)).getOrElse(inUri)
 
-    var request: HttpRequest = Post(uri, text).withHeaders(RawHeader(WatsonService.ContentType, options.contentType))
-
-    request = RequestUtils.addIfNotNull(options.language.value, request, WatsonService.ContentLanguage)
-
-    request = RequestUtils.addIfNotNull(options.acceptLanguage.value, request, WatsonService.AcceptLanguage)
-
+    val headers = options.contentType.map(p => RawHeader(WatsonService.ContentType, p)).toList ++
+    options.language.map(p => RawHeader(WatsonService.ContentLanguage, p.value)).toList ++
+    options.acceptLanguage.map(p => RawHeader(WatsonService.AcceptLanguage, p.value)).toList
+    val request = Post(uri, text).withHeaders(headers)
 
     request
-
   }
 
   /**
