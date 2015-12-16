@@ -40,16 +40,13 @@ class PersonalityInsights(config: WatsonServiceConfig) extends WatsonService(con
   private def getRequest(options: ProfileOptions) : HttpRequest = {
     Validation.notNull(options, "Options cannot be null")
     Validation.assertTrue(Validation.notNull(options.text) || Validation.notNull(options.contentItems), "text, html or content items need to be specified")
-    var uri = Uri(config.endpoint + PATH_PROFILE)
+    val inUri = Uri(config.endpoint + PATH_PROFILE,)
     val text = Option(options.text) match {
       case Some(o) => o
       case _ => Content(options.contentItems).toString
     }
 
-    uri = Option(options.includeRaw) match {
-      case Some(incl) => uri.withQuery(PersonalityInsights.IncludeRaw -> options.includeRaw.toString)
-      case _ => uri
-    }
+    val uri = Option(options.includeRaw).map(x => inUri.withQuery(PersonalityInsights.IncludeRaw -> x.toString)).getOrElse(inUri)
 
     var request: HttpRequest = Post(uri, text).withHeaders(RawHeader(WatsonService.ContentType, options.contentType))
 

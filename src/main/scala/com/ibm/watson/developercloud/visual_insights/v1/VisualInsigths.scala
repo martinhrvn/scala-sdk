@@ -55,11 +55,9 @@ class VisualInsigths(config: WatsonServiceConfig) extends WatsonService(config: 
     * @return summary of classifiers
     */
   def getClassifiers(name: Option[String]) : Future[Classifiers] = {
-    var uri = Uri(config.endpoint + VisualInsights.ClassifiersPath)
-    uri = name match {
-      case Some(n) if n.nonEmpty => uri.withQuery(VisualInsights.FilterName -> n)
-      case _ => uri
-    }
+    val inUri = Uri(config.endpoint + VisualInsights.ClassifiersPath)
+    val uri = name.map(x => inUri.withQuery(VisualInsights.FilterName -> x)).getOrElse(inUri)
+
     val request = Get(uri)
     val response = send(request)
     response.map(unmarshal[Classifiers])

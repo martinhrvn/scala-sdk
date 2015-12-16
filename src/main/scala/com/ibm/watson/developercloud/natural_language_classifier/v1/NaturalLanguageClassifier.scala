@@ -53,17 +53,12 @@ class NaturalLanguageClassifier(config: WatsonServiceConfig) extends WatsonServi
     * @return created classifier
     */
   def createClassifier(name: String, language: String, trainingData: List[TrainingData]): Future[Classifier] = {
-    var map = Map[String, JsValue]()
     Validation.notEmpty(language, "Language cannot be empty")
 
+    val map = Option(language).map("language" -> JsString(_)).toMap ++
+    Option(name).map("name" -> JsString(_)).toMap ++
+    Option(trainingData).map("training_data" -> _.toJson).toMap
     //TODO: Validation.notEmpty(trainingData, "Training data cannot be empty")
-    map + ("language" -> JsString(language))
-    map = JsonUtils.addIfNotEmpty(name, "name", map)
-
-    map = Option(trainingData) match {
-      case Some(testData) if testData.nonEmpty => map + ("training_data" -> trainingData.toJson)
-      case _ => throw new IllegalArgumentException("Test data cannot be empty")
-    }
 
     val jsonRequest = new JsObject(map)
 

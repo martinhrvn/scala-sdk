@@ -65,11 +65,8 @@ class VisualRecognition(config: WatsonServiceConfig) extends WatsonService(confi
   def recognize(image: File, labelSet: Option[LabelSet] = None) : Future[VisualRecognitionImages] = {
     Validation.notNull(image, "Image cannot be null")
     val bodyPart = BodyPart(image, "imgFile")
-    var list = List(bodyPart)
-    list = labelSet match {
-      case Some(ls) => BodyPart(ls.toJson.toString(), VisualRecognition.labelsToCheck) :: list
-      case _ => list
-    }
+    val list = List(bodyPart) ++
+    labelSet.map({p => BodyPart(p.toJson.toString, VisualRecognition.labelsToCheck)}).toList
     val data = MultipartFormData(list)
 
     val request = Post(config.endpoint + VisualRecognition.recognizePath, data)
