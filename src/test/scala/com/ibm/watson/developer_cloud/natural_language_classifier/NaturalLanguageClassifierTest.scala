@@ -36,7 +36,7 @@ class NaturalLanguageClassifierTest extends FlatSpec with LazyLogging  {
   import system.dispatcher
   "A Stack" should "pop values in last-in-first-out order" in {
 
-    var a = new NaturalLanguageClassifier(new ManualServicesConfig("test", "test", "test"))
+    val a = new NaturalLanguageClassifier(new ManualServicesConfig("test", "test", "test"))
     assert(a.serviceType.equals("natural_language_classifier"))
     //assert(stack.pop() === 1)
   }
