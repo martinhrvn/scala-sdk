@@ -13,17 +13,17 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-package com.ibm.watson.developercloud.visual_recognition.v1
+package com.ibm.watson.developer_cloud.visual_recognition.v1
 
 import java.io.File
 
-import com.ibm.watson.developercloud.utils.{Validation, WatsonService, WatsonServiceConfig}
-import com.ibm.watson.developercloud.visual_recognition.v2.{VisualRecognitionImages, LabelSet}
+import com.ibm.watson.developer_cloud.utils.{Validation, WatsonService, WatsonServiceConfig}
+import com.ibm.watson.developer_cloud.visual_recognition.v2.{VisualRecognitionImages, LabelSet}
 import spray.httpx.SprayJsonSupport._
 import spray.http._
 import spray.client.pipelining._
 import spray.json._
-import com.ibm.watson.developercloud.visual_recognition.v2.VisualRecognitionProtocol._
+import com.ibm.watson.developer_cloud.visual_recognition.v2.VisualRecognitionProtocol._
 
 import scala.concurrent.Future
 

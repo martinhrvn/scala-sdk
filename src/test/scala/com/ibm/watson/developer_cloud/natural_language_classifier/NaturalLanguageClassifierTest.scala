@@ -13,11 +13,11 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-package com.ibm.watson.developercloud.natural_language_classifier
+package com.ibm.watson.developer_cloud.natural_language_classifier
 
 import akka.actor.ActorSystem
-import com.ibm.watson.developercloud.natural_language_classifier.v1.{NaturalLanguageClassifier, TrainingData}
-import com.ibm.watson.developercloud.utils.{ManualServicesConfig, VCAPServicesConfig}
+import com.ibm.watson.developer_cloud.natural_language_classifier.v1.{NaturalLanguageClassifier, TrainingData}
+import com.ibm.watson.developer_cloud.utils.{ManualServicesConfig, VCAPServicesConfig}
 import org.scalatest.junit._
 import com.typesafe.scalalogging._
 import org.junit._

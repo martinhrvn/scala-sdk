@@ -13,17 +13,18 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-package com.ibm.watson.developercloud.language_translation.v2
+package com.ibm.watson.developer_cloud.language_translation.v2
 
-import com.ibm.watson.developercloud.utils.{JsonUtils, Validation, WatsonService, WatsonServiceConfig}
+import com.ibm.watson.developer_cloud.utils.{Validation, WatsonService, WatsonServiceConfig}
 import com.typesafe.scalalogging.LazyLogging
 import spray.client.pipelining._
 import spray.http.{MultipartFormData, BodyPart, HttpResponse, Uri}
 
-import spray.json.{JsObject, JsString, JsValue}
+import spray.json.{JsObject, JsString}
 import LanguageTranslationProtocol._
 import spray.httpx.SprayJsonSupport._
 import scala.concurrent.Future
+import LanguageTranslation._
 
 /**
   * The IBM Watson Language Translation service translate text from one language to another and
@@ -35,12 +36,6 @@ import scala.concurrent.Future
 class LanguageTranslation(config: WatsonServiceConfig ) extends WatsonService(config) with LazyLogging {
   import system.dispatcher
 
-  val MODEL_URL  = "/v2/models"
-  val PATH_MODEL = "/v2/models/%s"
-  val PATH_IDENTIFY: String = "/v2/identify"
-  val PATH_TRANSLATE: String = "/v2/translate"
-  val PATH_IDENTIFIABLE_LANGUAGES: String = "/v2/identifiable_languages"
-  val PATH_MODELS: String = "/v2/models"
 
   def serviceType : String = "language_translation"
 
@@ -74,7 +69,7 @@ class LanguageTranslation(config: WatsonServiceConfig ) extends WatsonService(co
   def getModels(params: Map[String,String]) : Future[LanguageModels] = {
     logger.info("Entering getModels")
 
-    val request = Get(Uri(config.endpoint + MODEL_URL).withQuery(params))
+    val request = Get(Uri(config.endpoint + modelsPath).withQuery(params))
     val response: Future[HttpResponse] = send(request)
     logger.info("Returning response")
     response.map(unmarshal[LanguageModels])
@@ -95,7 +90,7 @@ class LanguageTranslation(config: WatsonServiceConfig ) extends WatsonService(co
 
     val formData = MultipartFormData(data)
 
-    val request = Post(config.endpoint + PATH_MODELS, formData)
+    val request = Post(config.endpoint + modelsPath, formData)
     send(request).map(unmarshal[LanguageModel])
 
   }
@@ -107,7 +102,7 @@ class LanguageTranslation(config: WatsonServiceConfig ) extends WatsonService(co
     */
   def deleteModel(modelId : String) : Future[HttpResponse] = {
     Validation.notEmpty(modelId, Validation.MessageNotEmpty.format(LanguageTranslation.ModelId))
-    val request = Delete(config.endpoint + PATH_MODEL.format(modelId))
+    val request = Delete(config.endpoint + modelPath.format(modelId))
     send(request)
   }
 
@@ -117,7 +112,7 @@ class LanguageTranslation(config: WatsonServiceConfig ) extends WatsonService(co
     * @return the list of identifiable languages
     */
   def getIdentifiableLanguages: Future[List[IdentifiableLanguage]] = {
-    val request = Get(config.endpoint + PATH_IDENTIFIABLE_LANGUAGES)
+    val request = Get(config.endpoint + identifiableLanguagePath)
     val response = send(request)
     response.map(unmarshal[List[IdentifiableLanguage]])
   }
@@ -128,7 +123,7 @@ class LanguageTranslation(config: WatsonServiceConfig ) extends WatsonService(co
     * @return the identified language
     */
   def identify (text: String): Future[List[IdentifiedLanguage]] = {
-    val request = Post(config.endpoint + PATH_IDENTIFY, text)
+    val request = Post(config.endpoint + identifyPath, text)
     val response = send(request)
     response.map(unmarshal[List[IdentifiedLanguage]])
   }
@@ -175,7 +170,7 @@ class LanguageTranslation(config: WatsonServiceConfig ) extends WatsonService(co
     target.map(LanguageTranslation.Target -> JsString(_)).toMap
     val jsonRequest = new JsObject(map)
 
-    val response = send(Post(config.endpoint + PATH_TRANSLATE, jsonRequest.toString()))
+    val response = send(Post(config.endpoint + translatePath, jsonRequest.toString()))
     response.map(unmarshal[TranslationResult])
   }
 }
@@ -191,4 +186,9 @@ object LanguageTranslation {
   val ForcedGlossary = "forced_glossary"
   val BodyPart = "body_part"
   val Default = "default"
+  val modelsPath  = "/v2/models"
+  val modelPath = "/v2/models/%s"
+  val identifyPath: String = "/v2/identify"
+  val translatePath: String = "/v2/translate"
+  val identifiableLanguagePath: String = "/v2/identifiable_languages"
 }

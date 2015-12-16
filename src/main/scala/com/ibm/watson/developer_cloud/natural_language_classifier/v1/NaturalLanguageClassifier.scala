@@ -13,9 +13,9 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-package com.ibm.watson.developercloud.natural_language_classifier.v1
+package com.ibm.watson.developer_cloud.natural_language_classifier.v1
 
-import com.ibm.watson.developercloud.utils.{JsonUtils, Validation, WatsonServiceConfig, WatsonService}
+import com.ibm.watson.developer_cloud.utils.{JsonUtils, Validation, WatsonServiceConfig, WatsonService}
 import com.typesafe.scalalogging.LazyLogging
 import spray.client.pipelining._
 import spray.http._

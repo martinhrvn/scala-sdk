@@ -13,7 +13,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-package com.ibm.watson.developercloud.language_translation.v2
+package com.ibm.watson.developer_cloud.language_translation.v2
 
 import java.io.File
 

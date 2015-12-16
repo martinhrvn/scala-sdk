@@ -13,7 +13,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-package com.ibm.watson.developercloud.visual_insights.v1
+package com.ibm.watson.developer_cloud.visual_insights.v1
 
 import spray.json.DefaultJsonProtocol
 

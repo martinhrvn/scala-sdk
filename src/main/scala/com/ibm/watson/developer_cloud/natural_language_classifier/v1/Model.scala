@@ -14,7 +14,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.ibm.watson.developercloud.natural_language_classifier.v1
+package com.ibm.watson.developer_cloud.natural_language_classifier.v1
 
 import spray.json._
 

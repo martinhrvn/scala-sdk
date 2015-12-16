@@ -13,7 +13,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-package com.ibm.watson.developercloud.utils
+package com.ibm.watson.developer_cloud.utils
 
 import com.typesafe.scalalogging.LazyLogging
 import org.apache.commons.codec.binary.Base64
