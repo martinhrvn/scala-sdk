@@ -54,9 +54,9 @@ class LanguageTranslation(config: WatsonServiceConfig ) extends WatsonService(co
     */
   def getModels(showDefault: Boolean, source: String, target: String) : Future[LanguageModels] = {
 
-    val map = Option(source).map(LanguageTranslation.Source -> _).toMap ++
-    Option(target).map(LanguageTranslation.Target -> _).toMap ++
-    Option(showDefault).map(LanguageTranslation.Default -> _.toString)
+    val map = Option(source).map(LanguageTranslation.source -> _).toMap ++
+    Option(target).map(LanguageTranslation.target -> _).toMap ++
+    Option(showDefault).map(LanguageTranslation.default -> _.toString)
 
     getModels(map.toMap)
   }
@@ -82,11 +82,11 @@ class LanguageTranslation(config: WatsonServiceConfig ) extends WatsonService(co
     * @return the translation model
     */
   def createModel(options: CreateModelOptions) : Future[LanguageModel] = {
-    val data: List[BodyPart] = List(BodyPart(options.baseModelId, formHeaders(LanguageTranslation.Name -> LanguageTranslation.BodyPart))) ++
-    Option(options.forcedGlossary).map(BodyPart(_, LanguageTranslation.ForcedGlossary)).toList ++
-    Option(options.monlingualCorpus).map(BodyPart(_, LanguageTranslation.MonolingualCorpus)).toList ++
-    Option(options.parallelCorpus).map(BodyPart(_, LanguageTranslation.ParallelCorpus)).toList ++
-    Option(options.name).map(BodyPart(_, LanguageTranslation.Name)).toList
+    val data: List[BodyPart] = List(BodyPart(options.baseModelId, formHeaders(LanguageTranslation.name -> LanguageTranslation.bodyPart))) ++
+    Option(options.forcedGlossary).map(BodyPart(_, LanguageTranslation.forcedGlossary)).toList ++
+    Option(options.monlingualCorpus).map(BodyPart(_, LanguageTranslation.monolingualCorpus)).toList ++
+    Option(options.parallelCorpus).map(BodyPart(_, LanguageTranslation.parallelCorpus)).toList ++
+    Option(options.name).map(BodyPart(_, LanguageTranslation.name)).toList
 
     val formData = MultipartFormData(data)
 
@@ -101,7 +101,7 @@ class LanguageTranslation(config: WatsonServiceConfig ) extends WatsonService(co
     * @return future of HttpRequest
     */
   def deleteModel(modelId : String) : Future[HttpResponse] = {
-    Validation.notEmpty(modelId, Validation.MessageNotEmpty.format(LanguageTranslation.ModelId))
+    Validation.notEmpty(modelId, Validation.MessageNotEmpty.format(LanguageTranslation.modelId))
     val request = Delete(config.endpoint + modelPath.format(modelId))
     send(request)
   }
@@ -135,7 +135,7 @@ class LanguageTranslation(config: WatsonServiceConfig ) extends WatsonService(co
     * @return translation result
     */
   def translate(text: String, modelId: Option[String]): Future[TranslationResult] = {
-    Validation.notEmpty(modelId, Validation.MessageNotEmpty.format(LanguageTranslation.ModelId))
+    Validation.notEmpty(modelId, Validation.MessageNotEmpty.format(LanguageTranslation.modelId))
     translateRequest(text, modelId, None, None)
   }
 
@@ -147,8 +147,8 @@ class LanguageTranslation(config: WatsonServiceConfig ) extends WatsonService(co
     * @return translated text
     */
   def translate(text: String, source: Option[String], target: Option[String]) : Future[TranslationResult]= {
-    Validation.notEmpty(source, Validation.MessageNotEmpty.format(LanguageTranslation.Source))
-    Validation.notEmpty(target, Validation.MessageNotEmpty.format(LanguageTranslation.Target))
+    Validation.notEmpty(source, Validation.MessageNotEmpty.format(LanguageTranslation.source))
+    Validation.notEmpty(target, Validation.MessageNotEmpty.format(LanguageTranslation.target))
     translateRequest(text, None, source, target)
   }
 
@@ -163,11 +163,11 @@ class LanguageTranslation(config: WatsonServiceConfig ) extends WatsonService(co
     * @return translated text
     */
   def translateRequest(text: String, modelId: Option[String], source: Option[String], target: Option[String]) : Future[TranslationResult] = {
-    Validation.notEmpty(text, Validation.MessageNotEmpty.format(LanguageTranslation.Text))
-    val map = Option(text).map(LanguageTranslation.Text -> JsString(_)).toMap ++
-    modelId.map(LanguageTranslation.ModelId -> JsString(_)).toMap ++
-    source.map(LanguageTranslation.Source -> JsString(_)).toMap ++
-    target.map(LanguageTranslation.Target -> JsString(_)).toMap
+    Validation.notEmpty(text, Validation.MessageNotEmpty.format(LanguageTranslation.text))
+    val map = Option(text).map(LanguageTranslation.text -> JsString(_)).toMap ++
+    modelId.map(LanguageTranslation.modelId -> JsString(_)).toMap ++
+    source.map(LanguageTranslation.source -> JsString(_)).toMap ++
+    target.map(LanguageTranslation.target -> JsString(_)).toMap
     val jsonRequest = new JsObject(map)
 
     val response = send(Post(config.endpoint + translatePath, jsonRequest.toString()))
@@ -176,16 +176,16 @@ class LanguageTranslation(config: WatsonServiceConfig ) extends WatsonService(co
 }
 
 object LanguageTranslation {
-  val ModelId = "model_id"
-  val Source = "source"
-  val Target = "target"
-  val Text = "text"
-  val Name = "name"
-  val ParallelCorpus = "parallel_corpus"
-  val MonolingualCorpus = "monolingual_corpus"
-  val ForcedGlossary = "forced_glossary"
-  val BodyPart = "body_part"
-  val Default = "default"
+  val modelId = "model_id"
+  val source = "source"
+  val target = "target"
+  val text = "text"
+  val name = "name"
+  val parallelCorpus = "parallel_corpus"
+  val monolingualCorpus = "monolingual_corpus"
+  val forcedGlossary = "forced_glossary"
+  val bodyPart = "body_part"
+  val default = "default"
   val modelsPath  = "/v2/models"
   val modelPath = "/v2/models/%s"
   val identifyPath: String = "/v2/identify"
