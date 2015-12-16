@@ -55,8 +55,8 @@ class VisualInsigths(config: WatsonServiceConfig) extends WatsonService(config: 
     * @return summary of classifiers
     */
   def getClassifiers(name: Option[String]) : Future[Classifiers] = {
-    val inUri = Uri(config.endpoint + VisualInsights.ClassifiersPath)
-    val uri = name.map(x => inUri.withQuery(VisualInsights.FilterName -> x)).getOrElse(inUri)
+    val inUri = Uri(config.endpoint + VisualInsights.classifiersPath)
+    val uri = name.map(x => inUri.withQuery(VisualInsights.filterName -> x)).getOrElse(inUri)
 
     val request = Get(uri)
     val response = send(request)
@@ -70,17 +70,17 @@ class VisualInsigths(config: WatsonServiceConfig) extends WatsonService(config: 
     */
   def getSummary(imagesFile: File) : Future[Summary] = {
     Validation.fileExists(imagesFile, "imagesFile cannot be null or empty")
-    val data: List[BodyPart] = List(BodyPart(imagesFile, VisualInsights.ImagesFile))
+    val data: List[BodyPart] = List(BodyPart(imagesFile, VisualInsights.imagesFile))
     val formData = MultipartFormData(data)
-    val request = Post(VisualInsights.SummaryPath, formData)
+    val request = Post(VisualInsights.summaryPath, formData)
     val response = send(request)
     response.map(unmarshal[Summary])
   }
 }
 
 object VisualInsights {
-  val ClassifiersPath = "/v1/classifiers"
-  val FilterName = "filter_name"
-  val ImagesFile = "images_file"
-  val SummaryPath = "/v1/summary"
+  val classifiersPath = "/v1/classifiers"
+  val filterName = "filter_name"
+  val imagesFile = "images_file"
+  val summaryPath = "/v1/summary"
 }

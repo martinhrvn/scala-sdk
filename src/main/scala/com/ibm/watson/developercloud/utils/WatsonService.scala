@@ -38,9 +38,9 @@ abstract class WatsonService(var config : WatsonServiceConfig) {
 
   import system.dispatcher
 
-  val headers = List(HttpHeaders.RawHeader(WatsonService.Authorization, config.apiKey),
-    HttpHeaders.RawHeader(WatsonService.Accept, "application/json"),
-    HttpHeaders.Host(config.host, WatsonService.SslPort))
+  val headers = List(HttpHeaders.RawHeader(WatsonService.authorization, config.apiKey),
+    HttpHeaders.RawHeader(WatsonService.accept, "application/json"),
+    HttpHeaders.Host(config.host, WatsonService.sslPort))
 
 
   /**
@@ -52,7 +52,7 @@ abstract class WatsonService(var config : WatsonServiceConfig) {
   val pipeline: Future[SendReceive] =
     for (
       Http.HostConnectorInfo(connector, _) <-
-      IO(Http) ? Http.HostConnectorSetup(config.host, port = WatsonService.SslPort, sslEncryption = true)
+      IO(Http) ? Http.HostConnectorSetup(config.host, port = WatsonService.sslPort, sslEncryption = true)
     ) yield sendReceive(connector)
 
   /**
@@ -70,16 +70,16 @@ abstract class WatsonService(var config : WatsonServiceConfig) {
     * @return sequence of headers
     */
   def formHeaders(params: (String, String)*): Seq[HttpHeader] =
-    Seq(HttpHeaders.`Content-Disposition`(WatsonService.FormData, Map(params: _*)))
+    Seq(HttpHeaders.`Content-Disposition`(WatsonService.formData, Map(params: _*)))
 }
 
 object WatsonService {
-  val Accept = "Accept"
-  val Authorization = "Authorization"
-  val FormData = "form-data"
-  val IncludeRaw = "include_raw"
-  val ContentType = "Content-Type"
-  val ContentLanguage = "Content-Language"
-  val AcceptLanguage = "Accept-Language"
-  val SslPort = 443
+  val accept = "Accept"
+  val authorization = "Authorization"
+  val formData = "form-data"
+  val includeRaw = "include_raw"
+  val contentType = "Content-Type"
+  val contentLanguage = "Content-Language"
+  val acceptLanguage = "Accept-Language"
+  val sslPort = 443
 }

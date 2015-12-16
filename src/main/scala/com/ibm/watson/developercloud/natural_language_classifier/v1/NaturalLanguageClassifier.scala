@@ -22,7 +22,7 @@ import spray.http._
 import spray.httpx.SprayJsonSupport._
 import spray.json._
 import NaturalLanguageClassifierProtocol._
-
+import NaturalLanguageClassifier._
 import scala.concurrent.Future
 
 
@@ -37,9 +37,6 @@ import scala.concurrent.Future
 class NaturalLanguageClassifier(config: WatsonServiceConfig) extends WatsonService(config) with LazyLogging {
   import system.dispatcher
   def serviceType : String = "natural_language_classifier"
-  val CLASSIFIERS_URL = "/v1/classifiers"
-  val CLASSIFIER_URL = "/v1/classifiers/%s"
-  val CLASSIFICATION_URL = "/v1/classifiers/%s/classify"
 
   /**
     * Sends data to create and train a classifier, and returns information about the new classifier.
@@ -62,7 +59,7 @@ class NaturalLanguageClassifier(config: WatsonServiceConfig) extends WatsonServi
 
     val jsonRequest = new JsObject(map)
 
-    val post: HttpRequest = Post(config.endpoint + CLASSIFIERS_URL, jsonRequest.toString())
+    val post: HttpRequest = Post(config.endpoint + classifiersPath, jsonRequest.toString())
     send(post).map(unmarshal[Classifier])
   }
 
@@ -77,7 +74,7 @@ class NaturalLanguageClassifier(config: WatsonServiceConfig) extends WatsonServi
     Validation.notEmpty(classifierId, "Classifier ID cannot be empty")
     Validation.notEmpty(text, "Text cannot be empty")
 
-    val url = CLASSIFICATION_URL.format(classifierId)
+    val url = classificationPath.format(classifierId)
     val jsonRequest = JsObject("text" -> JsString(text))
 
     val request: HttpRequest = Post(config.endpoint + url, jsonRequest.toString())
@@ -91,7 +88,7 @@ class NaturalLanguageClassifier(config: WatsonServiceConfig) extends WatsonServi
     */
   def getClassifiers : Future[List[Classifier]] = {
     logger.info("Running getClassifiers method")
-    val response: Future[HttpResponse] = send(Get(config.endpoint + CLASSIFIERS_URL))
+    val response: Future[HttpResponse] = send(Get(config.endpoint + classifiersPath))
     logger.info("returning a response")
     response.map(unmarshal[List[Classifier]])
   }
@@ -104,7 +101,7 @@ class NaturalLanguageClassifier(config: WatsonServiceConfig) extends WatsonServi
     */
   def deleteClassifier(classifierId : String) : Future[HttpResponse] = {
     Validation.notEmpty(classifierId, "Classifier ID cannot be empty")
-    val url = CLASSIFIER_URL.format(classifierId)
+    val url = classifierPathL.format(classifierId)
 
     val response : Future[HttpResponse] = send(Delete(config.endpoint + url))
     response
@@ -118,10 +115,17 @@ class NaturalLanguageClassifier(config: WatsonServiceConfig) extends WatsonServi
   def getClassifier(classifierId : String) : Future[Classifier] = {
     Validation.notEmpty(classifierId, "Classifier ID cannot be empty")
 
-    val url = CLASSIFIER_URL.format(classifierId)
+    val url = classifierPathL.format(classifierId)
 
     val response : Future[HttpResponse] = send(Get(config.endpoint + url))
 
     response.map(unmarshal[Classifier])
   }
+}
+
+object NaturalLanguageClassifier {
+  val classifiersPath = "/v1/classifiers"
+  val classifierPathL = "/v1/classifiers/%s"
+  val classificationPath = "/v1/classifiers/%s/classify"
+
 }

@@ -46,11 +46,11 @@ class PersonalityInsights(config: WatsonServiceConfig) extends WatsonService(con
       case _ => Content(options.contentItems).toString
     }
 
-    val uri = Option(options.includeRaw).map(x => inUri.withQuery(PersonalityInsights.IncludeRaw -> x.toString)).getOrElse(inUri)
+    val uri = Option(options.includeRaw).map(x => inUri.withQuery(PersonalityInsights.includeRaw -> x.toString)).getOrElse(inUri)
 
-    val headers = options.contentType.map(p => RawHeader(WatsonService.ContentType, p)).toList ++
-    options.language.map(p => RawHeader(WatsonService.ContentLanguage, p.value)).toList ++
-    options.acceptLanguage.map(p => RawHeader(WatsonService.AcceptLanguage, p.value)).toList
+    val headers = options.contentType.map(p => RawHeader(WatsonService.contentType, p)).toList ++
+    options.language.map(p => RawHeader(WatsonService.contentLanguage, p.value)).toList ++
+    options.acceptLanguage.map(p => RawHeader(WatsonService.acceptLanguage, p.value)).toList
     val request = Post(uri, text).withHeaders(headers)
 
     request
@@ -84,5 +84,5 @@ class PersonalityInsights(config: WatsonServiceConfig) extends WatsonService(con
 }
 
 object PersonalityInsights {
-  val IncludeRaw = "include_raw"
+  val includeRaw = "include_raw"
 }
