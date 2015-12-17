@@ -23,7 +23,7 @@ import spray.http.{MultipartFormData, BodyPart, HttpResponse, Uri}
 import spray.json.{JsObject, JsString}
 import LanguageTranslationProtocol._
 import spray.httpx.SprayJsonSupport._
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContextExecutor, Future}
 import LanguageTranslation._
 
 /**
@@ -34,7 +34,6 @@ import LanguageTranslation._
   * @param config service config
   */
 class LanguageTranslation(config: WatsonServiceConfig ) extends WatsonService(config) with LazyLogging {
-  import system.dispatcher
 
 
   def serviceType : String = "language_translation"

@@ -35,7 +35,7 @@ import scala.concurrent.Future
   * @param config Configuration for service
   */
 class NaturalLanguageClassifier(config: WatsonServiceConfig) extends WatsonService(config) with LazyLogging {
-  import system.dispatcher
+
   def serviceType : String = "natural_language_classifier"
 
   /**

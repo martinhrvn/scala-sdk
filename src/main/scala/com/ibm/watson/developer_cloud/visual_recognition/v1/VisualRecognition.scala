@@ -37,7 +37,6 @@ import scala.concurrent.Future
   *      Visual Recognition</a>
   */
 class VisualRecognition(config: WatsonServiceConfig) extends WatsonService(config) {
-  import system.dispatcher
   /**
     * Gets the service type for service (used to get correct entry from VCAP_SERVICES properties)
     * @return

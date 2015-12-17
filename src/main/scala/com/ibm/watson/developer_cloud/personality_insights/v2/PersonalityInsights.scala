@@ -32,8 +32,7 @@ import scala.concurrent.Future
   * @version v2
   */
 class PersonalityInsights(config: WatsonServiceConfig) extends WatsonService(config: WatsonServiceConfig){
-  import system.dispatcher
-
+  
   def serviceType: String = "personality_insights"
   val PATH_PROFILE = "/v2/profile"
 

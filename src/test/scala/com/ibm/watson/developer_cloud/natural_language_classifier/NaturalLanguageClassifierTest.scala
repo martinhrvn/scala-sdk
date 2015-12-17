@@ -33,7 +33,6 @@ import scala.concurrent.duration._
 @RunWith(classOf[JUnitRunner])
 class NaturalLanguageClassifierTest extends FlatSpec with LazyLogging  {
   implicit val system = ActorSystem()
-  import system.dispatcher
   "A Stack" should "pop values in last-in-first-out order" in {
 
     val a = new NaturalLanguageClassifier(new ManualServicesConfig("test", "test", "test"))

@@ -24,7 +24,7 @@ import spray.can.Http
 import spray.client.pipelining.{SendReceive, sendReceive}
 import spray.http.{HttpHeader, HttpRequest, HttpResponse, HttpHeaders}
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContextExecutor, Future}
 import scala.concurrent.duration._
 import scala.language.postfixOps
 
@@ -34,9 +34,9 @@ abstract class WatsonService(var config : WatsonServiceConfig) {
 
   implicit val system = ActorSystem("simple-spray-client")
 
-  implicit val requestTimeout = Timeout(60 seconds)
+  implicit def executionContext: ExecutionContextExecutor = system.dispatcher
 
-  import system.dispatcher
+  implicit val requestTimeout = Timeout(60 seconds)
 
   val headers = List(HttpHeaders.RawHeader(WatsonService.authorization, config.apiKey),
     HttpHeaders.RawHeader(WatsonService.accept, "application/json"),
