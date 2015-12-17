@@ -1,4 +1,6 @@
 # Watson Developer Cloud Scala SDK
+
+[![Join the chat at https://gitter.im/kane77/scala-sdk](https://badges.gitter.im/kane77/scala-sdk.svg)](https://gitter.im/kane77/scala-sdk?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Build Status](https://travis-ci.org/kane77/watson-scala-wrapper.svg)](https://travis-ci.org/kane77/watson-scala-wrapper)
 [![Codacy Badge](https://api.codacy.com/project/badge/grade/9f621de87f474787a7abd734deb30148)](https://www.codacy.com/app/martinhrvn/watson-scala-wrapper)
 [![Codacy Badge](https://api.codacy.com/project/badge/coverage/9f621de87f474787a7abd734deb30148)](https://www.codacy.com/app/martinhrvn/watson-scala-wrapper)
