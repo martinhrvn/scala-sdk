@@ -101,7 +101,7 @@ class LanguageTranslation(config: WatsonServiceConfig ) extends WatsonService(co
     * @return future of HttpRequest
     */
   def deleteModel(modelId : String) : Future[HttpResponse] = {
-    Validation.notEmpty(modelId, Validation.MessageNotEmpty.format(LanguageTranslation.modelId))
+    Validation.notEmpty(modelId, Validation.messageNotEmpty.format(LanguageTranslation.modelId))
     val request = Delete(config.endpoint + modelPath.format(modelId))
     send(request)
   }
@@ -135,7 +135,7 @@ class LanguageTranslation(config: WatsonServiceConfig ) extends WatsonService(co
     * @return translation result
     */
   def translate(text: String, modelId: Option[String]): Future[TranslationResult] = {
-    Validation.notEmpty(modelId, Validation.MessageNotEmpty.format(LanguageTranslation.modelId))
+    Validation.notEmpty(modelId, Validation.messageNotEmpty.format(LanguageTranslation.modelId))
     translateRequest(text, modelId, None, None)
   }
 
@@ -147,8 +147,8 @@ class LanguageTranslation(config: WatsonServiceConfig ) extends WatsonService(co
     * @return translated text
     */
   def translate(text: String, source: Option[String], target: Option[String]) : Future[TranslationResult]= {
-    Validation.notEmpty(source, Validation.MessageNotEmpty.format(LanguageTranslation.source))
-    Validation.notEmpty(target, Validation.MessageNotEmpty.format(LanguageTranslation.target))
+    Validation.notEmpty(source, Validation.messageNotEmpty.format(LanguageTranslation.source))
+    Validation.notEmpty(target, Validation.messageNotEmpty.format(LanguageTranslation.target))
     translateRequest(text, None, source, target)
   }
 
@@ -163,7 +163,7 @@ class LanguageTranslation(config: WatsonServiceConfig ) extends WatsonService(co
     * @return translated text
     */
   def translateRequest(text: String, modelId: Option[String], source: Option[String], target: Option[String]) : Future[TranslationResult] = {
-    Validation.notEmpty(text, Validation.MessageNotEmpty.format(LanguageTranslation.text))
+    Validation.notEmpty(text, Validation.messageNotEmpty.format(LanguageTranslation.text))
     val map = Option(text).map(LanguageTranslation.text -> JsString(_)).toMap ++
     modelId.map(LanguageTranslation.modelId -> JsString(_)).toMap ++
     source.map(LanguageTranslation.source -> JsString(_)).toMap ++

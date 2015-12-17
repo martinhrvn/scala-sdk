@@ -22,15 +22,18 @@ import java.io.File
   */
 object Validation {
 
-  val MessageNotNull = "%s cannot be null"
-  val MessageNotEmpty = "%s cannot be null or empty"
+  val messageNotNull = "%s cannot be null"
+  val messageNotEmpty = "%s cannot be null or empty"
   /**
     * Validates if file is not null and exists
     * @param file file to validate
     * @param message message to use for exception
     */
   def fileExists(file: File, message: String ) : Unit = {
-    validate(file, {x : File => x != null && x.exists() }, message)
+    validate(file, {x : File => Option(x) match {
+      case Some(x) if x.exists() => true
+      case _ => false
+    }}, message)
   }
 
   /**
@@ -77,7 +80,7 @@ object Validation {
     * @tparam T type of value to validate
     */
   def notNull[T](value : T, message: String) : Unit =  {
-    validate(value, {p : T => p != null}, message)
+    validate(value, {x : T => notNull(x)}, message)
   }
 
   /**
