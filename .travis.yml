@@ -3,7 +3,7 @@ language: scala
 scala:
     - 2.11.7
 script:
-    - sbt clean coverage +package test
+    - sbt clean coverage test
     - sbt coverageReport
 after_success:
     - sbt codacyCoverage
