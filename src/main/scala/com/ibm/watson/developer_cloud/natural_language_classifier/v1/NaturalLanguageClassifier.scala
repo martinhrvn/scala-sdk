@@ -15,7 +15,7 @@
 // limitations under the License.
 package com.ibm.watson.developer_cloud.natural_language_classifier.v1
 
-import com.ibm.watson.developer_cloud.utils.{JsonUtils, Validation, WatsonServiceConfig, WatsonService}
+import com.ibm.watson.developer_cloud.utils._
 import org.slf4j.LoggerFactory
 import spray.client.pipelining._
 import spray.http._
@@ -32,9 +32,9 @@ import scala.concurrent.Future
   * trigger a corresponding action in an application, such as directing a request to a location or
   * person, or answering a question. After training, the service returns information for texts that
   * it hasn't seen before. The response includes the name of the top classes and confidence values.
-  * @param config Configuration for service
+  * @param configFactory Configuration for service
   */
-class NaturalLanguageClassifier(config: WatsonServiceConfig) extends WatsonService(config) {
+class NaturalLanguageClassifier(configFactory: ConfigFactory = new VCAPConfigFactory()) extends WatsonService(configFactory) {
   val logger = LoggerFactory.getLogger(classOf[NaturalLanguageClassifier])
   def serviceType : String = "natural_language_classifier"
 

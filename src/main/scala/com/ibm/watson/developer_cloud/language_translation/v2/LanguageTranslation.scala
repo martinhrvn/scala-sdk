@@ -15,7 +15,7 @@
 // limitations under the License.
 package com.ibm.watson.developer_cloud.language_translation.v2
 
-import com.ibm.watson.developer_cloud.utils.{Validation, WatsonService, WatsonServiceConfig}
+import com.ibm.watson.developer_cloud.utils._
 import org.slf4j.LoggerFactory
 import spray.client.pipelining._
 import spray.http.{MultipartFormData, BodyPart, HttpResponse, Uri}
@@ -31,9 +31,9 @@ import LanguageTranslation._
   * identifies the language in which text is written.
   *
   * @version v2
-  * @param config service config
+  * @param configFactory service config
   */
-class LanguageTranslation(config: WatsonServiceConfig ) extends WatsonService(config) {
+class LanguageTranslation(configFactory: ConfigFactory = new VCAPConfigFactory()) extends WatsonService(configFactory) {
   val logger = LoggerFactory.getLogger(classOf[LanguageTranslation])
 
   def serviceType : String = "language_translation"

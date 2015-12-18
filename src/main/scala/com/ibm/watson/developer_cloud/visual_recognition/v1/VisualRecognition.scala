@@ -17,7 +17,7 @@ package com.ibm.watson.developer_cloud.visual_recognition.v1
 
 import java.io.File
 
-import com.ibm.watson.developer_cloud.utils.{Validation, WatsonService, WatsonServiceConfig}
+import com.ibm.watson.developer_cloud.utils._
 import com.ibm.watson.developer_cloud.visual_recognition.v2.{VisualRecognitionImages, LabelSet}
 import spray.httpx.SprayJsonSupport._
 import spray.http._
@@ -36,7 +36,7 @@ import scala.concurrent.Future
   *      href="http://www.ibm.com/smarterplanet/us/en/ibmwatson/developercloud/visual-recognition.html">
   *      Visual Recognition</a>
   */
-class VisualRecognition(config: WatsonServiceConfig) extends WatsonService(config) {
+class VisualRecognition(configFactory: ConfigFactory = new VCAPConfigFactory()) extends WatsonService(configFactory) {
   /**
     * Gets the service type for service (used to get correct entry from VCAP_SERVICES properties)
     * @return

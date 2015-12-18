@@ -29,8 +29,9 @@ import scala.concurrent.duration._
 import scala.language.postfixOps
 
 
-abstract class WatsonService(var config : WatsonServiceConfig) {
-  config.setup(serviceType)
+abstract class WatsonService(var configFactory : ConfigFactory = new VCAPConfigFactory()) {
+
+  def config : WatsonServiceConfig = configFactory.getConfigForServiceType(serviceType)
 
   implicit val system = ActorSystem("simple-spray-client")
 
@@ -71,6 +72,7 @@ abstract class WatsonService(var config : WatsonServiceConfig) {
     */
   def formHeaders(params: (String, String)*): Seq[HttpHeader] =
     Seq(HttpHeaders.`Content-Disposition`(WatsonService.formData, Map(params: _*)))
+
 }
 
 object WatsonService {
