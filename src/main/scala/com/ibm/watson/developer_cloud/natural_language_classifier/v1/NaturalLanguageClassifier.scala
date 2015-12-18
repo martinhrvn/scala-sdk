@@ -16,7 +16,7 @@
 package com.ibm.watson.developer_cloud.natural_language_classifier.v1
 
 import com.ibm.watson.developer_cloud.utils.{JsonUtils, Validation, WatsonServiceConfig, WatsonService}
-import com.typesafe.scalalogging.LazyLogging
+import org.slf4j.LoggerFactory
 import spray.client.pipelining._
 import spray.http._
 import spray.httpx.SprayJsonSupport._
@@ -34,8 +34,8 @@ import scala.concurrent.Future
   * it hasn't seen before. The response includes the name of the top classes and confidence values.
   * @param config Configuration for service
   */
-class NaturalLanguageClassifier(config: WatsonServiceConfig) extends WatsonService(config) with LazyLogging {
-
+class NaturalLanguageClassifier(config: WatsonServiceConfig) extends WatsonService(config) {
+  val logger = LoggerFactory.getLogger(classOf[NaturalLanguageClassifier])
   def serviceType : String = "natural_language_classifier"
 
   /**

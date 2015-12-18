@@ -15,8 +15,8 @@
 // limitations under the License.
 package com.ibm.watson.developer_cloud.utils
 
-import com.typesafe.scalalogging.LazyLogging
 import org.apache.commons.codec.binary.Base64
+import org.slf4j.LoggerFactory
 import spray.json._
 import spray.httpx.SprayJsonSupport._
 import spray.json.DefaultJsonProtocol._
@@ -46,8 +46,9 @@ object VCAPServicesProtocol extends DefaultJsonProtocol {
   }
 }
 
-abstract class WatsonServiceConfig extends LazyLogging {
+abstract class WatsonServiceConfig  {
 
+  val logger = LoggerFactory.getLogger(classOf[WatsonServiceConfig])
 
   def username : String
   def password : String

@@ -18,7 +18,6 @@ package com.ibm.watson.developer_cloud.visual_insights.v1
 import java.io.File
 
 import com.ibm.watson.developer_cloud.utils.{Validation, WatsonService, WatsonServiceConfig}
-import com.typesafe.scalalogging.LazyLogging
 import spray.client.pipelining._
 import spray.http._
 import spray.httpx.SprayJsonSupport._
@@ -32,7 +31,7 @@ import scala.concurrent.Future
   *
   * @version v1
   */
-class VisualInsigths(config: WatsonServiceConfig) extends WatsonService(config: WatsonServiceConfig) with LazyLogging {
+class VisualInsigths(config: WatsonServiceConfig) extends WatsonService(config: WatsonServiceConfig) {
   /**
     * Gets the service type for service (used to get correct entry from VCAP_SERVICES properties)
     * @return

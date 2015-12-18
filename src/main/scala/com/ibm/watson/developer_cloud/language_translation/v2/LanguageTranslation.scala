@@ -16,7 +16,7 @@
 package com.ibm.watson.developer_cloud.language_translation.v2
 
 import com.ibm.watson.developer_cloud.utils.{Validation, WatsonService, WatsonServiceConfig}
-import com.typesafe.scalalogging.LazyLogging
+import org.slf4j.LoggerFactory
 import spray.client.pipelining._
 import spray.http.{MultipartFormData, BodyPart, HttpResponse, Uri}
 
@@ -33,8 +33,8 @@ import LanguageTranslation._
   * @version v2
   * @param config service config
   */
-class LanguageTranslation(config: WatsonServiceConfig ) extends WatsonService(config) with LazyLogging {
-
+class LanguageTranslation(config: WatsonServiceConfig ) extends WatsonService(config) {
+  val logger = LoggerFactory.getLogger(classOf[LanguageTranslation])
 
   def serviceType : String = "language_translation"
 

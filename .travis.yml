@@ -1,8 +1,8 @@
 sudo: false
 language: scala
 scala:
-    - 2.11.5
+    - 2.11.7
 script:
-    - sbt clean coverage test
+    - sbt clean coverage +package test
 after_success:
     - sbt codacyCoverage
