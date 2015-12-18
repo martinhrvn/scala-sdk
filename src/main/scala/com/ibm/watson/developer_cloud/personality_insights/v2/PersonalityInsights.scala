@@ -35,12 +35,11 @@ import scala.concurrent.Future
 class PersonalityInsights(config: WatsonServiceConfig) extends WatsonService(config: WatsonServiceConfig){
   val logger = LoggerFactory.getLogger(classOf[PersonalityInsights])
   def serviceType: String = "personality_insights"
-  val PATH_PROFILE = "/v2/profile"
 
   private def getRequest(options: ProfileOptions) : HttpRequest = {
     Validation.notNull(options, "Options cannot be null")
     Validation.assertTrue(Validation.notNull(options.text) || Validation.notNull(options.contentItems), "text, html or content items need to be specified")
-    val inUri = Uri(config.endpoint + PATH_PROFILE)
+    val inUri = Uri(config.endpoint + PersonalityInsights.pathProfile)
     val text = Option(options.text) match {
       case Some(o) => o
       case _ => Content(options.contentItems).toString
@@ -85,4 +84,6 @@ class PersonalityInsights(config: WatsonServiceConfig) extends WatsonService(con
 
 object PersonalityInsights {
   val includeRaw = "include_raw"
+  val pathProfile = "/v2/profile"
+
 }
