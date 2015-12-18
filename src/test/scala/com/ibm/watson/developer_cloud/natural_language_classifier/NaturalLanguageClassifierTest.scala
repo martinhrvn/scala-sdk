@@ -17,7 +17,7 @@ package com.ibm.watson.developer_cloud.natural_language_classifier
 
 import akka.actor.ActorSystem
 import com.ibm.watson.developer_cloud.natural_language_classifier.v1.{NaturalLanguageClassifier, TrainingData}
-import com.ibm.watson.developer_cloud.utils.{ManualServicesConfig, VCAPServicesConfig}
+import com.ibm.watson.developer_cloud.utils.{ManualConfig, ManualServicesConfig, VCAPServicesConfig}
 import org.scalatest.junit._
 import com.typesafe.scalalogging._
 import org.junit._
@@ -33,9 +33,9 @@ import scala.concurrent.duration._
 @RunWith(classOf[JUnitRunner])
 class NaturalLanguageClassifierTest extends FlatSpec with LazyLogging  {
   implicit val system = ActorSystem()
-  "A Stack" should "pop values in last-in-first-out order" in {
+  "Service type for NaturalLanguageClassifier" should "be natural_language_classifier" in {
 
-    val a = new NaturalLanguageClassifier(new ManualServicesConfig("test", "test", "test"))
+    val a = new NaturalLanguageClassifier(new ManualConfig("test", "test", "test"))
     assert(a.serviceType.equals("natural_language_classifier"))
     //assert(stack.pop() === 1)
   }
