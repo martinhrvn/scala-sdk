@@ -16,7 +16,7 @@
 package com.ibm.watson.developer_cloud.personality_insights.v2
 
 import com.ibm.watson.developer_cloud.personality_insights.v2.PersonalityInsightsProtocol._
-import com.ibm.watson.developer_cloud.utils.{RequestUtils, Validation, WatsonService, WatsonServiceConfig}
+import com.ibm.watson.developer_cloud.utils._
 import org.slf4j.LoggerFactory
 import spray.client.pipelining._
 import spray.http.HttpHeaders._
@@ -32,7 +32,7 @@ import scala.concurrent.Future
   *
   * @version v2
   */
-class PersonalityInsights(config: WatsonServiceConfig) extends WatsonService(config: WatsonServiceConfig){
+class PersonalityInsights(configFactory: ConfigFactory = new VCAPConfigFactory()) extends WatsonService(configFactory){
   val logger = LoggerFactory.getLogger(classOf[PersonalityInsights])
   def serviceType: String = "personality_insights"
   val PATH_PROFILE = "/v2/profile"
