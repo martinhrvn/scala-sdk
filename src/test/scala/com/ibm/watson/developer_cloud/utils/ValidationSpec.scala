@@ -51,4 +51,11 @@ class ValidationSpec extends FlatSpec {
     val string : Option[String] = Some("text")
     Validation.notEmpty(string, "string cannot be empty")
   }
+
+  "Validation.notNull" should "throw excpetion for null value" in {
+    val string = null
+    intercept[IllegalArgumentException] {
+      Validation.notNull(string, "Value cannot be null")
+    }
+  }
 }
