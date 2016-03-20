@@ -1,0 +1,10 @@
+package com.ibm.watson.developer_cloud.personality_insights.v2.model
+
+import java.util.Date
+
+/**
+  * Created by martinhrvn on 20/03/16.
+  */
+case class ContentItem(charset: String, content: String, contentType: String, created: Date, forward: Boolean,
+                       id: String, language: String, parentId: String, reply: Boolean, sourceId: String,
+                       update: Date, userId: String)

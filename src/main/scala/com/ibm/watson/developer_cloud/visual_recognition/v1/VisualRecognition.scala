@@ -18,12 +18,13 @@ package com.ibm.watson.developer_cloud.visual_recognition.v1
 import java.io.File
 
 import com.ibm.watson.developer_cloud.utils._
-import com.ibm.watson.developer_cloud.visual_recognition.v2.{VisualRecognitionImages, LabelSet}
+import com.ibm.watson.developer_cloud.visual_recognition.v1.model.{VisualRecognitionImages, LabelSet, VisualRecognitionProtocol}
+import com.ibm.watson.developer_cloud.visual_recognition.v2.VisualRecognitionImages
 import spray.httpx.SprayJsonSupport._
 import spray.http._
 import spray.client.pipelining._
 import spray.json._
-import com.ibm.watson.developer_cloud.visual_recognition.v2.VisualRecognitionProtocol._
+import VisualRecognitionProtocol._
 
 import scala.concurrent.Future
 

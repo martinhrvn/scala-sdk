@@ -15,7 +15,8 @@
 // limitations under the License.
 package com.ibm.watson.developer_cloud.personality_insights.v2
 
-import com.ibm.watson.developer_cloud.personality_insights.v2.PersonalityInsightsProtocol._
+import com.ibm.watson.developer_cloud.personality_insights.v2.model.{ProfileOptions, Profile, Content, PersonalityInsightsProtocol}
+import PersonalityInsightsProtocol._
 import com.ibm.watson.developer_cloud.utils._
 import org.slf4j.LoggerFactory
 import spray.client.pipelining._

@@ -15,6 +15,7 @@
 // limitations under the License.
 package com.ibm.watson.developer_cloud.language_translation.v2
 
+import com.ibm.watson.developer_cloud.language_translation.v2.model._
 import com.ibm.watson.developer_cloud.utils._
 import org.slf4j.LoggerFactory
 import spray.client.pipelining._

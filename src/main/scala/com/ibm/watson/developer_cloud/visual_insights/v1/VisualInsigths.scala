@@ -18,10 +18,11 @@ package com.ibm.watson.developer_cloud.visual_insights.v1
 import java.io.File
 
 import com.ibm.watson.developer_cloud.utils._
+import com.ibm.watson.developer_cloud.visual_insights.v1.model.{VisualInsightsProtocol, Summary, Classifiers}
 import spray.client.pipelining._
 import spray.http._
 import spray.httpx.SprayJsonSupport._
-import VisualInsigthsProtocol._
+import VisualInsightsProtocol._
 import scala.concurrent.Future
 
 
