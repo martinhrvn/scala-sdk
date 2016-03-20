@@ -1,7 +1,6 @@
 package com.ibm.watson.developer_cloud.natural_language_classifier.v1.model
 
 import spray.json.DefaultJsonProtocol
-
 /**
   * Created by martinhrvn on 20/03/16.
   */

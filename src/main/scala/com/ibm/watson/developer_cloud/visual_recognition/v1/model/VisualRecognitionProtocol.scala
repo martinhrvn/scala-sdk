@@ -1,7 +1,7 @@
 package com.ibm.watson.developer_cloud.visual_recognition.v1.model
 
 import spray.json.DefaultJsonProtocol
-
+import com.ibm.watson.developer_cloud.visual_recognition.v1.model._
 /**
   * Created by martinhrvn on 20/03/16.
   */
