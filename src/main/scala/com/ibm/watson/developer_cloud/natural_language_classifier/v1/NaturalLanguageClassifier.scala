@@ -18,6 +18,7 @@ package com.ibm.watson.developer_cloud.natural_language_classifier.v1
 import com.ibm.watson.developer_cloud.natural_language_classifier.v1.NaturalLanguageClassifier._
 import com.ibm.watson.developer_cloud.natural_language_classifier.v1.model.NaturalLanguageClassifierProtocol._
 import com.ibm.watson.developer_cloud.natural_language_classifier.v1.model.{Classification, Classifier, TrainingData}
+import com.ibm.watson.developer_cloud.service.{VCAPConfigFactory, ConfigFactory, WatsonService}
 import com.ibm.watson.developer_cloud.utils._
 import org.slf4j.LoggerFactory
 import spray.client.pipelining._

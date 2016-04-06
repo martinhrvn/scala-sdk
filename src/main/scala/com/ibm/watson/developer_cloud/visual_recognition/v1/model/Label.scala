@@ -15,4 +15,6 @@
 // limitations under the License.
 package com.ibm.watson.developer_cloud.visual_recognition.v1.model
 
-case class Label(name: String, score: Double)
+import com.ibm.watson.developer_cloud.service.GenericModel
+
+case class Label(name: String, score: Double) extends GenericModel

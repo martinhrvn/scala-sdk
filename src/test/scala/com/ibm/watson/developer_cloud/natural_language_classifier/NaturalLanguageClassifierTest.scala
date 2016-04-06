@@ -17,7 +17,9 @@ package com.ibm.watson.developer_cloud.natural_language_classifier
 
 import akka.actor.ActorSystem
 import com.ibm.watson.developer_cloud.natural_language_classifier.v1.NaturalLanguageClassifier
-import com.ibm.watson.developer_cloud.utils.{ManualConfig}
+import com.ibm.watson.developer_cloud.service.ManualConfig
+import com.ibm.watson.developer_cloud.visual_insights.v1.model.Classifier
+import com.ibm.watson.developer_cloud.visual_insights.v1.model.VisualInsightsProtocol._
 import org.scalatest.junit._
 import com.typesafe.scalalogging._
 import org.junit._
