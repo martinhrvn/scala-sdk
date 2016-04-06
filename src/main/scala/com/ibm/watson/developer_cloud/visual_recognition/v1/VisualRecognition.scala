@@ -17,6 +17,7 @@ package com.ibm.watson.developer_cloud.visual_recognition.v1
 
 import java.io.File
 
+import com.ibm.watson.developer_cloud.service.{VCAPConfigFactory, ConfigFactory, WatsonService}
 import com.ibm.watson.developer_cloud.utils._
 import com.ibm.watson.developer_cloud.visual_recognition.v1.model.{VisualRecognitionImages, LabelSet, VisualRecognitionProtocol}
 import spray.httpx.SprayJsonSupport._

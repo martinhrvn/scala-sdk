@@ -13,16 +13,13 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-package com.ibm.watson.developer_cloud.utils
+package com.ibm.watson.developer_cloud.service
 
+import com.ibm.watson.developer_cloud.utils._
+import com.ibm.watson.developer_cloud.utils.VCAPServicesProtocol._
 import org.apache.commons.codec.binary.Base64
 import org.slf4j.LoggerFactory
 import spray.json._
-import spray.json.DefaultJsonProtocol._
-
-
-
-import VCAPServicesProtocol._
 case class WatsonServiceConfig(username: String, password: String, endpoint: String)  {
 
   val logger = LoggerFactory.getLogger(classOf[WatsonServiceConfig])

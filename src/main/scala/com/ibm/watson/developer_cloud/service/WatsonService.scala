@@ -13,8 +13,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-package com.ibm.watson.developer_cloud.utils
-
+package com.ibm.watson.developer_cloud.service
 
 import akka.actor.ActorSystem
 import akka.io.IO
@@ -22,10 +21,10 @@ import akka.pattern.ask
 import akka.util.Timeout
 import spray.can.Http
 import spray.client.pipelining.{SendReceive, sendReceive}
-import spray.http.{HttpHeader, HttpRequest, HttpResponse, HttpHeaders}
+import spray.http.{HttpHeader, HttpHeaders, HttpRequest, HttpResponse}
 
-import scala.concurrent.{ExecutionContextExecutor, Future}
 import scala.concurrent.duration._
+import scala.concurrent.{ExecutionContextExecutor, Future}
 import scala.language.postfixOps
 
 
