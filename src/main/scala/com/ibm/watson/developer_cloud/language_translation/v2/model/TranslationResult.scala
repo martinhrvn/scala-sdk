@@ -15,15 +15,10 @@
 // limitations under the License.
 package com.ibm.watson.developer_cloud.language_translation.v2.model
 
+import com.ibm.watson.developer_cloud.service.GenericModel
 
 
-
-
-
-
-
-
-case class TranslationResult(var translations: List[Translation], var wordCount: Int, var characterCount: Int)
+case class TranslationResult(var translations: List[Translation], var wordCount: Int, var characterCount: Int)extends GenericModel
 
 
 

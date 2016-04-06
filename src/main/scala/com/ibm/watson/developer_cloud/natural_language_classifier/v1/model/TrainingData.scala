@@ -16,8 +16,7 @@
 
 package com.ibm.watson.developer_cloud.natural_language_classifier.v1.model
 
+import com.ibm.watson.developer_cloud.service.GenericModel
 
 
-
-
-case class TrainingData (var text: String, var classes: List[String])
+case class TrainingData (var text: String, var classes: List[String])extends GenericModel

@@ -15,11 +15,9 @@
 // limitations under the License.
 package com.ibm.watson.developer_cloud.personality_insights.v2.model
 
-
-
-
+import com.ibm.watson.developer_cloud.service.GenericModel
 
 
 case class ProfileOptions(text: String, contentType: Option[String] = None, contentItems: List[ContentItem] = List(),
-                          includeRaw: Boolean = false, acceptLanguage: Option[AcceptLanguage] = None, language: Option[Language] = None)
+                          includeRaw: Boolean = false, acceptLanguage: Option[AcceptLanguage] = None, language: Option[Language] = None)extends GenericModel
 
