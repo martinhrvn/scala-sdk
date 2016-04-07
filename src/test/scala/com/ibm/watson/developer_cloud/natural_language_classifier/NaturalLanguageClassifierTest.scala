@@ -15,9 +15,6 @@
 // limitations under the License.
 package com.ibm.watson.developer_cloud.natural_language_classifier
 
-import java.util
-import java.util.Date
-
 import akka.actor.ActorSystem
 import com.ibm.watson.developer_cloud.natural_language_classifier.v1.NaturalLanguageClassifier
 import com.ibm.watson.developer_cloud.natural_language_classifier.v1.model.NaturalLanguageClassifierProtocol._
@@ -25,13 +22,8 @@ import com.ibm.watson.developer_cloud.natural_language_classifier.v1.model.{Clas
 import com.ibm.watson.developer_cloud.service.ManualConfig
 import org.joda.time.DateTime
 import org.scalatest.junit._
-import com.typesafe.scalalogging._
-import org.junit._
-import scala.util.{Success, Failure}
 import org.scalatest._
 import org.junit.runner.RunWith
-import org.scalatest.concurrent._
-import scala.concurrent.duration._
 import spray.json._
 
 /**
@@ -72,7 +64,7 @@ class NaturalLanguageClassifierTest extends FlatSpec  {
     assert(classification.confidence.equals(0.33))
   }
 
-  it should "be outputed correctly" in {
+  it should "be outputted correctly" in {
     val classifiedClass = ClassifiedClass("name", 0.22)
     val json = classifiedClass.toJson.compactPrint
     val parsed = json.parseJson.convertTo[ClassifiedClass]
@@ -88,5 +80,13 @@ class NaturalLanguageClassifierTest extends FlatSpec  {
     assert(classification.url.equals("https://gateway.watsonplatform.net/natural-language-classifier/api/v1/classifiers/5E00F7x2-nlc-507"))
     assert(classification.language.equals("en"))
     assert(classification.created.equals(new DateTime("2015-10-17T20:56:29.974Z")))
+  }
+
+  it should "be outputted correctly" in {
+    val classifier = Classifier(new DateTime(), "id", "language", "test", "status", "status Description", "url")
+    val json = classifier.toJson.compactPrint
+    val parsed  = json.parseJson.convertTo[Classifier]
+
+    assert(parsed.equals(classifier))
   }
 }

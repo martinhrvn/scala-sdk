@@ -16,6 +16,7 @@ libraryDependencies ++= Seq(
   "com.typesafe.akka" %% "akka-actor" % "2.3.14",
   "joda-time" % "joda-time" % "2.9.3",
   "org.joda" % "joda-convert" % "1.8",
+  "org.scalamock" %% "scalamock-scalatest-support" % "3.2.2" % Test,
   "org.scalatest" %% "scalatest" % "2.2.4" % Test,
   "junit" % "junit" % "4.12" % Test,
   "org.pegdown" % "pegdown" % "1.1.0" % Test)
