@@ -47,7 +47,7 @@ class NaturalLanguageClassifierTest extends FlatSpec  {
   }
 
   "Classification" should "be parsed correctly" in {
-    val json = scala.io.Source.fromURL(getClass.getResource("/json/natural_language_classifier/classification.json")).mkString
+    val json = scala.io.Source.fromURL(getClass.getResource("/natural_language_classifier/classification.json")).mkString
     val classification = json.parseJson.convertTo[Classification]
 
     assert(classification.id.equals("1234"))
@@ -65,7 +65,7 @@ class NaturalLanguageClassifierTest extends FlatSpec  {
   }
 
   "ClassifiedClass" should "be parsed correctly" in {
-    val json = scala.io.Source.fromURL(getClass.getResource("/json/natural_language_classifier/classified_class.json")).mkString
+    val json = scala.io.Source.fromURL(getClass.getResource("/natural_language_classifier/classified_class.json")).mkString
     val classification = json.parseJson.convertTo[ClassifiedClass]
 
     assert(classification.name.equals("temperature"))
@@ -80,7 +80,7 @@ class NaturalLanguageClassifierTest extends FlatSpec  {
   }
 
   "ClassifierClass" should "be parsed correctly" in {
-    val json = scala.io.Source.fromURL(getClass.getResource("/json/natural_language_classifier/classifier.json")).mkString
+    val json = scala.io.Source.fromURL(getClass.getResource("/natural_language_classifier/classifier.json")).mkString
     val classification = json.parseJson.convertTo[Classifier]
 
     assert(classification.name.equals("Music controls"))

@@ -15,10 +15,13 @@
 // limitations under the License.
 package com.ibm.watson.developer_cloud.natural_language_classifier
 
+import java.io.File
+
 import akka.actor.ActorSystem
 import com.ibm.watson.developer_cloud.natural_language_classifier.v1.NaturalLanguageClassifier
 import com.ibm.watson.developer_cloud.natural_language_classifier.v1.model.{Classifier,Classifiers}
 import com.ibm.watson.developer_cloud.service.{LocalFileConfigFactory, ConfigFactory}
+import com.ibm.watson.developer_cloud.utils.ParameterMissingException
 import org.junit.runner.RunWith
 import org.scalatest.time.{Seconds, Span, Millis}
 import org.scalatest.{Matchers, FlatSpec}
@@ -28,20 +31,37 @@ import org.scalatest.junit._
 /**
   * Created by martinhrvn on 07/04/16.
   */
-class NaturalLanguageClassifierIT extends FlatSpec with ScalaFutures {
+class NaturalLanguageClassifierIT extends FlatSpec with ScalaFutures with Matchers {
   val config : ConfigFactory = LocalFileConfigFactory("/vcap_services.json")
+  val service = new NaturalLanguageClassifier(config)
 
   implicit val system = ActorSystem()
   implicit val defaultPatience =
     PatienceConfig(timeout = Span(15, Seconds), interval = Span(500, Millis))
 
   "NaturalLanguageClassifier.getClassifiers" should "retrieve classifiers" in {
-    val service = new NaturalLanguageClassifier(config)
+
 
     val futureClassifier = service.getClassifiers
     val futureValue = futureClassifier.futureValue
 
      assert(!futureValue.classifiers.isEmpty)
+
+  }
+
+  "NaturalLanguageClassifier.createClassifier" should "create classifier for training data" in {
+    val file = new File(getClass.getResource("/natural_language_classifier/weather_data_train.csv").toURI)
+    val futureClassifier = service.createClassifier("itest-example", "en", file)
+  }
+
+  "NaturalLanguageClassifier.createClassifier" should "throw exception for missing training data" in {
+    val file = scala.io.Source.fromURL(getClass.getResource("/natural_language_classifier/weather_data_train.csv"))
+//    service.createClassifier(null, null, null) shouldBe a [ParameterMissingException]
+
+    intercept[IllegalArgumentException] {
+      val futureClassifier = service.createClassifier("itest-example", "en", null)
+      val futureValue = futureClassifier.futureValue
+    }
 
   }
 
