@@ -15,6 +15,7 @@
 // limitations under the License.
 package com.ibm.watson.developer_cloud.natural_language_classifier
 
+import java.util
 import java.util.Date
 
 import akka.actor.ActorSystem
@@ -55,12 +56,27 @@ class NaturalLanguageClassifierTest extends FlatSpec  {
     assert(classification.topClass.equals("temperature"))
   }
 
+  it should "be outputted correctly" in {
+    val classification = Classification("id", "http://example.com/test", "test text", "topClass", List.empty[ClassifiedClass])
+    val generatedJson = classification.toJson.compactPrint
+
+    val reReadJson = generatedJson.parseJson.convertTo[Classification]
+    assert(classification.equals(reReadJson))
+  }
+
   "ClassifiedClass" should "be parsed correctly" in {
     val json = scala.io.Source.fromURL(getClass.getResource("/json/natural_language_classifier/classified_class.json")).mkString
     val classification = json.parseJson.convertTo[ClassifiedClass]
 
     assert(classification.name.equals("temperature"))
     assert(classification.confidence.equals(0.33))
+  }
+
+  it should "be outputed correctly" in {
+    val classifiedClass = ClassifiedClass("name", 0.22)
+    val json = classifiedClass.toJson.compactPrint
+    val parsed = json.parseJson.convertTo[ClassifiedClass]
+    assert(parsed.equals(classifiedClass))
   }
 
   "ClassifierClass" should "be parsed correctly" in {
