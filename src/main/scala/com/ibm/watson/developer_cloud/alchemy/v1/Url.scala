@@ -15,7 +15,9 @@
 // limitations under the License.
 package com.ibm.watson.developer_cloud.alchemy.v1
 
+import com.ibm.watson.developer_cloud.service.GenericModel
+
 /**
-  * Created by martinhrvn on 06/04/16.
+  * Created by martinhrvn on 07/04/16.
   */
-case class Document(id: String, source: Source, timestamp: Integer)
+case class Url(article: Article) extends GenericModel
