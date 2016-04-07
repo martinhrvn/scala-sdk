@@ -37,7 +37,7 @@ import spray.json._
 /**
  * @author Martin Harvan (martin.harvan@sk.ibm.com)
  */
-@RunWith(classOf[JUnitRunner])
+
 class NaturalLanguageClassifierTest extends FlatSpec  {
   implicit val system = ActorSystem()
   "Service type for NaturalLanguageClassifier" should "be natural_language_classifier" in {
