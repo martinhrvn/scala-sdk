@@ -36,10 +36,20 @@ abstract class ConfigFactory(serviceName: Option[String] = None) {
   def getConfigForServiceType(serviceType: String) : WatsonServiceConfig
 }
 
-class VCAPConfigFactory(serviceName: Option[String] = None) extends ConfigFactory(serviceName) {
+class VCAPConfigFactory(serviceName: Option[String] = None) extends JsonConfigFactory(serviceName) {
+  def getJsonConfigString : String = sys.env("VCAP_SERVICES")
+}
+
+case class LocalFileConfigFactory(filename: String, serviceName: Option[String] = None) extends JsonConfigFactory(serviceName) {
+  def getJsonConfigString : String = scala.io.Source.fromURL(getClass.getResource(filename)).mkString
+}
+
+abstract class JsonConfigFactory(serviceName: Option[String] = None) extends ConfigFactory(serviceName) {
+  def getJsonConfigString : String
+
   def getConfigForServiceType(serviceType: String): WatsonServiceConfig = {
     Validation.notEmpty(serviceType, "ServiceType cannot be empty")
-    val vcapProperties: VCAPProperties = sys.env("VCAP_SERVICES").parseJson.convertTo[VCAPProperties]
+    val vcapProperties: VCAPProperties = getJsonConfigString.parseJson.convertTo[VCAPProperties]
     val serviceProperties = serviceName match {
       case Some(s) if !s.isEmpty => vcapProperties.properties(serviceType).filter(_.name == s).head
       case _ => vcapProperties.properties(serviceType).head
