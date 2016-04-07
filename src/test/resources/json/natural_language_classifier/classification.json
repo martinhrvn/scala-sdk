@@ -1,0 +1,16 @@
+{
+  "classifier_id": "1234",
+  "url": "https://sample.com/url",
+  "text": "test text",
+  "top_class": "temperature",
+  "classes": [
+    {
+      "class_name": "temperature",
+      "confidence": 0.5113944760846317
+    },
+    {
+      "class_name": "conditions",
+      "confidence": 0.48860552391536816
+    }
+  ]
+}

@@ -15,11 +15,14 @@
 // limitations under the License.
 package com.ibm.watson.developer_cloud.natural_language_classifier
 
+import java.util.Date
+
 import akka.actor.ActorSystem
 import com.ibm.watson.developer_cloud.natural_language_classifier.v1.NaturalLanguageClassifier
+import com.ibm.watson.developer_cloud.natural_language_classifier.v1.model.NaturalLanguageClassifierProtocol._
+import com.ibm.watson.developer_cloud.natural_language_classifier.v1.model.{Classifier, ClassifiedClass, Classification}
 import com.ibm.watson.developer_cloud.service.ManualConfig
-import com.ibm.watson.developer_cloud.visual_insights.v1.model.Classifier
-import com.ibm.watson.developer_cloud.visual_insights.v1.model.VisualInsightsProtocol._
+import org.joda.time.DateTime
 import org.scalatest.junit._
 import com.typesafe.scalalogging._
 import org.junit._
@@ -28,6 +31,7 @@ import org.scalatest._
 import org.junit.runner.RunWith
 import org.scalatest.concurrent._
 import scala.concurrent.duration._
+import spray.json._
 
 /**
  * @author Martin Harvan (martin.harvan@sk.ibm.com)
@@ -39,6 +43,34 @@ class NaturalLanguageClassifierTest extends FlatSpec  {
 
     val a = new NaturalLanguageClassifier(new ManualConfig("test", "test", "test"))
     assert(a.serviceType.equals("natural_language_classifier"))
-    //assert(stack.pop() === 1)
+  }
+
+  "Classification" should "be parsed correctly" in {
+    val json = scala.io.Source.fromURL(getClass.getResource("/json/natural_language_classifier/classification.json")).mkString
+    val classification = json.parseJson.convertTo[Classification]
+
+    assert(classification.id.equals("1234"))
+    assert(classification.url.equals("https://sample.com/url"))
+    assert(classification.text.equals("test text"))
+    assert(classification.topClass.equals("temperature"))
+  }
+
+  "ClassifiedClass" should "be parsed correctly" in {
+    val json = scala.io.Source.fromURL(getClass.getResource("/json/natural_language_classifier/classified_class.json")).mkString
+    val classification = json.parseJson.convertTo[ClassifiedClass]
+
+    assert(classification.name.equals("temperature"))
+    assert(classification.confidence.equals(0.33))
+  }
+
+  "ClassifierClass" should "be parsed correctly" in {
+    val json = scala.io.Source.fromURL(getClass.getResource("/json/natural_language_classifier/classifier.json")).mkString
+    val classification = json.parseJson.convertTo[Classifier]
+
+    assert(classification.name.equals("Music controls"))
+    assert(classification.id.equals("5E00F7x2-nlc-507"))
+    assert(classification.url.equals("https://gateway.watsonplatform.net/natural-language-classifier/api/v1/classifiers/5E00F7x2-nlc-507"))
+    assert(classification.language.equals("en"))
+    assert(classification.created.equals(new DateTime("2015-10-17T20:56:29.974Z")))
   }
 }
