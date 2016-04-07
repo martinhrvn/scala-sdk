@@ -15,6 +15,8 @@
 // limitations under the License.
 package com.ibm.watson.developer_cloud.natural_language_classifier.v1
 
+import java.io.File
+
 import com.ibm.watson.developer_cloud.natural_language_classifier.v1.NaturalLanguageClassifier._
 import com.ibm.watson.developer_cloud.natural_language_classifier.v1.model.NaturalLanguageClassifierProtocol._
 import com.ibm.watson.developer_cloud.natural_language_classifier.v1.model.{Classifiers, Classification, Classifier, TrainingData}
@@ -52,17 +54,17 @@ class NaturalLanguageClassifier(configFactory: ConfigFactory = new VCAPConfigFac
     *        (the ground truth)
     * @return created classifier
     */
-  def createClassifier(name: String, language: String, trainingData: List[TrainingData]): Future[Classifier] = {
+  def createClassifier(name: String, language: String, trainingData: File): Future[Classifier] = {
     Validation.notEmpty(language, "Language cannot be empty")
+    Validation.notNull(trainingData, "Training data must be specified")
 
-    val map = Option(language).map("language" -> JsString(_)).toMap ++
-    Option(name).map("name" -> JsString(_)).toMap ++
-    Option(trainingData).map("training_data" -> _.toJson).toMap
-    //TODO: Validation.notEmpty(trainingData, "Training data cannot be empty")
+    val json = JsObject(Option(name).map("name" -> JsString(_)).toMap ++
+      Map("language" -> JsString(language)))
+    val bodyParts = List(BodyPart(trainingData, "training_date"), BodyPart(json.compactPrint))
+    val data = MultipartFormData(bodyParts)
 
-    val jsonRequest = new JsObject(map)
 
-    val post: HttpRequest = Post(config.endpoint + classifiersPath, jsonRequest.toString())
+    val post: HttpRequest = Post(config.endpoint + classifiersPath, data)
     send(post).map(unmarshal[Classifier])
   }
 
