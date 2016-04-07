@@ -7,16 +7,10 @@ import spray.json._
 abstract class GenericModel {
 
   override def equals(o: Any) : Boolean = {
-    if(this == o) {
-      return true
+    Option(o) match {
+      case Some(g: GenericModel) => this.toString.equals(g.toString)
+      case _ => false
     }
-    if (o == null || getClass() != o.getClass) {
-      return false;
-    }
-
-    val other = o.asInstanceOf[GenericModel]
-
-    this.toString.equals(other.toString);
   }
 
   override def hashCode : Int = {
