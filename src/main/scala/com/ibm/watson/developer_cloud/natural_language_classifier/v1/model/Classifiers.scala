@@ -13,7 +13,8 @@ case class Classifier(created: DateTime,
                       id : String,
                       language: String,
                       name: String,
-                      status: String = "",
-                      statusDescription: String = "",
-                      url: String = ""
+                      status: Option[String],
+                      statusDescription: Option[String] ,
+                      url: String
                        )extends GenericModel
+case class Classifiers(classifiers: List[Classifier])

@@ -9,6 +9,7 @@ import spray.json.DefaultJsonProtocol
 object NaturalLanguageClassifierProtocol extends DefaultJsonProtocol {
   implicit val dateJsonFormat = DateJsonFormat
   implicit val classifierFormat = jsonFormat(Classifier, "created","classifier_id", "language","name", "status", "status_description", "url" )
+  implicit val classifiersFormat = jsonFormat(Classifiers, "classifiers" )
   implicit val classifiedClassFormat = jsonFormat(ClassifiedClass, "class_name", "confidence")
   implicit val classificationFormat = jsonFormat(Classification, "classifier_id", "url", "text", "top_class", "classes")
   implicit val trainingDataFormat = jsonFormat(TrainingData, "text", "classes")

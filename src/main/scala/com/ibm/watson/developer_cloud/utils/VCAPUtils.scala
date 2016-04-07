@@ -45,7 +45,7 @@ object VCAPServicesProtocol extends DefaultJsonProtocol {
 }
 
 case class VCAPCredentials(url: String, username: String, password: String)
-case class VCAPService(name : String, label: String, plan: String, tags: List[String], credentials: VCAPCredentials)
+case class VCAPService(name : String, label: String, plan: String, tags: Option[List[String]], credentials: VCAPCredentials)
 case class VCAPProperties(properties: Map[String, List[VCAPService]])
 
 
