@@ -83,7 +83,7 @@ class NaturalLanguageClassifierTest extends FlatSpec  {
   }
 
   it should "be outputted correctly" in {
-    val classifier = Classifier(new DateTime(), "id", "language", "test", "status", "status Description", "url")
+    val classifier = Classifier(new DateTime(), "id", "language", "test", Some("status"), Some("status Description"), "url")
     val json = classifier.toJson.compactPrint
     val parsed  = json.parseJson.convertTo[Classifier]
 

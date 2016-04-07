@@ -21,7 +21,6 @@ import akka.actor.ActorSystem
 import com.ibm.watson.developer_cloud.natural_language_classifier.v1.NaturalLanguageClassifier
 import com.ibm.watson.developer_cloud.natural_language_classifier.v1.model.{Classifier,Classifiers}
 import com.ibm.watson.developer_cloud.service.{LocalFileConfigFactory, ConfigFactory}
-import com.ibm.watson.developer_cloud.utils.ParameterMissingException
 import org.junit.runner.RunWith
 import org.scalatest.time.{Seconds, Span, Millis}
 import org.scalatest.{Matchers, FlatSpec}
@@ -45,7 +44,7 @@ class NaturalLanguageClassifierIT extends FlatSpec with ScalaFutures with Matche
     val futureClassifier = service.getClassifiers
     val futureValue = futureClassifier.futureValue
 
-     assert(!futureValue.classifiers.isEmpty)
+     assert(futureValue.classifiers.nonEmpty)
 
   }
 
