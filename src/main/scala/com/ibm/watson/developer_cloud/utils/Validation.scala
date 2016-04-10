@@ -60,6 +60,18 @@ object Validation {
   }
 
   /**
+    *
+    */
+  def notEmpty[T](value: List[T], message: String) : Unit = {
+    validate(Option(value), {p: Option[List[T]] =>
+      p match {
+        case Some(x) if x.nonEmpty => true
+        case _ => false
+      }
+    }, message)
+  }
+
+  /**
     * Validate Option[String] for not empty
     * @param value either Some(string) or None
     * @param message message to use for exception
