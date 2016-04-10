@@ -28,7 +28,7 @@ import scala.concurrent.{ExecutionContextExecutor, Future}
 import scala.language.postfixOps
 
 
-abstract class WatsonService(var configFactory : ConfigFactory = new VCAPConfigFactory()) {
+abstract class WatsonService(val configFactory : ConfigFactory = new VCAPConfigFactory()) {
 
   def config : WatsonServiceConfig = configFactory.getConfigForServiceType(serviceType)
 

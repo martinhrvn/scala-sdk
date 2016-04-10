@@ -20,14 +20,20 @@ import com.ibm.watson.developer_cloud.service.GenericModel
 /**
   * Created by Martin Harvan (martin.harvan@sk.ibm.com) on 10/04/16.
   */
-case class Job(id: String, status: Status.Value) extends GenericModel
+case class Job(id: String, status: StatusEnum) extends GenericModel
 
-object  Status extends Enumeration{
-  val AwaitingWork = Value("Awaiting Work", "A")
-  val Done = Value("Done", "D")
-  val Failed = Value("Failed", "F")
-  val InFlight = Value("In Flight", "G")
-  val Retrieved = Value("Retrieved", "R")
-  class MyVal(name: String, val id : String) extends Val(nextId, name)
-  protected final def Value(name: String, id : String): MyVal = new MyVal(name,id)
+class StatusEnum(val name: String, val id:String)
+
+object StatusEnum {
+  val Done = new StatusEnum("Done", "D")
+  val Failed = new StatusEnum("Failed", "F")
+  val AwaitingWork = new StatusEnum("Awaiting Work", "A")
+  val InFlight = new StatusEnum("In Flight", "G")
+  val Retrieved = new StatusEnum("Retrieved", "R")
+  val enumMap = Map(Done.id -> Done, Failed.id -> Failed, AwaitingWork.id -> AwaitingWork,
+    InFlight.id -> InFlight, Retrieved.id -> Retrieved)
+
+  def byId(id: String) : Option[StatusEnum] = {
+    enumMap.get(id)
+  }
 }

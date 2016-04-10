@@ -22,7 +22,7 @@ import com.ibm.watson.developer_cloud.service.GenericModel
   */
 case class Dataset(id: String, name: String) extends GenericModel
 
-object Dataset {
-  val MTSamples = new Dataset("Medical Transcriptions", "mtsamples")
-  val Twitter = new Dataset("Twitter", "twitter")
-}
+//object Dataset {
+////  val MTSamples = Dataset("Medical Transcriptions", "mtsamples")
+////  val Twitter = Dataset("Twitter", "twitter")
+//}

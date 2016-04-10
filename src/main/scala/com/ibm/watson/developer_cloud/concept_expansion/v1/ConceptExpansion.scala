@@ -15,23 +15,24 @@
 // limitations under the License.
 package com.ibm.watson.developer_cloud.concept_expansion.v1
 
-import com.ibm.watson.developer_cloud.concept_expansion.v1.model.{Concept, Dataset, Job, Status}
+import com.ibm.watson.developer_cloud.concept_expansion.v1.model.{StatusEnum, Concept, Dataset, Job}
 import com.ibm.watson.developer_cloud.service.{ConfigFactory, VCAPConfigFactory, WatsonService}
 import com.ibm.watson.developer_cloud.utils.Validation
 
 import scala.concurrent.Future
+import model.ConceptExpansionProtocol._
 import spray.json._
 import spray.client.pipelining._
 import spray.http._
 import spray.json.DefaultJsonProtocol._
-
 import spray.httpx.SprayJsonSupport._
 import ConceptExpansion._
 /**
   * Created by Martin Harvan on 10/04/16.
   */
-class ConceptExpansion(override val configFactory: ConfigFactory = new VCAPConfigFactory()) extends WatsonService(configFactory) {
-  val dataset = Dataset.MTSamples
+class ConceptExpansion(val dataset: Dataset = new Dataset("Medical Transcription", "mtsamples"),
+                       override val configFactory: ConfigFactory = new VCAPConfigFactory())
+  extends WatsonService(configFactory) {
 
   def serviceType: String = "concept_expansion"
 
@@ -50,33 +51,36 @@ class ConceptExpansion(override val configFactory: ConfigFactory = new VCAPConfi
     Validation.notNull(dataset, "dataset cannot be null")
 
     val properties : Map[String, JsValue] = label.map(x => "label" -> JsString(x)).toMap ++
-      Map("dataset" -> JsString(dataset.id), "seeds" -> seeds.toJson)
+      Map("dataset" -> JsString(dataset.id), "seeds" -> JsArray(seeds.map(JsString(_))))
 
     val data = JsObject(properties)
-    val request = Post(Upload, data)
+    val request = Post(Upload, data.toString())
     val response = send(request)
     response.map(unmarshal[Job])
   }
 
-  def getJobResult(job: Job) : Future[List[Concept]] = {
+  def getJobResult(job: Job) : Future[Concept] = {
     Validation.notNull(job, "job cannot be null")
 
     val payload = JsObject("jobid"-> JsString(job.id))
 
-    val request = Put(Result, payload)
+    val request = Put(Result, payload.toString)
     val response = send(request)
-    response.map(unmarshal[List[Concept]])
+    response.map(unmarshal[Concept])
   }
 
-  def getJobStatus(job: Job) : Future[Status.Value] = {
+  def getJobStatus(job: Job) : Future[StatusEnum] = {
     Validation.notNull(job, "Job cannot be empty")
 
     val request = Get(Uri(ConceptExpansion.Status).withQuery("jobid" -> job.id))
     val response = send(request)
 
-    response.map(unmarshal[Status.Value])
+    response.map(unmarshal[StatusEnum])
   }
 
+  def withDataset(dataset: Dataset) : ConceptExpansion = {
+    new ConceptExpansion(dataset, configFactory)
+  }
 }
 
 object ConceptExpansion {
