@@ -3,7 +3,7 @@ package com.ibm.watson.developer_cloud.visual_recognition.v1.model
 import spray.json.DefaultJsonProtocol
 import com.ibm.watson.developer_cloud.visual_recognition.v1.model._
 /**
-  * Created by martinhrvn on 20/03/16.
+  * Created by Martin Harvan (martin.harvan@sk.ibm.com) on 20/03/16.
   */
 object VisualRecognitionProtocol extends DefaultJsonProtocol {
   implicit val labelFormat = jsonFormat(Label, "label_name", "label_score")

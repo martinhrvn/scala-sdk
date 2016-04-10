@@ -2,7 +2,7 @@ package com.ibm.watson.developer_cloud.service
 import spray.json._
 
 /**
-  * Created by martinhrvn on 06/04/16.
+  * Created by Martin Harvan (martin.harvan@sk.ibm.com) on 06/04/16.
   */
 abstract class GenericModel {
 

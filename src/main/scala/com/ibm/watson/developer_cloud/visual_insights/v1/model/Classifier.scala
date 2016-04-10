@@ -5,6 +5,6 @@ import com.ibm.watson.developer_cloud.visual_insights.v1.model.VisualInsightsPro
 import spray.json._
 
 /**
-  * Created by martinhrvn on 20/03/16.
+  * Created by Martin Harvan (martin.harvan@sk.ibm.com) on 20/03/16.
   */
 case class Classifier(name: String) extends GenericModel

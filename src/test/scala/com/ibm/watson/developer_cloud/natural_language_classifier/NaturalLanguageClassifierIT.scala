@@ -28,7 +28,7 @@ import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.junit._
 
 /**
-  * Created by martinhrvn on 07/04/16.
+  * Created by Martin Harvan (martin.harvan@sk.ibm.com) on 07/04/16.
   */
 class NaturalLanguageClassifierIT extends FlatSpec with ScalaFutures with Matchers {
   val config : ConfigFactory = LocalFileConfigFactory("/vcap_services.json")
@@ -53,15 +53,21 @@ class NaturalLanguageClassifierIT extends FlatSpec with ScalaFutures with Matche
     val futureClassifier = service.createClassifier("itest-example", "en", file)
   }
 
-  "NaturalLanguageClassifier.createClassifier" should "throw exception for missing training data" in {
-    val file = scala.io.Source.fromURL(getClass.getResource("/natural_language_classifier/weather_data_train.csv"))
-//    service.createClassifier(null, null, null) shouldBe a [ParameterMissingException]
-
+  it should "throw exception for missing training data" in {
     intercept[IllegalArgumentException] {
       val futureClassifier = service.createClassifier("itest-example", "en", null)
       val futureValue = futureClassifier.futureValue
     }
 
+  }
+
+  it should "throw exception for empty language" in {
+    val file = new File(getClass.getResource("/natural_language_classifier/weather_data_train.csv").toURI)
+    //    service.createClassifier(null, null, null) shouldBe a [ParameterMissingException]
+    intercept[IllegalArgumentException] {
+      val futureClassifier = service.createClassifier("itest-example", "", file)
+      futureClassifier.futureValue
+    }
   }
 
 }

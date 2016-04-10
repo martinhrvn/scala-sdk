@@ -17,7 +17,7 @@ package com.ibm.watson.developer_cloud.utils
 
 import spray.json.{JsString,JsValue}
 /**
-  * Created by martinhrvn on 10/12/15.
+  * Created by Martin Harvan (martin.harvan@sk.ibm.com) on 10/12/15.
   */
 object JsonUtils {
   def addIfNotEmpty(value: Option[String], name: String, map: Map[String, JsValue]) : Map[String, JsValue] = {

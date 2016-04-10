@@ -132,5 +132,4 @@ object NaturalLanguageClassifier {
   val classifiersPath = "/v1/classifiers"
   val classifierPathL = "/v1/classifiers/%s"
   val classificationPath = "/v1/classifiers/%s/classify"
-
 }

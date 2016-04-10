@@ -18,7 +18,7 @@ package com.ibm.watson.developer_cloud.utils
 import org.scalatest.FlatSpec
 
 /**
-  * Created by martinhrvn on 18/12/15.
+  * Created by Martin Harvan (martin.harvan@sk.ibm.com) on 18/12/15.
   */
 class ValidationSpec extends FlatSpec {
   "Validation.notEmpty" should "throw exception for empty string" in {

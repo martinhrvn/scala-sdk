@@ -6,7 +6,7 @@ import com.ibm.watson.developer_cloud.service.GenericModel
 import org.joda.time.DateTime
 
 /**
-  * Created by martinhrvn on 20/03/16.
+  * Created by Martin Harvan (martin.harvan@sk.ibm.com) on 20/03/16.
   */
 //TODO: Use enum for status
 case class Classifier(created: DateTime,

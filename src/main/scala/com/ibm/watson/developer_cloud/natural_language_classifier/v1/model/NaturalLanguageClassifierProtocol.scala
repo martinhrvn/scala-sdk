@@ -4,7 +4,7 @@ import com.ibm.watson.developer_cloud.utils.DateJsonFormat.DateJsonFormat
 import spray.json.DefaultJsonProtocol
 
 /**
-  * Created by martinhrvn on 20/03/16.
+  * Created by Martin Harvan (martin.harvan@sk.ibm.com) on 20/03/16.
   */
 object NaturalLanguageClassifierProtocol extends DefaultJsonProtocol {
   implicit val dateJsonFormat = DateJsonFormat

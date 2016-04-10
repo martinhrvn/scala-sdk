@@ -3,7 +3,7 @@ package com.ibm.watson.developer_cloud.language_translation.v2.model
 import spray.json.DefaultJsonProtocol
 
 /**
-  * Created by martinhrvn on 20/03/16.
+  * Created by Martin Harvan (martin.harvan@sk.ibm.com) on 20/03/16.
   */
 object LanguageTranslationProtocol extends DefaultJsonProtocol {
   implicit val identifiableLanguage = jsonFormat(IdentifiableLanguage, "language", "name")
