@@ -31,10 +31,5 @@ case class ConceptMetadata(_abstract: String, id: String, label: String, link: S
 case class Concepts(concepts: List[Concept])
 
 object Concept {
-  def fromGraph(graph: Graph, concept: String) : Concept = {
-    Validation.notNull(graph, "graph cannot be null")
-    Validation.notNull(gralh.id, "graph.id cannot be null")
-    val id = graph.id + "/concepts/" + concept
-    Concept(None, id, None, None)
-  }
+//TODO from graph
 }
