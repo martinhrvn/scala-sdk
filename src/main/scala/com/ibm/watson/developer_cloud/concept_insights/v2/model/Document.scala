@@ -22,7 +22,7 @@ import org.joda.time.DateTime
   * Created by Martin Harvan on 11/04/16.
   */
 case class Document(expiresOn: DateTime, id: String, label: String, lastModified: DateTime, name: String,
-                    parts: List[Part], timeToLive: Integer, userFields: Map[String,String]) extends GenericModel
+                    parts: List[Part], timeToLive: Int, userFields: Map[String,String]) extends GenericModel
 
 //TODO constructor from corpus
 

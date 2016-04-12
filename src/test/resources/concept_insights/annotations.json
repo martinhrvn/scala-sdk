@@ -1,0 +1,345 @@
+{
+  "annotations": [
+    {
+      "concept": {
+        "id": "/graphs/wikipedia/en-20120601/concepts/Consent_of_the_governed",
+        "label": "Consent of the governed"
+      },
+      "score": 0.92967343,
+      "text_index": [
+        717,
+        744
+      ]
+    },
+    {
+      "concept": {
+        "id": "/graphs/wikipedia/en-20120601/concepts/Natural_law",
+        "label": "Natural law"
+      },
+      "score": 0.85233194,
+      "text_index": [
+        233,
+        247
+      ]
+    },
+    {
+      "concept": {
+        "id": "/graphs/wikipedia/en-20120601/concepts/Natural_and_legal_rights",
+        "label": "Natural and legal rights"
+      },
+      "score": 0.841325,
+      "text_index": [
+        532,
+        550
+      ]
+    },
+    {
+      "concept": {
+        "id": "/graphs/wikipedia/en-20120601/concepts/All_men_are_created_equal",
+        "label": "All men are created equal"
+      },
+      "score": 0.83780026,
+      "text_index": [
+        453,
+        478
+      ]
+    },
+    {
+      "concept": {
+        "id": "/graphs/wikipedia/en-20120601/concepts/Right_of_revolution",
+        "label": "Right of revolution"
+      },
+      "score": 0.82543343,
+      "text_index": [
+        830,
+        875
+      ]
+    },
+    {
+      "concept": {
+        "id": "/graphs/wikipedia/en-20120601/concepts/Despotism",
+        "label": "Despotism"
+      },
+      "score": 0.79564375,
+      "text_index": [
+        1506,
+        1515
+      ]
+    },
+    {
+      "concept": {
+        "id": "/graphs/wikipedia/en-20120601/concepts/Rights",
+        "label": "Rights"
+      },
+      "score": 0.79306895,
+      "text_index": [
+        639,
+        645
+      ]
+    },
+    {
+      "concept": {
+        "id": "/graphs/wikipedia/en-20120601/concepts/Self-evidence",
+        "label": "Self-evidence"
+      },
+      "score": 0.7863506,
+      "text_index": [
+        434,
+        446
+      ]
+    },
+    {
+      "concept": {
+        "id": "/graphs/wikipedia/en-20120601/concepts/Creator_deity",
+        "label": "Creator deity"
+      },
+      "score": 0.7729266,
+      "text_index": [
+        511,
+        518
+      ]
+    },
+    {
+      "concept": {
+        "id": "/graphs/wikipedia/en-20120601/concepts/When_in_the_Course",
+        "label": "When in the Course"
+      },
+      "score": 0.7328455,
+      "text_index": [
+        0,
+        18
+      ]
+    },
+    {
+      "concept": {
+        "id": "/graphs/wikipedia/en-20120601/concepts/Deism",
+        "label": "Deism"
+      },
+      "score": 0.69516003,
+      "text_index": [
+        255,
+        267
+      ]
+    },
+    {
+      "concept": {
+        "id": "/graphs/wikipedia/en-20120601/concepts/Respect",
+        "label": "Respect"
+      },
+      "score": 0.69481784,
+      "text_index": [
+        291,
+        298
+      ]
+    },
+    {
+      "concept": {
+        "id": "/graphs/wikipedia/en-20120601/concepts/Prudence",
+        "label": "Prudence"
+      },
+      "score": 0.69268554,
+      "text_index": [
+        1063,
+        1071
+      ]
+    },
+    {
+      "concept": {
+        "id": "/graphs/wikipedia/en-20120601/concepts/Human",
+        "label": "Human"
+      },
+      "score": 0.68134,
+      "text_index": [
+        22,
+        27
+      ]
+    },
+    {
+      "concept": {
+        "id": "/graphs/wikipedia/en-20120601/concepts/Government",
+        "label": "Government"
+      },
+      "score": 0.6701078,
+      "text_index": [
+        898,
+        908
+      ]
+    },
+    {
+      "concept": {
+        "id": "/graphs/wikipedia/en-20120601/concepts/Object_(grammar)",
+        "label": "Object (grammar)"
+      },
+      "score": 0.6678197,
+      "text_index": [
+        1912,
+        1918
+      ]
+    },
+    {
+      "concept": {
+        "id": "/graphs/wikipedia/en-20120601/concepts/Government",
+        "label": "Government"
+      },
+      "score": 0.66585994,
+      "text_index": [
+        766,
+        784
+      ]
+    },
+    {
+      "concept": {
+        "id": "/graphs/wikipedia/en-20120601/concepts/Human",
+        "label": "Human"
+      },
+      "score": 0.6359947,
+      "text_index": [
+        318,
+        325
+      ]
+    },
+    {
+      "concept": {
+        "id": "/graphs/wikipedia/en-20120601/concepts/Revolution",
+        "label": "Revolution"
+      },
+      "score": 0.62901264,
+      "text_index": [
+        1557,
+        1582
+      ]
+    },
+    {
+      "concept": {
+        "id": "/graphs/wikipedia/en-20120601/concepts/Usurper",
+        "label": "Usurper"
+      },
+      "score": 0.60755223,
+      "text_index": [
+        1410,
+        1421
+      ]
+    },
+    {
+      "concept": {
+        "id": "/graphs/wikipedia/en-20120601/concepts/Human",
+        "label": "Human"
+      },
+      "score": 0.6071069,
+      "text_index": [
+        1230,
+        1237
+      ]
+    },
+    {
+      "concept": {
+        "id": "/graphs/wikipedia/en-20120601/concepts/Light",
+        "label": "Light"
+      },
+      "score": 0.5960837,
+      "text_index": [
+        1154,
+        1159
+      ]
+    },
+    {
+      "concept": {
+        "id": "/graphs/wikipedia/en-20120601/concepts/Security",
+        "label": "Security"
+      },
+      "score": 0.5934855,
+      "text_index": [
+        1627,
+        1635
+      ]
+    },
+    {
+      "concept": {
+        "id": "/graphs/wikipedia/en-20120601/concepts/George_III_of_the_United_Kingdom",
+        "label": "George III of the United Kingdom"
+      },
+      "score": 0.5917601,
+      "text_index": [
+        1806,
+        1839
+      ]
+    },
+    {
+      "concept": {
+        "id": "/graphs/wikipedia/en-20120601/concepts/Right-wing_politics",
+        "label": "Right-wing politics"
+      },
+      "score": 0.5788282,
+      "text_index": [
+        1303,
+        1308
+      ]
+    },
+    {
+      "concept": {
+        "id": "/graphs/wikipedia/en-20120601/concepts/Train",
+        "label": "Train"
+      },
+      "score": 0.5645827,
+      "text_index": [
+        1390,
+        1395
+      ]
+    },
+    {
+      "concept": {
+        "id": "/graphs/wikipedia/en-20120601/concepts/Politics",
+        "label": "Politics"
+      },
+      "score": 0.55693686,
+      "text_index": [
+        88,
+        97
+      ]
+    },
+    {
+      "concept": {
+        "id": "/graphs/wikipedia/en-20120601/concepts/Foundation_(engineering)",
+        "label": "Foundation (engineering)"
+      },
+      "score": 0.5565448,
+      "text_index": [
+        921,
+        931
+      ]
+    },
+    {
+      "concept": {
+        "id": "/graphs/wikipedia/en-20120601/concepts/Design",
+        "label": "Design"
+      },
+      "score": 0.4406048,
+      "text_index": [
+        1469,
+        1475
+      ]
+    },
+    {
+      "concept": {
+        "id": "/graphs/wikipedia/en-20120601/concepts/History",
+        "label": "History"
+      },
+      "score": 0.39415154,
+      "text_index": [
+        1845,
+        1852
+      ]
+    },
+    {
+      "concept": {
+        "id": "/graphs/wikipedia/en-20120601/concepts/History",
+        "label": "History"
+      },
+      "score": 0.3853516,
+      "text_index": [
+        1795,
+        1802
+      ]
+    }
+  ]
+}

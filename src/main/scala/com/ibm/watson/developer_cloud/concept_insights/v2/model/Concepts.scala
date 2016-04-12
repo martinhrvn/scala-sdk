@@ -21,14 +21,29 @@ import com.ibm.watson.developer_cloud.utils.Validation
 /**
   * Created by Martin Harvan on 11/04/16.
   */
-case class Concept(_abstract: String, id: String, label: String, link: String, name: String,
-                  ontology: List[String], thumbnail: String) extends GenericModel {
+case class Concept(
+  _abstract: Option[String],
+  id: String,
+  label: String,
+  link: Option[String],
+  name: Option[String],
+  ontology: Option[List[String]],
+  thumbnail: Option[String]
+) extends GenericModel
 
-}
+case class ConceptMetadata(
+  _abstract: Option[String],
+  id: String,
+  label: String,
+  link: Option[String],
+  ontology: Option[List[String]],
+  thumbnail: Option[String],
+  _type: Option[String]
+) extends GenericModel
 
-case class ConceptMetadata(_abstract: String, id: String, label: String, link: String, ontology: List[String], thumbnail: String, _type: String) extends GenericModel
-
-case class Concepts(concepts: List[Concept])
+case class Concepts(
+  concepts: List[Concept]
+) extends GenericModel
 
 object Concept {
 //TODO from graph

@@ -20,4 +20,4 @@ import com.ibm.watson.developer_cloud.service.GenericModel
 /**
   * Created by Martin Harvan on 11/04/16.
   */
-case class BuildStatus(error: Integer, processing: Integer, ready: Integer) extends GenericModel
+case class BuildStatus(error: Int, processing: Int, ready: Int) extends GenericModel

@@ -1,0 +1,39 @@
+{
+  "matches": [
+    {
+      "abstract": "Measurement is the process or the result of determining the ratio of a physical quantity, such as a length, time, temperature etc. , to a unit of measurement, such as the meter, second or degree Celsius. The science of measurement is called metrology. The English word measurement originates from the Latin mēnsūra and the verb metiri through the Middle French mesure.",
+      "id": "/graphs/wikipedia/en-20120601/concepts/Measurement",
+      "label": "Measurement"
+    },
+    {
+      "abstract": "Time is the indefinite continued progress of existence and events that occur in apparently irreversible succession from the past through the present to the future. Time is a component quantity of many measurements used to sequence events, to compare the durations of events and the intervals between them, and to quantify rates of change of quantities in material reality or in the conscious experience.",
+      "id": "/graphs/wikipedia/en-20120601/concepts/Time",
+      "label": "Measurement of Time"
+    },
+    {
+      "abstract": "Virtu comes from Italian virtù “virtue, excellence,” from Latin virtus, “excellence, worth, goodness, virtue. ” See also vertù. According to the Oxford Dictionary, Virtu means “a love of fine arts. ” Examples of this are seen here: The Italian humanist Giovanni Pontano described these objects as “statues, pictures, tapestries, divans, chairs of ivory, cloth interwoven with gems, many-coloured boxes and coffers in the Arabian style, crystal vases and other things of this kind . . .",
+      "id": "/graphs/wikipedia/en-20120601/concepts/Virt%25C3%25B9",
+      "label": "Measurement of student progress"
+    },
+    {
+      "abstract": "The ton is a unit of measure. It has a long history and has acquired a number of meanings and uses over the years. It is used principally as a unit of weight, and as a unit of volume. It can also be used as a measure of energy, for truck classification, or as a colloquial term. It is derived from the tun, the term applied to a barrel of the largest size.",
+      "id": "/graphs/wikipedia/en-20120601/concepts/Ton",
+      "label": "Measurement ton"
+    },
+    {
+      "abstract": "A unit of measurement is a definite magnitude of a physical quantity, defined and adopted by convention and/or by law, that is used as a standard for measurement of the same physical quantity. Any other value of the physical quantity can be expressed as a simple multiple of the unit of measurement. For example, length is a physical quantity. The metre is a unit of length that represents a definite predetermined length.",
+      "id": "/graphs/wikipedia/en-20120601/concepts/Units_of_measurement",
+      "label": "Measurement unit"
+    },
+    {
+      "abstract": "In the physical sciences, quality assurance, and engineering, measurement is the activity of obtaining and comparing physical quantities of real-world objects and events. Established standard objects and events are used as units, and the process of measurement gives a number relating the item under study and the referenced unit of measurement. Measuring instruments, and formal test methods which define the instrument's use, are the means by which these relations of numbers are obtained.",
+      "id": "/graphs/wikipedia/en-20120601/concepts/Measuring_instrument",
+      "label": "Measurement device"
+    },
+    {
+      "abstract": "Observational error is the difference between a measured value of quantity and its true value. In statistics, an error is not a \"mistake\". Variability is an inherent part of things being measured and of the measurement process.",
+      "id": "/graphs/wikipedia/en-20120601/concepts/Observational_error",
+      "label": "Measurement error"
+    }
+  ]
+}

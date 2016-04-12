@@ -20,4 +20,4 @@ import com.ibm.watson.developer_cloud.service.GenericModel
 /**
   * Created by Martin Harvan on 11/04/16.
   */
-case class Tag(concept: String, count: Integer) extends GenericModel
+case class Tag(concept: String, count: Int) extends GenericModel

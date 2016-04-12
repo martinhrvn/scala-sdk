@@ -18,6 +18,6 @@ package com.ibm.watson.developer_cloud.concept_insights.v2.model
 /**
   * Created by Martin Harvan on 11/04/16.
   */
-case class Annotations(annotations: ScoredConcept)
+case class Annotations(annotations: List[ScoredConcept])
 
-case class Annotation(concept: Concept, partsIndex: Integer, score: Double, textIndex: List[Integer])
+case class Annotation(concept: Concept, partsIndex: Int, score: Double, textIndex: List[Int])

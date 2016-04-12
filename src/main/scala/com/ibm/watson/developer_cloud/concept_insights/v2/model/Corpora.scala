@@ -24,9 +24,9 @@ import org.joda.time.DateTime
 case class Corpora(corpora: List[Corpus])
 
 case class Corpus(access: String, accountPermissions: List[AccountPermission], id: String, name: String,
-                  ttlHours: Integer, expiresOn: String) extends GenericModel
+                  ttlHours: Int, expiresOn: String) extends GenericModel
 
-case class CorpusProcessingStatus(buildStatus: BuildStatus, documents: Integer, id: String, lastUpdated: DateTime) extends GenericModel
+case class CorpusProcessingStatus(buildStatus: BuildStatus, documents: Int, id: String, lastUpdated: DateTime) extends GenericModel
 
 case class CorpusStats(id: String, lastUpdated: DateTime, topTags: TopTags) extends GenericModel
 

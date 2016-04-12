@@ -1,0 +1,297 @@
+{
+  "query_concepts": [
+    {
+      "id": "/graphs/wikipedia/en-20120601/concepts/Earth",
+      "label": "Earth"
+    },
+    {
+      "id": "/graphs/wikipedia/en-20120601/concepts/Sun",
+      "label": "Sun"
+    },
+    {
+      "id": "/graphs/wikipedia/en-20120601/concepts/Measurement",
+      "label": "Measurement"
+    }
+  ],
+  "results": [
+    {
+      "explanation_tags": [
+        {
+          "concept": {
+            "id": "/graphs/wikipedia/en-20120601/concepts/Measurement",
+            "label": "Measurement"
+          },
+          "score": 0.9978237,
+          "parts_index": 0,
+          "text_index": [
+            11213,
+            11225
+          ],
+          "passage": "...amounts of evidence that the Earth is warming up. This slide here, the black line shows the <b>measurements</b> that scientists have taken for the last 150 years showing that the Earth's temperature has..."
+        },
+        {
+          "concept": {
+            "id": "/graphs/wikipedia/en-20120601/concepts/Sun",
+            "label": "Sun"
+          },
+          "score": 0.9956522,
+          "parts_index": 0,
+          "text_index": [
+            3516,
+            3519
+          ],
+          "passage": "...actually had a fabric. And that that fabric was bent in the presence of massive objects like the <b>sun</b>. So if this theory were true then it meant that light as it passed the sun should actually be bent..."
+        },
+        {
+          "concept": {
+            "id": "/graphs/wikipedia/en-20120601/concepts/Earth",
+            "label": "Earth"
+          },
+          "score": 0.9934854,
+          "parts_index": 0,
+          "text_index": [
+            5409,
+            5414
+          ],
+          "passage": "...that too, \nagain from the history of science. This is a picture of the Ptolemaic universe with the <b>Earth</b> at the center of the universe and the sun and the planets going around it. The Ptolemaic model was..."
+        },
+        {
+          "concept": {
+            "id": "/graphs/wikipedia/en-20120601/concepts/Stellar_parallax",
+            "label": "Stellar parallax"
+          },
+          "score": 0.99132335,
+          "parts_index": 0,
+          "text_index": [
+            6565,
+            6581
+          ],
+          "passage": "...the motion of the Earth around the sun. And so this slide here illustrates a concept known as <b>stellar parallax</b>. And astronomers said, if the Earth is moving and we look at a prominent star, let's say, Sirius..."
+        },
+        {
+          "concept": {
+            "id": "/graphs/wikipedia/en-20120601/concepts/Observation",
+            "label": "Observation"
+          },
+          "score": 0.9891661,
+          "parts_index": 0,
+          "text_index": [
+            8583,
+            8595
+          ],
+          "passage": "...that scientists don't necessarily start with theories and hypotheses, often they just start with <b>observations</b> of stuff going on in the world. And the most famous example\nof that is one of the most famous..."
+        },
+        {
+          "concept": {
+            "id": "/graphs/wikipedia/en-20120601/concepts/Prediction",
+            "label": "Prediction"
+          },
+          "score": 0.9848657,
+          "parts_index": 0,
+          "text_index": [
+            3658,
+            3668
+          ],
+          "passage": "...that light as it passed the sun should actually be bent around it. That was a pretty startling <b>prediction</b> and it took a few years before scientists were able to test it but they did test it in 1919, and..."
+        }
+      ],
+      "id": "/corpora/public/TEDTalks/documents/2032",
+      "label": "Naomi Oreskes: Why we should trust scientists",
+      "score": 0.99507576,
+      "user_fields": {
+        "description": "Many of the world's biggest problems require asking questions of scientists -- but why should we believe what they say? Historian of science Naomi Oreskes thinks deeply about our relationship to belief and draws out three problems with common attitudes toward scientific inquiry -- and gives her own reasoning for why we ought to trust science.",
+        "speaker": "Naomi Oreskes",
+        "thumbnail": "https://tedcdnpi-a.akamaihd.net/r/tedcdnpe-a.akamaihd.net/images/ted/a03b16b44edd4c66025791eccad2319363bf1860_2400x1800.jpg?quality=89&w=600",
+        "title": "Why we should trust scientists",
+        "url": "http://www.ted.com/talks/naomi_oreskes_why_we_should_believe_in_science"
+      },
+      "last_modified": "2015-09-01T17:00:06.022Z"
+    },
+    {
+      "explanation_tags": [
+        {
+          "concept": {
+            "id": "/graphs/wikipedia/en-20120601/concepts/Sun",
+            "label": "Sun"
+          },
+          "score": 0.9956522,
+          "parts_index": 0,
+          "text_index": [
+            3049,
+            3052
+          ],
+          "passage": "...and then fading from view, each one of these supernovae five billion times the brightness of our <b>sun</b>, so we can see them to great distances but only for a short amount of time. Ten supernova per..."
+        },
+        {
+          "concept": {
+            "id": "/graphs/wikipedia/en-20120601/concepts/Earth",
+            "label": "Earth"
+          },
+          "score": 0.9934854,
+          "parts_index": 0,
+          "text_index": [
+            5773,
+            5778
+          ],
+          "passage": "...will be for the first time we'll have detected more objects in our universe than people on the <b>Earth</b>. Now, we can talk about this in terms of terabytes and petabytes and billions of objects, but a..."
+        },
+        {
+          "concept": {
+            "id": "/graphs/wikipedia/en-20120601/concepts/Motion_(physics)",
+            "label": "Motion (physics)"
+          },
+          "score": 0.9827227,
+          "parts_index": 0,
+          "text_index": [
+            3351,
+            3357
+          ],
+          "passage": "...Now, if we fade out the supernovae, it's not just brightness that changes. Our sky is in constant <b>motion</b>. This swarm of objects you\nsee streaming across the sky are asteroids as they orbit our sun, and..."
+        },
+        {
+          "concept": {
+            "id": "/graphs/wikipedia/en-20120601/concepts/History_of_astronomy",
+            "label": "History of astronomy"
+          },
+          "score": 0.9805844,
+          "parts_index": 0,
+          "text_index": [
+            4359,
+            4379
+          ],
+          "passage": "...or the LSST, possibly the most boring name ever for one of the most fascinating experiments in the <b>history of astronomy</b>, in fact proof, if you should need it, that you should never allow \na scientist or an engineer to..."
+        },
+        {
+          "concept": {
+            "id": "/graphs/wikipedia/en-20120601/concepts/Time",
+            "label": "Time"
+          },
+          "score": 0.976322,
+          "parts_index": 0,
+          "text_index": [
+            1638,
+            1642
+          ],
+          "passage": "...data, may once again transform astronomy by opening up a window into our universe, the window of <b>time</b>.\n\nWhy time? Well, time is about origins, and it's about evolution. The origins of our solar..."
+        },
+        {
+          "concept": {
+            "id": "/graphs/wikipedia/en-20120601/concepts/Month",
+            "label": "Month"
+          },
+          "score": 0.9699641,
+          "parts_index": 0,
+          "text_index": [
+            459,
+            464
+          ],
+          "passage": "...of children, but a planet that overnight doubled the size of our known solar system. Just last <b>month</b>, NASA announced the discovery of 517 new planets in orbit around nearby stars, almost doubling..."
+        }
+      ],
+      "id": "/corpora/public/TEDTalks/documents/2069",
+      "label": "Andrew Connolly: What's the next window into our universe?",
+      "score": 0.9948232,
+      "user_fields": {
+        "description": "Big Data is everywhere — even the skies. In an informative talk, astronomer Andrew Connolly shows how large amounts of data are being collected about our universe, recording it in its ever-changing moods. Just how do scientists capture so many images at scale? It starts with a giant telescope …",
+        "speaker": "Andrew Connolly",
+        "thumbnail": "https://tedcdnpi-a.akamaihd.net/r/tedcdnpe-a.akamaihd.net/images/ted/4037b79ef05ea9c6f615932a53a32f26bb6d675c_2400x1800.jpg?quality=89&w=600",
+        "title": "What's the next window into our universe?",
+        "url": "http://www.ted.com/talks/andrew_connolly_what_s_the_next_window_into_our_universe"
+      },
+      "last_modified": "2015-09-01T17:01:51.313Z"
+    },
+    {
+      "explanation_tags": [
+        {
+          "concept": {
+            "id": "/graphs/wikipedia/en-20120601/concepts/Sun",
+            "label": "Sun"
+          },
+          "score": 0.9956522,
+          "parts_index": 0,
+          "text_index": [
+            7957,
+            7960
+          ],
+          "passage": "...to show this picture because this is remarkable. This is actually a picture of the spectrum of the <b>Sun</b>. And now, this is a picture of atoms in the Sun's atmosphere absorbing light. And again, they only..."
+        },
+        {
+          "concept": {
+            "id": "/graphs/wikipedia/en-20120601/concepts/Earth",
+            "label": "Earth"
+          },
+          "score": 0.9934854,
+          "parts_index": 0,
+          "text_index": [
+            3164,
+            3169
+          ],
+          "passage": "...water beneath the surface of this moon. And what's important about that is that, on our planet, on <b>Earth</b>, wherever we find liquid water, we find life. So, to find strong evidence of liquid, pools of..."
+        },
+        {
+          "concept": {
+            "id": "/graphs/wikipedia/en-20120601/concepts/Quantum",
+            "label": "Quantum"
+          },
+          "score": 0.9870135,
+          "parts_index": 0,
+          "text_index": [
+            8734,
+            8741
+          ],
+          "passage": "...for example. The way that silicon behaves, the fact that you can build transistors, is a purely <b>quantum</b> phenomenon. So without that curiosity-driven understanding of the structure of atoms, which led to..."
+        },
+        {
+          "concept": {
+            "id": "/graphs/wikipedia/en-20120601/concepts/Prediction",
+            "label": "Prediction"
+          },
+          "score": 0.9848657,
+          "parts_index": 0,
+          "text_index": [
+            9398,
+            9409
+          ],
+          "passage": "...not only to the planets, but to the most distant stars and galaxies. And one of the astonishing <b>predictions</b> of quantum mechanics, just by looking at the structure of atoms -- the same theory that describes..."
+        },
+        {
+          "concept": {
+            "id": "/graphs/wikipedia/en-20120601/concepts/Space_probe",
+            "label": "Space probe"
+          },
+          "score": 0.96785426,
+          "parts_index": 1,
+          "text_index": [
+            71,
+            83
+          ],
+          "passage": "...tough economic times, our exploratory science programs -- from <b>space probes</b> to the LHC -- are first to suffer budget cuts. Brian Cox explains how curiosity-driven science..."
+        },
+        {
+          "concept": {
+            "id": "/graphs/wikipedia/en-20120601/concepts/Space",
+            "label": "Space"
+          },
+          "score": 0.96574914,
+          "parts_index": 0,
+          "text_index": [
+            3767,
+            3772
+          ],
+          "passage": "...above the surface. And so this, again, a real picture of the ice fountains rising up into <b>space</b>, absolutely beautiful.\n\nBut that's not the prime candidate for life in the solar system. That's..."
+        }
+      ],
+      "id": "/corpora/public/TEDTalks/documents/876",
+      "label": "Brian Cox: Why we need the explorers",
+      "score": 0.99457073,
+      "user_fields": {
+        "description": "In tough economic times, our exploratory science programs -- from space probes to the LHC -- are first to suffer budget cuts. Brian Cox explains how curiosity-driven science pays for itself, powering innovation and a profound appreciation of our existence.",
+        "speaker": "Brian Cox",
+        "thumbnail": "https://tedcdnpi-a.akamaihd.net/r/tedcdnpe-a.akamaihd.net/images/ted/175142_800x600.jpg?quality=89&w=600",
+        "title": "Why we need the explorers",
+        "url": "http://www.ted.com/talks/brian_cox_why_we_need_the_explorers"
+      },
+      "last_modified": "2015-09-01T16:25:08.618Z"
+    }
+  ]
+}

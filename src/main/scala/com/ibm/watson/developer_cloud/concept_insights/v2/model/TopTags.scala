@@ -21,11 +21,11 @@ import com.ibm.watson.developer_cloud.service.GenericModel
   * Created by Martin Harvan on 11/04/16.
   */
 case class TopTags(
-    corpusTagsHistogram: Map[String, Integer],
-    documentLengthHistogram: Map[String, Integer],
-    documents: Integer,
-    documentTagsHistogram: Map[String, Integer],
+    corpusTagsHistogram: Map[String, Int],
+    documentLengthHistogram: Map[String, Int],
+    documents: Int,
+    documentTagsHistogram: Map[String, Int],
     tags: List[Tag],
-    totalTags: Integer,
-    uniqueTags: Integer
+    totalTags: Int,
+    uniqueTags: Int
 ) extends GenericModel

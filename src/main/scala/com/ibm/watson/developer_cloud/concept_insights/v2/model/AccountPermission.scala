@@ -20,4 +20,19 @@ import com.ibm.watson.developer_cloud.service.GenericModel
 /**
   * Created by Martin Harvan on 11/04/16.
   */
-case class AccountPermission(accountId: String, permission: String, uid: String) extends GenericModel
+case class AccountPermission(
+  accountId: String,
+  permission: Permission,
+  uid: String
+) extends GenericModel
+
+case class Permission(
+  name: String
+) extends GenericModel
+
+object Permission {
+    val Read = Permission("Read")
+    val Write = Permission("Write")
+    val Admin = Permission("Admin")
+    val ReadWriteAdmin = Permission("ReadWriteAdmin")
+}

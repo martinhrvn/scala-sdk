@@ -15,9 +15,16 @@
 // limitations under the License.
 package com.ibm.watson.developer_cloud.concept_insights.v2
 
+import com.ibm.watson.developer_cloud.service.{ConfigFactory, VCAPConfigFactory, WatsonService}
+
 /**
   * Created by Martin Harvan on 11/04/16.
   */
-class ConceptInsights {
-
+class ConceptInsights(configFactory: ConfigFactory = new VCAPConfigFactory) extends WatsonService(configFactory) {
+    /**
+      * Gets the service type for service (used to get correct entry from VCAP_SERVICES properties)
+      *
+      * @return
+      */
+    override def serviceType: String = "concept_insights"
 }

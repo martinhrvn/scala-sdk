@@ -18,14 +18,14 @@ package com.ibm.watson.developer_cloud.concept_insights.v2.model
 /**
   * Created by Martin Harvan on 11/04/16.
   */
-case class RequestedFields(fields: Map[String, Integer] = Map.empty[String, Integer]) {
+case class RequestedFields(fields: Map[String, Int] = Map.empty[String, Int]) {
     def include(field: String) : RequestedFields = {
-        val tuple: (String, Integer) = field -> 1
+        val tuple: (String, Int) = field -> 1
         RequestedFields(fields + tuple)
     }
 
     def exclude(field: String) : RequestedFields = {
-        val tuple: (String, Integer) = field -> 0
+        val tuple: (String, Int) = field -> 0
         RequestedFields(fields + tuple)
     }
 }
