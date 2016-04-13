@@ -17,6 +17,7 @@ package com.ibm.watson.developer_cloud.concept_insights.v2.model
 
 import com.ibm.watson.developer_cloud.service.GenericModel
 
+
 /**
   * Created by Martin Harvan on 11/04/16.
   */
@@ -25,6 +26,8 @@ case class Graphs(graphs: List[Graph])
 case class Graph(id: String, name: String) extends GenericModel
 
 object Graph {
+  val Wikipedia = graph("wikipedia", "en-20120601")
+
   def graph(accountId: String, name: String) : Graph = Graph(id(accountId, name), name)
 
   def id(accountId: String, name: String) : String = "/graphs/" + accountId + "/" + name
