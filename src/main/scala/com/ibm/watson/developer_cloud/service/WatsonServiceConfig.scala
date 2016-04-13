@@ -25,7 +25,7 @@ case class WatsonServiceConfig(username: String, password: String, endpoint: Str
   val logger = LoggerFactory.getLogger(classOf[WatsonServiceConfig])
 
   def apiKey : String = {
-    "Basic " + Base64.encodeBase64String((username + ":" + password).getBytes)
+    "Basic " + Base64.encodeBase64String((username + ":" + password).getBytes("ISO-8859-1"))
   }
   def host: String = {
     endpoint.split("://").tail.mkString.split("/").head
