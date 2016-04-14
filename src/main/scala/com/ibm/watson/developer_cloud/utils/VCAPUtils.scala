@@ -24,9 +24,9 @@ object VCAPServicesProtocol extends DefaultJsonProtocol {
   implicit val serviceFormat = jsonFormat(VCAPService, "name", "label", "plan", "tags", "credentials")
   implicit val vcapPropertiesFormat = new JsonFormat[VCAPProperties] {
     def write(m: VCAPProperties) = JsObject {
-      m.properties.map { field =>
-        field._1.toJson match {
-          case JsString(x) => x -> field._2.toJson
+      m.properties.map { case (k: String, v: List[VCAPService])  =>
+        k.toJson match {
+          case JsString(x) => x -> v.toJson
           case x => throw new SerializationException("Map key must be formatted as JsString, not '" + x + "'")
         }
       }
@@ -34,8 +34,8 @@ object VCAPServicesProtocol extends DefaultJsonProtocol {
 
     def read(value: JsValue) : VCAPProperties = {
       val map = value match {
-        case x: JsObject => x.fields.map { field =>
-          (JsString(field._1).convertTo[String], field._2.convertTo[List[VCAPService]])
+        case x: JsObject => x.fields.map { case (k,v) =>
+          (JsString(k).convertTo[String], v.convertTo[List[VCAPService]])
         }
         case x => deserializationError("Expected Map as JsObject, but got " + x)
       }
