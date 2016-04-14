@@ -34,7 +34,7 @@ class ConceptInsights(accountId: Option[String] = None, configFactory: ConfigFac
     /**
       * Gets the service type for service (used to get correct entry from VCAP_SERVICES properties)
       *
-      * @return
+      * @return service type
       */
     override def serviceType: String = "concept_insights"
 
@@ -76,6 +76,37 @@ class ConceptInsights(accountId: Option[String] = None, configFactory: ConfigFac
         val request = Put(apiVersion + corpusId, corpus.toJson.compactPrint)
         val response = send(request)
         response
+    }
+
+    def createDocument(document: Document) : Future[HttpResponse] = {
+        val documentId = IDHelper.documentId(document)
+
+        val request = Put(apiVersion + documentId, document.toJson.compactPrint)
+
+        send(request)
+    }
+
+    def deleteCorpus(corpus: Corpus) : Future[HttpResponse] = {
+        val corpusId = IDHelper.corpusId(corpus, getAccountId)
+        val request = Delete(apiVersion + corpusId)
+
+        send(request)
+    }
+
+    def deleteDocument(document: Document) : Future[HttpResponse] = {
+        val documentId = IDHelper.documentId(document)
+        val request = Delete(apiVersion + documentId)
+
+        send(request)
+    }
+
+    def getConcept(concept: Concept) : Future[ConceptMetadata] = {
+        val conceptId : String = IDHelper.conceptId(concept)
+        val request = Get(apiVersion + conceptId)
+
+        val response = send(request)
+
+        response.map(unmarshal[ConceptMetadata])
     }
 
     def getAccountId: String = {

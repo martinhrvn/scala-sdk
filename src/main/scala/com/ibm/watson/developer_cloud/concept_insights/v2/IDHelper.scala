@@ -15,7 +15,7 @@
 // limitations under the License.
 package com.ibm.watson.developer_cloud.concept_insights.v2
 
-import com.ibm.watson.developer_cloud.concept_insights.v2.model.{Corpus, Graph}
+import com.ibm.watson.developer_cloud.concept_insights.v2.model.{Concept, Corpus, Document, Graph}
 import com.ibm.watson.developer_cloud.utils.Validation
 
 import scala.util.matching.Regex
@@ -26,13 +26,15 @@ import scala.util.matching.Regex
 object IDHelper {
     val graphIdRegex: String = "^/graphs/[_\\-\\w\\s]*/[_\\-\\w\\s]*$"
     val corpusRegex: String = "^/corpora/[_\\-\\w\\s]*/[_\\-\\w\\s]*$"
+    val documentRegex: String=  "^/corpora/[_\\-\\w\\s]*/[_\\-\\w\\s]*/documents/[_\\-\\w\\s]*$"
+    val conceptRegex: String = "^/graphs/[_\\-\\w\\s]*/[_\\-\\w\\s]*/concepts/[_\\-\\w\\s\\(\\)]*$"
 
     def corpusId(corpus: Corpus, accountId: String): String = {
         Validation.notNull(corpus, "graph object cannot be null")
         val id = Option(corpus.id) match {
             case Some(id) => {
                 validateId(corpusRegex, id, "Provide a valid corpus.id (format is " + '"' +
-                  " (/corpora/{account_id}/{graph}) +" + '"' + ")")
+                " (/corpora/{account_id}/{graph}) +" + '"' + ")")
                 id
             }
             case _ => {
@@ -41,6 +43,27 @@ object IDHelper {
             }
         }
         id
+    }
+
+
+    def conceptId(concept: Concept) : String = {
+        Validation.notNull(concept, "document cannot be null")
+        Validation.notNull(concept.id, "document.id cannot be null")
+
+        validateId(conceptRegex, concept.id, "Provide a valid concept.id (format is " + '"' +
+          " (/graphs/{account_id}/{graph}/concepts/{concept})+" + '"' + ")")
+
+        concept.id
+    }
+
+    def documentId(document: Document) : String = {
+        Validation.notNull(document, "document cannot be null")
+        Validation.notNull(document.id, "document.id cannot be null")
+
+        validateId(documentRegex, document.id, "Provide a valid document.id (format is " + '"' +
+          " (/corpora/{account_id}/{corpus}/documents/{document}) +" + '"' + ")")
+
+        document.id
     }
 
     def graphId(graph: Graph, accountId: String) : String = {

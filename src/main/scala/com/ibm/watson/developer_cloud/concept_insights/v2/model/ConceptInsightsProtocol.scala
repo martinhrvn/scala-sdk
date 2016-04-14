@@ -16,7 +16,7 @@
 package com.ibm.watson.developer_cloud.concept_insights.v2.model
 
 import com.ibm.watson.developer_cloud.utils.DateJsonFormat.DateJsonFormat
-import spray.json.DefaultJsonProtocol
+import spray.json.{DefaultJsonProtocol, ProductFormats}
 /**
   * Created by Martin Harvan on 12/04/16.
   */
@@ -42,5 +42,7 @@ object ConceptInsightsProtocol extends DefaultJsonProtocol {
     implicit val corporaFormat = jsonFormat(Corpora, "corpora")
     implicit val resultFormat = jsonFormat(Result, "explanation_tags", "id", "label", "score")
     implicit val queryConceptsProtocol = jsonFormat(QueryConcepts.apply, "query_concepts","results")
-
+    implicit val partProtocol = jsonFormat(Part, "content-type", "data", "name")
+    implicit val documentFormat = jsonFormat(Document, "expires_on", "id", "label", "last_modified", "name", "parts",
+        "ttl_hours", "user_fields")
 }
