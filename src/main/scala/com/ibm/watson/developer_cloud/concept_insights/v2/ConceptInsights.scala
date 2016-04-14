@@ -28,9 +28,15 @@ import spray.httpx.SprayJsonSupport._
 import scala.concurrent.Future
 
 /**
+  *
   * Created by Martin Harvan on 11/04/16.
   */
 class ConceptInsights(accountId: Option[String] = None, configFactory: ConfigFactory = new VCAPConfigFactory) extends WatsonService(configFactory) {
+    private lazy val accId = accountId match {
+        case Some(id) if id.nonEmpty => id
+        case _ => getAccountsInfo.value.get.get.accounts.head.id //TODO error handling
+    }
+
     /**
       * Gets the service type for service (used to get correct entry from VCAP_SERVICES properties)
       *
@@ -39,7 +45,6 @@ class ConceptInsights(accountId: Option[String] = None, configFactory: ConfigFac
     override def serviceType: String = "concept_insights"
 
     def annotateText(graph: Graph, text: String): Future[Annotations] = {
-        val accId: String = getAccountId
         val graphId = IDHelper.graphId(graph, accId)
 
         val request = Post(apiVersion + graphId + annotateTextPath, text)
@@ -57,10 +62,10 @@ class ConceptInsights(accountId: Option[String] = None, configFactory: ConfigFac
                         ):
     Future[QueryConcepts] = {
         Validation.notNull(ids)
-        val corpusId: String = IDHelper.corpusId(corpus, getAccountId)
+        val corpusId: String = IDHelper.corpusId(corpus, accId)
         val cursorMap = cursor.map(i => "cursor" -> i.toString).toMap
         val limitMap = limit.map(i => "limit" -> i.toString).toMap
-        val idsMap = ids.map(x => "ids" -> x.toJson.compactPrint).toMap
+        val idsMap = ids.map(x => idsLabel -> x.toJson.compactPrint).toMap
         val conceptMap = conceptFields.map(concept => "concept_fields" -> concept.fields.toJson.compactPrint).toMap
         val documentMap = documentFields.map(document => "document_fields" -> document.fields.toJson.compactPrint).toMap
 
@@ -72,7 +77,7 @@ class ConceptInsights(accountId: Option[String] = None, configFactory: ConfigFac
     }
 
     def createCorpus(corpus: Corpus): Future[HttpResponse] = {
-        val corpusId = IDHelper.corpusId(corpus, getAccountId)
+        val corpusId = IDHelper.corpusId(corpus, accId)
         val request = Put(apiVersion + corpusId, corpus.toJson.compactPrint)
         val response = send(request)
         response
@@ -87,7 +92,7 @@ class ConceptInsights(accountId: Option[String] = None, configFactory: ConfigFac
     }
 
     def deleteCorpus(corpus: Corpus) : Future[HttpResponse] = {
-        val corpusId = IDHelper.corpusId(corpus, getAccountId)
+        val corpusId = IDHelper.corpusId(corpus, accId)
         val request = Delete(apiVersion + corpusId)
 
         send(request)
@@ -109,11 +114,49 @@ class ConceptInsights(accountId: Option[String] = None, configFactory: ConfigFac
         response.map(unmarshal[ConceptMetadata])
     }
 
-    def getAccountId: String = {
-        accountId match {
-            case Some(id) if id.nonEmpty => id
-            case _ => getAccountsInfo.value.get.get.accounts.head.id //TODO error handling
-        }
+    def getConceptRelatedConcepts(concept: Concept, conceptFields: Option[QueryConcepts], level: Option[Int], limit:
+    Option[Int]) : Future[Concepts] = {
+        val conceptId = IDHelper.conceptId(concept)
+        val limitMap = limit.map(i => "limit" -> i.toString).toMap
+        val levelMap = level.map(i => "level" -> i.toString).toMap
+        val queryConceptMap = conceptFields.map(query => "concept_fields" -> query.toJson.compactPrint).toMap
+
+        val queryParams = limitMap ++ levelMap ++ queryConceptMap
+
+        val request = Get(Uri(apiVersion + conceptId + relatedConceptsPath).withQuery(queryParams))
+        val response = send(request)
+
+        response.map(unmarshal[Concepts])
+    }
+
+    def getCorpusStats(corpus: Corpus): Future[CorpusStats] = {
+        val corpusId = IDHelper.corpusId(corpus, accId)
+
+        val request = Get(apiVersion + corpusId + statsPath)
+        send(request).map(unmarshal[CorpusStats])
+    }
+
+    def getDocument(document: Document): Future[Document] = {
+        val documentId = IDHelper.documentId(document)
+
+        val request = Get(apiVersion + documentId)
+
+        send(request).map(unmarshal[Document])
+    }
+
+    def getDocumentAnnotations(document: Document): Future[Any] = {
+        val documentId = IDHelper.documentId(document)
+
+        val request = Get(apiVersion + documentId + annotationsPath)
+
+        send(request).map(unmarshal[DocumentAnnotations])
+    }
+
+    def getDocumentProcessingStatus(document: Document): Future[DocumentProcessingStatus] = {
+        val documentId = IDHelper.documentId(document)
+        val request = Get(apiVersion + documentId + processingStatusPath)
+
+        send(request).map(unmarshal[DocumentProcessingStatus])
     }
 
     def getAccountsInfo: Future[Accounts] = {
@@ -128,9 +171,13 @@ class ConceptInsights(accountId: Option[String] = None, configFactory: ConfigFac
 }
 
 object ConceptInsights {
-    val idsLabel: String = "ids"
+    private val idsLabel: String = "ids"
 
     val apiVersion = "v2"
+    val processingStatusPath = "/processing_state"
+    val annotationsPath = "/annotations"
+    val relatedConceptsPath = "/related_concepts"
+    val statsPath = "/stats"
     val annotateTextPath = "/annotate_text"
     val conceptualSearchPath = "/conceptual_search"
 }

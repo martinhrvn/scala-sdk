@@ -25,8 +25,13 @@ case class Document(expiresOn: DateTime, id: String, label: String, lastModified
                     parts: List[Part], timeToLive: Int, userFields: Map[String,String]) extends GenericModel
 
 //TODO constructor from corpus
-
-case class DocumentAnnotation(annotations: List[Annotation], id: String, label: String) extends GenericModel
+/**
+  *
+  * @param annotations
+  * @param id
+  * @param label
+  */
+case class DocumentAnnotations(annotations: List[Annotation], id: String, label: String) extends GenericModel
 
 case class DocumentProcessingStatus(lastModified: DateTime, status: String) extends GenericModel
 
