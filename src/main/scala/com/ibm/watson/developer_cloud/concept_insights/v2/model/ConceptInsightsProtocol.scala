@@ -40,5 +40,7 @@ object ConceptInsightsProtocol extends DefaultJsonProtocol {
         "tags", "total_tags", "unique_tags")
     implicit val corpusStatsFormat = jsonFormat(CorpusStats, "id", "last_updated", "top_tags")
     implicit val corporaFormat = jsonFormat(Corpora, "corpora")
+    implicit val resultFormat = jsonFormat(Result, "explanation_tags", "id", "label", "score")
+    implicit val queryConceptsProtocol = jsonFormat(QueryConcepts.apply, "query_concepts","results")
 
 }

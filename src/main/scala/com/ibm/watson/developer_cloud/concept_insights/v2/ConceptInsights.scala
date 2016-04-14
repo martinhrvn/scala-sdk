@@ -15,18 +15,18 @@
 // limitations under the License.
 package com.ibm.watson.developer_cloud.concept_insights.v2
 
+import com.ibm.watson.developer_cloud.concept_insights.v2.ConceptInsights._
+import com.ibm.watson.developer_cloud.concept_insights.v2.model.ConceptInsightsProtocol._
 import com.ibm.watson.developer_cloud.concept_insights.v2.model._
 import com.ibm.watson.developer_cloud.service.{ConfigFactory, VCAPConfigFactory, WatsonService}
+import com.ibm.watson.developer_cloud.utils.Validation
+import spray.client.pipelining._
+import spray.http.{HttpResponse, Uri}
 import spray.json._
-import spray.httpx.SprayJsonSupport
-import com.ibm.watson.developer_cloud.concept_insights.v2.model.ConceptInsightsProtocol._
+import spray.httpx.SprayJsonSupport._
 
 import scala.concurrent.Future
-import spray.client.pipelining._
-import spray.http.{BodyPart, HttpResponse, MultipartFormData, Uri}
-import ConceptInsights._
-import com.ibm.watson.developer_cloud.utils.Validation
-import spray.httpx.SprayJsonSupport._
+
 /**
   * Created by Martin Harvan on 11/04/16.
   */
@@ -38,8 +38,8 @@ class ConceptInsights(accountId: Option[String] = None, configFactory: ConfigFac
       */
     override def serviceType: String = "concept_insights"
 
-    def annotateText(graph: Graph, text: String) : Future[Annotations] = {
-        val accId : String = getAccountId
+    def annotateText(graph: Graph, text: String): Future[Annotations] = {
+        val accId: String = getAccountId
         val graphId = IDHelper.graphId(graph, accId)
 
         val request = Post(apiVersion + graphId + annotateTextPath, text)
@@ -50,32 +50,32 @@ class ConceptInsights(accountId: Option[String] = None, configFactory: ConfigFac
     }
 
 
+    def conceptualSearch(
+                          corpus: Corpus, cursor: Option[Int] = None, limit: Option[Int] = None,
+                          ids: Option[List[String]] = None, conceptFields: Option[RequestedFields] = None,
+                          documentFields: Option[RequestedFields] = None
+                        ):
+    Future[QueryConcepts] = {
+        Validation.notNull(ids)
+        val corpusId: String = IDHelper.corpusId(corpus, getAccountId)
+        val cursorMap = cursor.map(i => "cursor" -> i.toString).toMap
+        val limitMap = limit.map(i => "limit" -> i.toString).toMap
+        val idsMap = ids.map(x => "ids" -> x.toJson.compactPrint).toMap
+        val conceptMap = conceptFields.map(concept => "concept_fields" -> concept.fields.toJson.compactPrint).toMap
+        val documentMap = documentFields.map(document => "document_fields" -> document.fields.toJson.compactPrint).toMap
 
-    def conceptualSearch(corpus: Corpus, parameters: Map[String, Any]) : QueryConcepts = {
-        Validation.notNull(parameters("ids"))
-        val corpusId : String = IDHelper.corpusId(corpus, getAccountId)
+        val queryParam = cursorMap ++ limitMap ++ idsMap ++ conceptMap ++ documentMap
 
-        val ids : Map[String, Any] = parameters("ids") match {
-             case idList : List[String] => Map("ids" -> idList.toJson)
-             case _ => throw new IllegalArgumentException("parameters('ids') should be List[String]")
-         }
+        val request = Get(Uri(apiVersion + corpusId + conceptualSearchPath).withQuery(queryParam))
+        val response = send(request)
+        response.map(unmarshal[QueryConcepts])
+    }
 
-        val conceptFields: Map[String, Map[String, Int]] = Option(parameters("concept_fields")) match {
-            case Some(fields : RequestedFields) => Map("concept_fields" -> fields.fields)
-            case _ => Map.empty[String, Map[String, Int]]
-        }
-
-        val documenttFields: Map[String, Map[String, Int]] = Option(parameters("document_fields")) match {
-            case Some(fields : RequestedFields) => Map("document_fields" -> fields.fields)
-            case _ => Map.empty[String, Map[String, Int]]
-        }
-
-        val queryParam = parameters.filter(p => p._1.equals("cursor") || p._1.equals("limit")) ++ conceptFields ++ ids ++ documenttFields
-
-        val request = Get(apiVersion + corpusId + conceptualSearchPath)
-
-
-
+    def createCorpus(corpus: Corpus): Future[HttpResponse] = {
+        val corpusId = IDHelper.corpusId(corpus, getAccountId)
+        val request = Put(apiVersion + corpusId, corpus.toJson.compactPrint)
+        val response = send(request)
+        response
     }
 
     def getAccountId: String = {
@@ -91,12 +91,14 @@ class ConceptInsights(accountId: Option[String] = None, configFactory: ConfigFac
         response.map(unmarshal[Accounts])
     }
 
-    def withAccountId(accountId: String) : ConceptInsights = {
+    def withAccountId(accountId: String): ConceptInsights = {
         new ConceptInsights(Some(accountId), configFactory)
     }
 }
 
 object ConceptInsights {
+    val idsLabel: String = "ids"
+
     val apiVersion = "v2"
     val annotateTextPath = "/annotate_text"
     val conceptualSearchPath = "/conceptual_search"
