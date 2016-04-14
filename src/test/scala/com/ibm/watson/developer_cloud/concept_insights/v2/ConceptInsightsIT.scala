@@ -16,7 +16,7 @@
 package com.ibm.watson.developer_cloud.concept_insights.v2
 
 import akka.actor.ActorSystem
-import com.ibm.watson.developer_cloud.concept_insights.v2.model.{Graph}
+import com.ibm.watson.developer_cloud.concept_insights.v2.model.Graph
 
 import com.ibm.watson.developer_cloud.service.{ConfigFactory, LocalFileConfigFactory}
 import org.scalatest.concurrent.ScalaFutures
@@ -35,7 +35,7 @@ class ConceptInsightsIT extends FlatSpec with ScalaFutures with Matchers{
     implicit val defaultPatience =
         PatienceConfig(timeout = Span(15, Seconds), interval = Span(500, Millis))
 
-    "Annotation service" should "return annotations" in {
+    "Annotation service" should "return annotations" ignore {
         val annotations = service.annotateText(Graph.Wikipedia, "Nizar Magboul Alseddeg is currently living in Austin Texas")
         assert(annotations.futureValue.annotations.nonEmpty)
     }
