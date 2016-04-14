@@ -129,6 +129,21 @@ class ConceptInsights(accountId: Option[String] = None, configFactory: ConfigFac
         response.map(unmarshal[Concepts])
     }
 
+    def getDocumentRelatedConcepts(document: Document,conceptFields: Option[QueryConcepts], level: Option[Int],
+    limit: Option[Int]): Future[Concepts] = {
+        val documentId = IDHelper.documentId(document)
+        val limitMap = limit.map(i => limitLabel -> i.toString).toMap
+        val levelMap = level.map(i => levelLabel -> i.toString).toMap
+        val queryConceptMap = conceptFields.map(query => "concept_fields" -> query.toJson.compactPrint).toMap
+
+        val queryParams = limitMap ++ levelMap ++ queryConceptMap
+
+        val request = Get(Uri(apiVersion + documentId + relatedConceptsPath).withQuery(queryParams))
+        val response = send(request)
+
+        response.map(unmarshal[Concepts])
+
+    }
     def getCorpusStats(corpus: Corpus): Future[CorpusStats] = {
         val corpusId = IDHelper.corpusId(corpus, accId)
 
@@ -157,6 +172,18 @@ class ConceptInsights(accountId: Option[String] = None, configFactory: ConfigFac
         val request = Get(apiVersion + documentId + processingStatusPath)
 
         send(request).map(unmarshal[DocumentProcessingStatus])
+    }
+
+    def getDocumentRelationScores(document: Document, concepts: List[Concept]): Future[Scores] = {
+        Validation.notEmpty(concepts, "concepts cannot be empty")
+        val documentId = IDHelper.documentId(document)
+
+        val conceptsJson = JsArray(concepts.map(c => c.id.toJson).toVector)
+        val queryParam = Map("concepts" -> JsObject("concepts" -> conceptsJson).compactPrint)
+
+        val request = Get(Uri(apiVersion + documentId + relationScoresPath).withQuery(queryParam))
+
+        send(request).map(unmarshal[Scores])
     }
 
     def getAccountsInfo: Future[Accounts] = {
