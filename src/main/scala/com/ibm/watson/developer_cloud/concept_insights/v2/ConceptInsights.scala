@@ -44,6 +44,12 @@ class ConceptInsights(accountId: Option[String] = None, configFactory: ConfigFac
       */
     override def serviceType: String = "concept_insights"
 
+    /**
+      *
+      * @param graph
+      * @param text
+      * @return
+      */
     def annotateText(graph: Graph, text: String): Future[Annotations] = {
         val graphId = IDHelper.graphId(graph, accId)
 
@@ -55,6 +61,8 @@ class ConceptInsights(accountId: Option[String] = None, configFactory: ConfigFac
     }
 
 
+
+
     def conceptualSearch(
                           corpus: Corpus, cursor: Option[Int] = None, limit: Option[Int] = None,
                           ids: Option[List[String]] = None, conceptFields: Option[RequestedFields] = None,
@@ -64,7 +72,7 @@ class ConceptInsights(accountId: Option[String] = None, configFactory: ConfigFac
         Validation.notNull(ids)
         val corpusId: String = IDHelper.corpusId(corpus, accId)
         val cursorMap = cursor.map(i => "cursor" -> i.toString).toMap
-        val limitMap = limit.map(i => "limit" -> i.toString).toMap
+        val limitMap = limit.map(i => limitLabel -> i.toString).toMap
         val idsMap = ids.map(x => idsLabel -> x.toJson.compactPrint).toMap
         val conceptMap = conceptFields.map(concept => "concept_fields" -> concept.fields.toJson.compactPrint).toMap
         val documentMap = documentFields.map(document => "document_fields" -> document.fields.toJson.compactPrint).toMap
@@ -114,11 +122,12 @@ class ConceptInsights(accountId: Option[String] = None, configFactory: ConfigFac
         response.map(unmarshal[ConceptMetadata])
     }
 
+
     def getConceptRelatedConcepts(concept: Concept, conceptFields: Option[QueryConcepts], level: Option[Int], limit:
     Option[Int]) : Future[Concepts] = {
         val conceptId = IDHelper.conceptId(concept)
-        val limitMap = limit.map(i => "limit" -> i.toString).toMap
-        val levelMap = level.map(i => "level" -> i.toString).toMap
+        val limitMap = limit.map(i => limitLabel -> i.toString).toMap
+        val levelMap = level.map(i => levelLabel -> i.toString).toMap
         val queryConceptMap = conceptFields.map(query => "concept_fields" -> query.toJson.compactPrint).toMap
 
         val queryParams = limitMap ++ levelMap ++ queryConceptMap
@@ -198,8 +207,6 @@ class ConceptInsights(accountId: Option[String] = None, configFactory: ConfigFac
 }
 
 object ConceptInsights {
-    private val idsLabel: String = "ids"
-
     val apiVersion = "v2"
     val processingStatusPath = "/processing_state"
     val annotationsPath = "/annotations"
@@ -207,4 +214,8 @@ object ConceptInsights {
     val statsPath = "/stats"
     val annotateTextPath = "/annotate_text"
     val conceptualSearchPath = "/conceptual_search"
+    val relationScoresPath = "/relation_scores"
+    private val idsLabel: String = "ids"
+    private val limitLabel: String = "limit"
+    private val levelLabel: String = "level"
 }
