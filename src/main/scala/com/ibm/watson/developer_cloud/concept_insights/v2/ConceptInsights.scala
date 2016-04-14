@@ -195,6 +195,18 @@ class ConceptInsights(accountId: Option[String] = None, configFactory: ConfigFac
         send(request).map(unmarshal[Scores])
     }
 
+    def updateCorpus(corpus: Corpus): Future[HttpResponse] = {
+        val corpusId = IDHelper.corpusId(corpus, accId)
+        val request = Post(apiVersion + corpusId, corpus.toJson.compactPrint)
+        send(request)
+    }
+
+    def updateDocument(document: Document): Future[HttpResponse] = {
+        val documentId = IDHelper.documentId(document)
+        val request = Post(apiVersion + documentId, document.toJson.compactPrint)
+        send(request)
+    }
+
     def getAccountsInfo: Future[Accounts] = {
         val request = Get("path")
         val response = send(request)
