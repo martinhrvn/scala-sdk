@@ -47,4 +47,6 @@ object ConceptInsightsProtocol extends DefaultJsonProtocol {
         "ttl_hours", "user_fields")
     implicit val documentProcessingStatusFormat = jsonFormat(DocumentProcessingStatus, "last_modified", "status")
     implicit val documentAnnotationsFormat = jsonFormat(DocumentAnnotations, "annotations","id","label")
+    implicit val scoreFormat = jsonFormat(Score, "concept", "score")
+    implicit val scoresFormat = jsonFormat(Scores,"scores")
 }
