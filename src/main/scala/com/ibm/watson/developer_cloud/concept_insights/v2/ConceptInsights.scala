@@ -71,10 +71,10 @@ class ConceptInsights(accountId: Option[String] = None, configFactory: ConfigFac
     Future[QueryConcepts] = {
         Validation.notNull(ids)
         val corpusId: String = IDHelper.corpusId(corpus, accId)
-        val cursorMap = cursor.map(i => "cursor" -> i.toString).toMap
+        val cursorMap = cursor.map(i => cursorLabel -> i.toString).toMap
         val limitMap = limit.map(i => limitLabel -> i.toString).toMap
         val idsMap = ids.map(x => idsLabel -> x.toJson.compactPrint).toMap
-        val conceptMap = conceptFields.map(concept => "concept_fields" -> concept.fields.toJson.compactPrint).toMap
+        val conceptMap = conceptFields.map(concept => conceptFieldsLabel -> concept.fields.toJson.compactPrint).toMap
         val documentMap = documentFields.map(document => "document_fields" -> document.fields.toJson.compactPrint).toMap
 
         val queryParam = cursorMap ++ limitMap ++ idsMap ++ conceptMap ++ documentMap
@@ -128,7 +128,7 @@ class ConceptInsights(accountId: Option[String] = None, configFactory: ConfigFac
         val conceptId = IDHelper.conceptId(concept)
         val limitMap = limit.map(i => limitLabel -> i.toString).toMap
         val levelMap = level.map(i => levelLabel -> i.toString).toMap
-        val queryConceptMap = conceptFields.map(query => "concept_fields" -> query.toJson.compactPrint).toMap
+        val queryConceptMap = conceptFields.map(query => conceptFieldsLabel -> query.toJson.compactPrint).toMap
 
         val queryParams = limitMap ++ levelMap ++ queryConceptMap
 
@@ -143,7 +143,7 @@ class ConceptInsights(accountId: Option[String] = None, configFactory: ConfigFac
         val documentId = IDHelper.documentId(document)
         val limitMap = limit.map(i => limitLabel -> i.toString).toMap
         val levelMap = level.map(i => levelLabel -> i.toString).toMap
-        val queryConceptMap = conceptFields.map(query => "concept_fields" -> query.toJson.compactPrint).toMap
+        val queryConceptMap = conceptFields.map(query => conceptFieldsLabel -> query.toJson.compactPrint).toMap
 
         val queryParams = limitMap ++ levelMap ++ queryConceptMap
 
@@ -195,6 +195,67 @@ class ConceptInsights(accountId: Option[String] = None, configFactory: ConfigFac
         send(request).map(unmarshal[Scores])
     }
 
+    def listCorpora(accountId: String): Future[Corpora] = {
+        Validation.notEmpty(accountId, "account_id cannot be empty")
+        val request = Get("/v2/corpora/" + accountId)
+        send(request).map(unmarshal[Corpora])
+    }
+
+    def listDocuments(corpus: Corpus, cursor: Option[Int], limit: Option[Int], query: Option[String]): Future[Documents] = {
+        val corpusId = IDHelper.corpusId(corpus, accId)
+
+        val cursorMap = cursor.map(c => cursorLabel -> c.toString).toMap
+        val limitMap = limit.map(i => cursorLabel -> i.toString).toMap
+        val queryMap = query.map(s => "query" -> s).toMap
+
+        val queryParams = cursorMap ++ limitMap ++ queryMap
+
+        val request = Get(Uri(apiVersion + corpusId + documentsPath).withQuery(queryParams))
+
+        send(request).map(unmarshal[Documents])
+    }
+
+    def searchCorpusByLabel(corpus: Corpus, conceptFields: Option[RequestedFields], documentFields:
+    Option[RequestedFields], query: String, prefix: Option[Boolean], limit: Option[Int], concepts: Option[Boolean]):
+    Future[Matches]
+    = {
+        val corpusId = IDHelper.corpusId(corpus, accId)
+
+        Validation.notEmpty(query, "query cannot be empty")
+        val limitMap = limit.map(i => limitLabel -> i.toString).toMap
+        val prefixMap = prefix.map(s => "prefix" -> s.toString).toMap
+        val conceptMap = concepts.map(s => "concept" -> s.toString)
+        val queryMap = Map("query" -> query)
+        val conceptFieldsMap = conceptFields.map(field => conceptFieldsLabel -> field.fields.toJson.compactPrint).toMap
+        val documentFieldsMap = documentFields.map(field => "document_fields" -> field.fields.toJson.compactPrint).toMap
+
+        val queryParams = limitMap ++ prefixMap ++ queryMap ++ conceptFieldsMap ++ conceptMap ++ documentFieldsMap
+
+        val request = Get(Uri(apiVersion + corpusId + labelSearchPath).withQuery(queryParams))
+        send(request).map(unmarshal[Matches])
+    }
+
+    def searchGraphsConceptByLabel(graph: Graph, requestedFields: Option[RequestedFields], query: String, prefix:
+    Option[Boolean], limit: Option[Int]) : Future[Matches] = {
+        val graphId = IDHelper.graphId(graph, accId)
+
+        Validation.notEmpty(query, "query cannot be empty")
+        val limitMap = limit.map(i => limitLabel -> i.toString).toMap
+        val prefixMap = prefix.map(s => "prefix" -> s.toString).toMap
+        val queryMap = Map("query" -> query)
+        val conceptFieldsMap = requestedFields.map(field => conceptFieldsLabel -> field.fields.toJson.compactPrint).toMap
+
+        val queryParams = limitMap ++ prefixMap ++ queryMap ++ conceptFieldsMap
+
+        val request = Get(Uri(apiVersion + graphId + labelSearchPath).withQuery(queryParams))
+        send(request).map(unmarshal[Matches])
+    }
+
+    def listGraphs: Future[Graph] = {
+        val request = Get(apiVersion + graphsPath)
+        send(request).map(unmarshal[Graph])
+    }
+
     def updateCorpus(corpus: Corpus): Future[HttpResponse] = {
         val corpusId = IDHelper.corpusId(corpus, accId)
         val request = Post(apiVersion + corpusId, corpus.toJson.compactPrint)
@@ -221,6 +282,9 @@ class ConceptInsights(accountId: Option[String] = None, configFactory: ConfigFac
 object ConceptInsights {
     val apiVersion = "v2"
     val processingStatusPath = "/processing_state"
+    val graphsPath = "/graphs"
+    val documentsPath = "/documents"
+    val labelSearchPath = "/label_search"
     val annotationsPath = "/annotations"
     val relatedConceptsPath = "/related_concepts"
     val statsPath = "/stats"
@@ -230,4 +294,6 @@ object ConceptInsights {
     private val idsLabel: String = "ids"
     private val limitLabel: String = "limit"
     private val levelLabel: String = "level"
+    private val cursorLabel: String = "cursor"
+    private val conceptFieldsLabel: String = "concept_fields"
 }

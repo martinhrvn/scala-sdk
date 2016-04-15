@@ -45,8 +45,11 @@ object ConceptInsightsProtocol extends DefaultJsonProtocol {
     implicit val partFormat = jsonFormat(Part, "content-type", "data", "name")
     implicit val documentFormat = jsonFormat(Document, "expires_on", "id", "label", "last_modified", "name", "parts",
         "ttl_hours", "user_fields")
+    implicit val documentsFormat = jsonFormat(Documents, "documents")
     implicit val documentProcessingStatusFormat = jsonFormat(DocumentProcessingStatus, "last_modified", "status")
     implicit val documentAnnotationsFormat = jsonFormat(DocumentAnnotations, "annotations","id","label")
     implicit val scoreFormat = jsonFormat(Score, "concept", "score")
     implicit val scoresFormat = jsonFormat(Scores,"scores")
+    implicit val graphFormat = jsonFormat(Graph.apply, "id", "name")
+    implicit val matchesFormat = jsonFormat(Matches, "matches")
 }
