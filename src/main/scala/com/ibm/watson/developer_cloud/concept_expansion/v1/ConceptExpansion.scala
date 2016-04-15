@@ -42,6 +42,7 @@ class ConceptExpansion(val dataset: Dataset = new Dataset("Medical Transcription
 
   /**
     * Creates a Job
+ *
     * @param label A conceptual classification of the seed terms.
     * @param seeds List of terms to be used as seeds
     * @return the Job
@@ -54,7 +55,7 @@ class ConceptExpansion(val dataset: Dataset = new Dataset("Medical Transcription
       Map("dataset" -> JsString(dataset.id), "seeds" -> JsArray(seeds.map(JsString(_))))
 
     val data = JsObject(properties)
-    val request = Post(Upload, data.toString())
+    val request = Post(upload, data.toString())
     val response = send(request)
     response.map(unmarshal[Job])
   }
@@ -64,7 +65,7 @@ class ConceptExpansion(val dataset: Dataset = new Dataset("Medical Transcription
 
     val payload = JsObject("jobid"-> JsString(job.id))
 
-    val request = Put(Result, payload.toString)
+    val request = Put(result, payload.toString)
     val response = send(request)
     response.map(unmarshal[Concept])
   }
@@ -72,7 +73,7 @@ class ConceptExpansion(val dataset: Dataset = new Dataset("Medical Transcription
   def getJobStatus(job: Job) : Future[StatusEnum] = {
     Validation.notNull(job, "Job cannot be empty")
 
-    val request = Get(Uri(ConceptExpansion.Status).withQuery("jobid" -> job.id))
+    val request = Get(Uri(ConceptExpansion.status).withQuery("jobid" -> job.id))
     val response = send(request)
 
     response.map(unmarshal[StatusEnum])
@@ -84,7 +85,7 @@ class ConceptExpansion(val dataset: Dataset = new Dataset("Medical Transcription
 }
 
 object ConceptExpansion {
-  val Upload = "/v1/upload"
-  val Status = "/v1/status"
-  val Result = "/v1/result"
+  val upload = "/v1/upload"
+  val status = "/v1/status"
+  val result = "/v1/result"
 }

@@ -6,7 +6,7 @@ import spray.json._
 
 object DateJsonFormat extends RootJsonFormat[DateTime] {
 
-  private val parserISO = ISODateTimeFormat.dateTime()
+  private[this] val parserISO = ISODateTimeFormat.dateTime()
 
   override def write(obj: DateTime) : JsValue = JsString(parserISO.print(obj))
 

@@ -38,7 +38,7 @@ class PersonalityInsights(configFactory: ConfigFactory = new VCAPConfigFactory()
   val logger = LoggerFactory.getLogger(classOf[PersonalityInsights])
   def serviceType: String = "personality_insights"
 
-  private def getRequest(options: ProfileOptions) : HttpRequest = {
+  private[this] def getRequest(options: ProfileOptions) : HttpRequest = {
     Validation.notNull(options, "Options cannot be null")
     Validation.assertTrue(Validation.notNull(options.text) || Validation.notNull(options.contentItems), "text, html or content items need to be specified")
     val inUri = Uri(config.endpoint + PersonalityInsights.pathProfile)

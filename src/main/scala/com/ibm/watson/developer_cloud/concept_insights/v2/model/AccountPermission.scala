@@ -32,8 +32,8 @@ case class Permission(
 
 object Permission {
     val fields = List("name")
-    val Read = Permission("Read")
-    val Write = Permission("Write")
-    val Admin = Permission("Admin")
-    val ReadWriteAdmin = Permission("ReadWriteAdmin")
+    val read = Permission("Read")
+    val write = Permission("Write")
+    val admin = Permission("Admin")
+    val readWriteAdmin = Permission("ReadWriteAdmin")
 }

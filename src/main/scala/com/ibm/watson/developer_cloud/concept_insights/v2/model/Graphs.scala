@@ -26,7 +26,7 @@ case class Graphs(graphs: List[Graph])
 case class Graph(id: String, name: String) extends GenericModel
 
 object Graph {
-  val Wikipedia = graph("wikipedia", "en-20120601")
+  val wikipedia = graph("wikipedia", "en-20120601")
 
   def graph(accountId: String, name: String) : Graph = Graph(id(accountId, name), name)
 

@@ -36,7 +36,7 @@ class ConceptInsightsIT extends FlatSpec with ScalaFutures with Matchers{
         PatienceConfig(timeout = Span(15, Seconds), interval = Span(500, Millis))
 
     "Annotation service" should "return annotations" ignore {
-        val annotations = service.annotateText(Graph.Wikipedia, "Nizar Magboul Alseddeg is currently living in Austin Texas")
+        val annotations = service.annotateText(Graph.wikipedia, "Nizar Magboul Alseddeg is currently living in Austin Texas")
         assert(annotations.futureValue.annotations.nonEmpty)
     }
 }

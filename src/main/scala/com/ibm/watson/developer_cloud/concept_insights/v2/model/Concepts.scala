@@ -45,6 +45,4 @@ case class Concepts(
   concepts: List[Concept]
 ) extends GenericModel
 
-object Concept {
-//TODO from graph
-}
+object Concept //TODO from grah

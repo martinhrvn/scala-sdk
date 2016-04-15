@@ -25,13 +25,13 @@ case class Job(id: String, status: StatusEnum) extends GenericModel
 class StatusEnum(val name: String, val id:String)
 
 object StatusEnum {
-  val Done = new StatusEnum("Done", "D")
-  val Failed = new StatusEnum("Failed", "F")
-  val AwaitingWork = new StatusEnum("Awaiting Work", "A")
-  val InFlight = new StatusEnum("In Flight", "G")
-  val Retrieved = new StatusEnum("Retrieved", "R")
-  val enumMap = Map(Done.id -> Done, Failed.id -> Failed, AwaitingWork.id -> AwaitingWork,
-    InFlight.id -> InFlight, Retrieved.id -> Retrieved)
+  val done = new StatusEnum("Done", "D")
+  val failed = new StatusEnum("Failed", "F")
+  val awaitingWork = new StatusEnum("Awaiting Work", "A")
+  val inFlight = new StatusEnum("In Flight", "G")
+  val retrieved = new StatusEnum("Retrieved", "R")
+  val enumMap = Map(done.id -> done, failed.id -> failed, awaitingWork.id -> awaitingWork,
+    inFlight.id -> inFlight, retrieved.id -> retrieved)
 
   def byId(id: String) : Option[StatusEnum] = {
     enumMap.get(id)
