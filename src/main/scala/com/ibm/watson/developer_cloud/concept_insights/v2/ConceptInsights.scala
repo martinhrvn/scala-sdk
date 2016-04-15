@@ -20,16 +20,27 @@ import com.ibm.watson.developer_cloud.concept_insights.v2.model.ConceptInsightsP
 import com.ibm.watson.developer_cloud.concept_insights.v2.model._
 import com.ibm.watson.developer_cloud.service.{ConfigFactory, VCAPConfigFactory, WatsonService}
 import com.ibm.watson.developer_cloud.utils.Validation
-import spray.client.pipelining._
+import spray.client.pipelining.{Post, unmarshal, Get, Put, Delete}
 import spray.http.{HttpResponse, Uri}
 import spray.json._
-import spray.httpx.SprayJsonSupport._
 
 import scala.concurrent.Future
 
 /**
+  * The IBM Watson™ Concept Insights service provides APIs that enable you to work with concepts and
+  * identify conceptual associations in the content that you provide as input to the service. Input
+  * content is auto-tagged against a concept graph, which is a formal representation of the
+  * relationship(s) between concepts. The concept graph used by the Concept Insights service is based
+  * on content that has been ingested from the English language Wikipedia.
   *
-  * Created by Martin Harvan on 11/04/16.
+  * @version v2
+  * @see <a href=
+  *      "http://www.ibm.com/smarterplanet/us/en/ibmwatson/developercloud/concept_insights.html">
+  *      Concept Insights</a>
+  *
+  * @param accountId account ID for the service
+  * @param configFactory configuration factory for the service, if not provided will be read from VCAP_SERVICES
+  *                      properties)
   */
 class ConceptInsights(accountId: Option[String] = None, configFactory: ConfigFactory = new VCAPConfigFactory) extends WatsonService(configFactory) {
     private lazy val accId = accountId match {
@@ -45,10 +56,11 @@ class ConceptInsights(accountId: Option[String] = None, configFactory: ConfigFac
     override def serviceType: String = "concept_insights"
 
     /**
+      * Identifies concepts in a piece of text.
       *
-      * @param graph
-      * @param text
-      * @return
+      * @param graph - The graph object.
+      * @param text  - The text to annotate.
+      * @return concepts from the text
       */
     def annotateText(graph: Graph, text: String): Future[Annotations] = {
         val graphId = IDHelper.graphId(graph, accId)
@@ -61,8 +73,19 @@ class ConceptInsights(accountId: Option[String] = None, configFactory: ConfigFac
     }
 
 
-
-
+    /**
+      * Performs a conceptual search within a corpus.
+      *
+      * @param corpus the corpus
+      * @param cursor A number of items to skip.
+      * @param limit The maximum number of concepts to be returned.
+      * @param ids JSON array of concept and/or document ids.
+      * @param conceptFields Additional fields to be included in the concept
+      *        objects.
+      * @param documentFields Additional fields to be included in the document
+      *        objects.
+      * @return QueryConcepts object
+      */
     def conceptualSearch(
                           corpus: Corpus, cursor: Option[Int] = None, limit: Option[Int] = None,
                           ids: Option[List[String]] = None, conceptFields: Option[RequestedFields] = None,
@@ -84,6 +107,12 @@ class ConceptInsights(accountId: Option[String] = None, configFactory: ConfigFac
         response.map(unmarshal[QueryConcepts])
     }
 
+    /**
+      * Creates an empty corpus.
+      *
+      * @param corpus the corpus object.
+      * @return Future response
+      */
     def createCorpus(corpus: Corpus): Future[HttpResponse] = {
         val corpusId = IDHelper.corpusId(corpus, accId)
         val request = Put(apiVersion + corpusId, corpus.toJson.compactPrint)
@@ -91,6 +120,12 @@ class ConceptInsights(accountId: Option[String] = None, configFactory: ConfigFac
         response
     }
 
+    /**
+      * Creates a document in given corpus.
+      *
+      * @param document the document object to create.
+      * @return Future response
+      */
     def createDocument(document: Document) : Future[HttpResponse] = {
         val documentId = IDHelper.documentId(document)
 
@@ -279,11 +314,14 @@ class ConceptInsights(accountId: Option[String] = None, configFactory: ConfigFac
     }
 }
 
+/**
+  * Companion object for ConceptInsights class, contains paths and string constants used by the class
+  */
 object ConceptInsights {
-    val apiVersion = "v2"
-    val processingStatusPath = "/processing_state"
-    val graphsPath = "/graphs"
-    val documentsPath = "/documents"
+    private[ConceptInsights] val apiVersion = "v2"
+    private val processingStatusPath = "/processing_state"
+    private val graphsPath = "/graphs"
+    private val documentsPath = "/documents"
     val labelSearchPath = "/label_search"
     val annotationsPath = "/annotations"
     val relatedConceptsPath = "/related_concepts"
@@ -291,9 +329,9 @@ object ConceptInsights {
     val annotateTextPath = "/annotate_text"
     val conceptualSearchPath = "/conceptual_search"
     val relationScoresPath = "/relation_scores"
-     val idsLabel: String = "ids"
-     val limitLabel: String = "limit"
-     val levelLabel: String = "level"
-     val cursorLabel: String = "cursor"
-     val conceptFieldsLabel: String = "concept_fields"
+    val idsLabel: String = "ids"
+    val limitLabel: String = "limit"
+    val levelLabel: String = "level"
+    val cursorLabel: String = "cursor"
+    val conceptFieldsLabel: String = "concept_fields"
 }
