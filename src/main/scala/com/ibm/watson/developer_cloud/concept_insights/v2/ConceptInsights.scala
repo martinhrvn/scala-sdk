@@ -134,6 +134,11 @@ class ConceptInsights(accountId: Option[String] = None, configFactory: ConfigFac
         send(request)
     }
 
+    /**
+      * Delete corpus by ID
+      * @param corpus corpus to delete
+      * @return Future for HttpResponse object
+      */
     def deleteCorpus(corpus: Corpus) : Future[HttpResponse] = {
         val corpusId = IDHelper.corpusId(corpus, accId)
         val request = Delete(apiVersion + corpusId)
@@ -141,6 +146,11 @@ class ConceptInsights(accountId: Option[String] = None, configFactory: ConfigFac
         send(request)
     }
 
+    /**
+      * Delete document by ID
+      * @param document document to delete
+      * @return Future for HttpResponse object
+      */
     def deleteDocument(document: Document) : Future[HttpResponse] = {
         val documentId = IDHelper.documentId(document)
         val request = Delete(apiVersion + documentId)
