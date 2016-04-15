@@ -31,6 +31,7 @@ case class Permission(
 ) extends GenericModel
 
 object Permission {
+    val fields = List("name")
     val Read = Permission("Read")
     val Write = Permission("Write")
     val Admin = Permission("Admin")

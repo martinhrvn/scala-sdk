@@ -18,6 +18,7 @@ package com.ibm.watson.developer_cloud.concept_insights.v2
 import com.ibm.watson.developer_cloud.concept_insights.v2.model.Annotations
 import com.ibm.watson.developer_cloud.service.ManualConfig
 import org.scalatest.FlatSpec
+import spray.httpx.SprayJsonSupport._
 import spray.json._
 import com.ibm.watson.developer_cloud.concept_insights.v2.model.ConceptInsightsProtocol._
 /**
@@ -25,7 +26,7 @@ import com.ibm.watson.developer_cloud.concept_insights.v2.model.ConceptInsightsP
   */
 class ConceptInsightsTest extends FlatSpec {
     "Service type for ConceptInsights" should "be concept_insights" in {
-        val service = new ConceptInsights(new ManualConfig("test1", "test2", "test3"))
+        val service = new ConceptInsights(Some("wikipedia"),new ManualConfig("test1", "test2", "test3"))
         assert(service.serviceType.equals("concept_insights"))
     }
 
