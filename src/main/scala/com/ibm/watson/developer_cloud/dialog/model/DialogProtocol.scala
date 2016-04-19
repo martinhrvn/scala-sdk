@@ -15,23 +15,13 @@
 // limitations under the License.
 package com.ibm.watson.developer_cloud.dialog.model
 
-import com.ibm.watson.developer_cloud.service.GenericModel
+import spray.json.DefaultJsonProtocol
 
 /**
-  * Created by Martin Harvan on 15/04/16.
+  * Created by Martin Harvan on 19/04/16.
   */
-case class Conversation(
-                       clientId: Option[Int],
-                       confidence: Double,
-                       dialogId: String,
-                       id: Option[Int],
-                       input: String,
-                       response: List[String]
-                       ) extends GenericModel
-case class ConversationData(
-                             clientId: Int,
-                             conversationId: Int,
-                             hitNodes: List[HitNode],
-                             messages: List[Message],
-                             profile: List[(String, String)]
-                           ) extends GenericModel
+object DialogProtocol extends DefaultJsonProtocol {
+    implicit val conversationFormat = jsonFormat(Conversation, "client_id", "confidence", "dialog_id",
+        "conversation_id", "input", "response")
+
+}
